@@ -1,0 +1,30 @@
+{
+  "name": "event_portal_backend",
+  "version": "1.0.0",
+  "description": "Event Backend Portal",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Dhamo",
+  "license": "ISC",
+  "dependencies": {
+    "aes256": "^1.0.4",
+    "base-64": "^0.1.0",
+    "bcrypt": "^4.0.1",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-mailer": "^0.3.1",
+    "helmet": "^3.21.3",
+    "json-2-csv": "^3.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.1.0",
+    "nocache": "^2.1.0",
+    "node-datetime": "^2.1.2",
+    "sequelize": "^5.21.5",
+    "slug": "^2.1.1",
+    "utf-8": "^2.0.0",
+    "utf8": "^3.0.0"
+  }
+}
