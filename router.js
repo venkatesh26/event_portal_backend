@@ -6,6 +6,7 @@ const categoriesController = require('./controllers/categories_controller');
 const countriesController = require('./controllers/countries_controller');
 const statesController = require('./controllers/states_controller');
 const citiesController = require('./controllers/cities_controller');
+const currenciesController = require('./controllers/currencies_controller');
 
 
 const jwt = require('jsonwebtoken');
@@ -123,4 +124,17 @@ module.exports.set = (app) => {
 	app.post('/api/cities', citiesController.add);
 	app.delete('/api/cities/:id', citiesController.delete);
 	app.put('/api/cities', citiesController.update);
+
+
+	// Categories
+	app.get('/api/categories', categoriesController.index);
+	app.get('/api/categories_open', categoriesController.index); 
+	app.get('/api/categories/:id', categoriesController.view);
+	app.post('/api/categories', categoriesController.add);
+	app.delete('/api/categories/:id', categoriesController.delete);
+	app.put('/api/categories', categoriesController.update);
+
+	// Currency
+	app.get('/api/currencies', currenciesController.index);
+	app.get('/api/currencies_open', currenciesController.index);
 }

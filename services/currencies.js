@@ -25,35 +25,14 @@ const getAllData = function (data) {
 		where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
 	}
   where.deletedAt = null; 
-  const Categories = models.categories.findAndCountAll({
+  const Currencies = models.currencies.findAndCountAll({
     limit: limit,
     where: where,
     order: [order_query],
     offset: offset,
     $sort: { id: 1 }
   });
-  return { 'Categories': Categories}
+  return { 'Currencies': Currencies}
 };
 
-const updateCategory = function (data) {
-  return models.categories.update(
-    {
-      name: data.name,
-      slug:data.slug,
-      is_active: data.is_active
-    },
-    { where: { id: data.id } })
-}
-
-const getCategoryById = id => models.categories.findById(id);
-
-const addCategory = category_data => models.categories.create(category_data, { returning: true });
-
-const deleteCategory = function (id) {
-  return models.categories.update(
-    {
-      deletedAt: Date()
-    },
-    { where: { id: id } })
-}
-module.exports = { addCategory, getAllData, getCategoryById, deleteCategory, updateCategory };
+module.exports = { getAllData};

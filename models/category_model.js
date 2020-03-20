@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
 					args: true,
 					msg: "Name Required"
 				},
+			},
+			unique: {
+				args: true,
+				msg: 'Category name already in use!'
 			}
 		},
 		slug: {

@@ -17,8 +17,6 @@ app.use(helmet())
 app.use(helmet.xssFilter())
 app.use(helmet.frameguard())
 
-global.sluggable_behavior = require('slug')
-
 global.CONFIG = require('./config');
 var sequelize = require('./db');
 sequelize
@@ -38,8 +36,6 @@ const decrypt = require('./customFunctions').decrypt;
 global.mailer = require('./mailer');
 
 
-global.sluggable_behavior = require('slug')
-
 app.use(nocache());
 app.use(bodyParser.json({limit: CONFIG.file_upload_limit, extended: true}));
 app.use(bodyParser.urlencoded({
@@ -50,10 +46,10 @@ app.use(express.static('client'));
 app.all('*', function (req, res, next) {
   
   if(CONFIG.is_allow_origin==true){   
-    var allowedOrigins = CONFIG.allowedOrigins
-    var origin = req.headers.origin;
-    console.log(origin)
-    console.log(allowedOrigins)
+        var allowedOrigins = CONFIG.allowedOrigins
+        var origin = req.headers.origin;
+        console.log(origin)
+        console.log(allowedOrigins)
 
        if(allowedOrigins.indexOf(origin) > -1){
             console.log('IN if======================')
