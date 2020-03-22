@@ -25,14 +25,25 @@ const getAllData = function (data) {
 		where.is_active = (data.is_active==true || data.is_active=='true') ? 1:0;
 	}
   if (data.country_id) {
-    where.country_id = data.state_id;
+    where.country_id = data.country_id;
   }
-  where.deletedAt = { $eq: null }
+  if (data.state_id) {
+    where.state_id = data.state_id;
+  }
+  where.deletedAt =  null;  
   const Cities = models.cities.findAndCountAll({
+    distinct:true,
     limit: limit,
     where: where,
     order: [order_query],
     offset: offset,
+    include : [{
+      model: models.states
+    },
+    {
+      model: models.countries
+    }
+    ],
     $sort: { id: 1 }
   });
   return { 'Cities': Cities}

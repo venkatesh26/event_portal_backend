@@ -5,8 +5,14 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true,
 			autoIncrement: true
 		},
-		county_id: {
-			type: DataTypes.INTEGER
+		country_id: {
+			type: DataTypes.INTEGER,
+			validate: {
+				notEmpty: {
+					args: true,
+					msg: "Country Required"
+				},
+			}
 		},
 		name: {
 			type: DataTypes.STRING, allowNull: true,
@@ -26,9 +32,13 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			}
 		},
+        is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }
-	})
+	});
+	states.associate = models => {
+		states.belongsTo(models.countries, { foreignKey: 'country_id' })
+	}
 	return states;
 }

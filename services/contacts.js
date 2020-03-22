@@ -13,24 +13,18 @@ const getAllData = function (data) {
 	}else{
 		order_query = ['createdAt', 'DESC']
 	}
-	if(data.page_no != 0){
-    limit = 10;
-		let page = data.page_no;
-		offset = limit * (page - 1);
+	var page = 1;
+  if(data.page_no){
+    page = data.page_no;
   }
-  if(data.page_no == 0){
-		limit = 100;
-		let page = 1;  
-		offset = limit * (page - 1);
-	}
+  offset = limit * (page - 1);
   if (data.name) {
     where.name = { [Op.iLike]: '%' + data.name + '%' }
   }
   if (data.is_active) {
 		where.is_active = data.is_active
 	}
-  where.deletedAt = { $eq: null }
-
+  where.deletedAt = null 
   const Contacts = models.contacts.findAndCountAll({
     limit: limit,
     where: where,

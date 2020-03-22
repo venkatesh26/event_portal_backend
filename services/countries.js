@@ -24,7 +24,7 @@ const getAllData = function (data) {
   if (data.is_active) {
 		where.is_active = (data.is_active==true || data.is_active=='true') ? 1:0;
 	}
-  where.deletedAt = { $eq: null }
+  where.deletedAt = null;
   const Countries = models.countries.findAndCountAll({
     limit: limit,
     where: where,

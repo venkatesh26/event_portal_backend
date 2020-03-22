@@ -15,7 +15,13 @@ module.exports = {
       })
   },
   add(req, res) {
-    req.body.slug = sluggable_behavior(req.body.name);
+    if(typeof req.body.name =='undefined' || req.body.name==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'name Field Is required'
+      }));
+    }
+    req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     countryService.add(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))
       .catch(err => {
@@ -26,6 +32,13 @@ module.exports = {
       });
   },
   update(req, res) {
+     if(typeof req.body.name =='undefined' || req.body.name==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'name Field Is required'
+      }));
+    }
+    req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     countryService.update(req.body)
       .then(data => res.send(encrypt({ "success": true, "message": "Updated successfully." })))
       .catch(err => {

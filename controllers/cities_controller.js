@@ -15,7 +15,25 @@ module.exports = {
       })
   },
   add(req, res) {
-    req.body.slug = sluggable_behavior(req.body.name);
+    if(typeof req.body.name =='undefined' || req.body.name==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'name Field Is required'
+      }));
+    }
+    if(typeof req.body.state_id =='undefined' || req.body.state_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'state_id Field Is required'
+      }));
+    }
+    if(typeof req.body.country_id =='undefined' || req.body.country_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'country_id Field Is required'
+      }));
+    }
+    req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     citiesService.add(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))
       .catch(err => {
@@ -26,6 +44,25 @@ module.exports = {
       });
   },
   update(req, res) {
+    if(typeof req.body.name =='undefined' || req.body.name==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'name Field Is required'
+      }));
+    }
+    if(typeof req.body.state_id =='undefined' || req.body.state_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'state_id Field Is required'
+      }));
+    }
+    if(typeof req.body.country_id =='undefined' || req.body.country_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'country_id Field Is required'
+      }));
+    }
+    req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     citiesService.update(req.body)
       .then(data => res.send(encrypt({ "success": true, "message": "Updated successfully." })))
       .catch(err => {

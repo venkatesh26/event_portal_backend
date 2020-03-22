@@ -94,12 +94,10 @@ module.exports.set = (app) => {
 	app.delete('/api/roles/:id', roleController.delete);
 	app.put('/api/roles', roleController.update);
 
-
 	// Contacts
 	app.get('/api/contacts', contactsController.index);
 	app.get('/api//contacts/:id', contactsController.view);
 	app.delete('/api/contacts/:id', contactsController.delete);
-
 
 	// Countries
 	app.get('/api/countries', countriesController.index);
@@ -125,7 +123,6 @@ module.exports.set = (app) => {
 	app.delete('/api/cities/:id', citiesController.delete);
 	app.put('/api/cities', citiesController.update);
 
-
 	// Categories
 	app.get('/api/categories', categoriesController.index);
 	app.get('/api/categories_open', categoriesController.index); 
@@ -134,7 +131,8 @@ module.exports.set = (app) => {
 	app.delete('/api/categories/:id', categoriesController.delete);
 	app.put('/api/categories', categoriesController.update);
 
-	// Currency
+	// Currency	
 	app.get('/api/currencies', currenciesController.index);
 	app.get('/api/currencies_open', currenciesController.index);
+	app.delete('/api/currencies/:id', categoriesController.delete);
 }

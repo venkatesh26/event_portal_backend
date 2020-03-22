@@ -25,14 +25,18 @@ const getAllData = function (data) {
 		where.is_active = (data.is_active==true || data.is_active=='true') ? 1:0;
 	}
   if (data.country_id) {
-    where.country_id = data.country_id;
+     where.country_id = data.country_id;
   }
-  where.deletedAt = { $eq: null }
+  where.deletedAt = null
   const States = models.states.findAndCountAll({
+    distinct:true,
     limit: limit,
     where: where,
     order: [order_query],
     offset: offset,
+    include : [{
+      model: models.countries
+    }],
     $sort: { id: 1 }
   });
   return { 'States': States}
