@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
 					args: true,
 					msg: "Long Description Required"}
 
-				},
 			}
 		},
 		start_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

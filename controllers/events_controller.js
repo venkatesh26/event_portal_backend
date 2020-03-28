@@ -63,7 +63,7 @@ module.exports = {
           event_tickets:req.body.event_tickets
       }
       console.log(post_data);
-      await  models.events.create(post_data,
+      models.events.create(post_data,
       {
             include: [
                 {  
