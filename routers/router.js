@@ -1,20 +1,18 @@
-const authController = require('./controllers/auth_controller');
-const userController = require('./controllers/users_controller');
-const roleController = require('./controllers/roles_controller');
-const contactsController = require('./controllers/contacts_controller');
-const categoriesController = require('./controllers/categories_controller');
-const countriesController = require('./controllers/countries_controller');
-const statesController = require('./controllers/states_controller');
-const citiesController = require('./controllers/cities_controller');
-const currenciesController = require('./controllers/currencies_controller');
-const eventsController = require('./controllers/events_controller');
-
+const authController = require(__basedir +'/controllers/auth_controller');
+const userController = require(__basedir +'/controllers/users_controller');
+const roleController = require(__basedir +'/controllers/roles_controller');
+const contactsController = require(__basedir +'/controllers/contacts_controller');
+const categoriesController = require(__basedir +'/controllers/categories_controller');
+const countriesController = require(__basedir +'/controllers/countries_controller');
+const statesController = require(__basedir +'/controllers/states_controller');
+const citiesController = require(__basedir +'/controllers/cities_controller');
+const currenciesController = require(__basedir +'/controllers/currencies_controller');
+const eventsController = require(__basedir +'/controllers/events_controller');
 
 const jwt = require('jsonwebtoken');
-const config = require('./config');
-const decrypt = require('./customFunctions').decrypt;
-const encrypt = require('./customFunctions').encrypt;
-const Aes_key = require('./config').Aes_key;
+const decrypt = require('../customFunctions').decrypt;
+const encrypt = require('../customFunctions').encrypt;
+const Aes_key = CONFIG.Aes_key;
 const aes256 = require('aes256');
 
 module.exports.set = (app) => {
@@ -37,7 +35,7 @@ module.exports.set = (app) => {
 			if (!token)
 				return res.status(403).send(encrypt({ auth: false, message: 'No token provided.' }));
 
-			jwt.verify(token, config.jwtSecret, function (err, decoded) {
+			jwt.verify(token, CONFIG.jwtSecret, function (err, decoded) {
 				if (err) {
 					const encrypting = require('./customFunctions').encrypt;
 					res.send(encrypting({

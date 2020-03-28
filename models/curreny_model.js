@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		name: {
 			type: DataTypes.STRING, allowNull: true,
+			unique:true,
 			validate: {
 				notEmpty: {
 					args: true,
@@ -15,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		code: {
-			type: DataTypes.STRING, allowNull: true
+			type: DataTypes.STRING, allowNull: true, unque:true
 		},
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
 

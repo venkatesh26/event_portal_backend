@@ -3,6 +3,7 @@ const http = require('http');
 const nocache = require('nocache');
 const bodyParser = require('body-parser');
 global.app = express();
+global.__basedir = __dirname;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -17,7 +18,7 @@ app.use(helmet())
 app.use(helmet.xssFilter())
 app.use(helmet.frameguard())
 
-global.CONFIG = require('./config');
+global.CONFIG = require('./config/config');
 var sequelize = require('./db');
 sequelize
 .authenticate()
@@ -28,7 +29,7 @@ sequelize
     console.error('Unable to connect to the database:', err);
 });
 
-const router = require('./router');
+const router = require('./routers/router');
 const encrypt = require('./customFunctions').encrypt;
 const decrypt = require('./customFunctions').decrypt;
 

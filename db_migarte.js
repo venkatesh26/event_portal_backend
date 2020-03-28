@@ -6,7 +6,7 @@ var path = require('path');
 var Sequelize = require('sequelize');
 var basename = path.basename(__filename);
 var sequelize = require('./db');
-global.CONFIG = require('./config');
+global.CONFIG = require('./config/config');
 var db = {};
 fs.readdirSync(__dirname + '/models/')
     .filter(file => {

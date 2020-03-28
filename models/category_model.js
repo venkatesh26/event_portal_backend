@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		name: {
 			type: DataTypes.STRING, allowNull: true,
+			unique: true,
 			validate: {
 				notEmpty: {
 					args: true,
@@ -20,11 +21,16 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		slug: {
 			type: DataTypes.STRING, allowNull: true,
+			unique: true,
 			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Slug Required"
 				},
+			},
+			unique: {
+				args: true,
+				msg: 'Slug already in use!'
 			}
 		},
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: false },

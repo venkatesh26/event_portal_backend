@@ -1,11 +1,10 @@
 const models = require('../models');
-const config = require('../config');
 const CustomError = require('../customError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 //const jwtBlacklist = require('jwt-blacklist')(jwt);
 const aes256 = require('aes256');
-var key = require('../config').Aes_key;
+var key = CONFIG.Aes_key;
 const decrypt = require('../customFunctions').decrypt;
 var dateTime = require('node-datetime');
 
@@ -34,20 +33,20 @@ async function authenticate(req, res, params){
 		var is_branch_connect=false;
 		var user_type_data=undefined;
 		const payload = {
-			id: bcrypt.hashSync(aes256.encrypt(key, user.id.toString()), config.saltRounds),
-			time: bcrypt.hashSync(aes256.encrypt(key, new Date().toString()), config.saltRounds),
+			id: bcrypt.hashSync(aes256.encrypt(key, user.id.toString()), CONFIG.saltRounds),
+			time: bcrypt.hashSync(aes256.encrypt(key, new Date().toString()), CONFIG.saltRounds),
 			r_token: aes256.encrypt(key, user.role.name),
 			super_admin_token: aes256.encrypt(key, (user.role.is_super_admin).toString()),
 			user_name_token:aes256.encrypt(key, (user.user_name).toString()),
 			role_id: aes256.encrypt(key, (user.role_id).toString()),
 			user_id: aes256.encrypt(key, (user.id).toString())
 		};
-		var token = jwt.sign(payload, config.jwtSecret, {
-			expiresIn: config.tokenExpireTimeInHours+"h"
+		var token = jwt.sign(payload, CONFIG.jwtSecret, {
+			expiresIn: CONFIG.tokenExpireTimeInHours+"h"
 		});
 		var dt = dateTime.create();
 		var current_login_time = dt.format('d-n-Y I:M:S p');
-		var token_expiry_hours = config.tokenExpireTimeInHours;
+		var token_expiry_hours = CONFIG.tokenExpireTimeInHours;
 		const  user_data_update  = models.users.update(  // to maintain logout time log
 			{
 				is_login: true,

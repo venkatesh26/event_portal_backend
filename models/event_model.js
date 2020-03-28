@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.TEXT, allowNull: false, trim:true, validate: {
 				notEmpty: {
 					args: true,
-					msg: "Long Description Required"
+					msg: "Long Description Required"}
+
 				},
 			}
 		},

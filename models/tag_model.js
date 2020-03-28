@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true
 		},
 		name: {
-			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
+			type: DataTypes.STRING, 
+			allowNull: false, 
+			unique: true,
+			trim:true, 
+			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Name Required"
@@ -14,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		slug: {
-			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
+			type: DataTypes.STRING, 
+			allowNull: false, 
+			unique: true,
+			trim:true, 
+			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Slug Required"

@@ -1,5 +1,5 @@
 var mailer = require('express-mailer');
-var config = require('./config');
+var config = require('./config/config');
 var EMAIL_CONFIG = {
     from: config.email.from,
     host: config.email.host, // hostname

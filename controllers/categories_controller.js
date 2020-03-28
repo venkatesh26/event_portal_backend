@@ -21,18 +21,6 @@ module.exports = {
             message: 'name Field Is required'
       }));
     }
-    if(typeof req.body.state_id =='undefined' || req.body.state_id==''){
-      return res.send(encrypt({
-            success: false,
-            message: 'state_id Field Is required'
-      }));
-    }
-    if(typeof req.body.country_id =='undefined' || req.body.country_id==''){
-      return res.send(encrypt({
-            success: false,
-            message: 'country_id Field Is required'
-      }));
-    }
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     categoryService.addCategory(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))
@@ -48,18 +36,6 @@ module.exports = {
       return res.send(encrypt({
             success: false,
             message: 'name Field Is required'
-      }));
-    }
-    if(typeof req.body.state_id =='undefined' || req.body.state_id==''){
-      return res.send(encrypt({
-            success: false,
-            message: 'state_id Field Is required'
-      }));
-    }
-    if(typeof req.body.country_id =='undefined' || req.body.country_id==''){
-      return res.send(encrypt({
-            success: false,
-            message: 'country_id Field Is required'
       }));
     }
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
