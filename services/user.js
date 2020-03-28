@@ -2,7 +2,7 @@ const models = require('../models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const addUser = user => models.users.create(user);
-const getUserByLogin = login => models.users.findOne({ where: { login } });
+const getUserByLogin = user_name => models.users.findOne({ where: { user_name } });
 
 const getUser = function (data) {
 	return models.users.findOne({

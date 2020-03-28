@@ -24,14 +24,6 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			}
 		},
-		short_description: {
-			type: DataTypes.TEXT, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "Short Description Required"
-				},
-			}
-		},
 		description: {
 			type: DataTypes.TEXT, allowNull: false, trim:true, validate: {
 				notEmpty: {
@@ -115,6 +107,16 @@ module.exports = (sequelize, DataTypes) => {
 		city_id: {
 			type: DataTypes.INTEGER
 		},
+		lat: {
+			type: DataTypes.STRING,
+			allowNull: true, 
+			trim:true 
+		},
+		long: {
+			type: DataTypes.STRING,
+			allowNull: true, 
+			trim:true 
+		},
 		tags: {
 			type: DataTypes.STRING, allowNull: true, trim:true
 		},
@@ -130,7 +132,15 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER, allowNull: false, trim:true, validate: {
 				notEmpty: {
 					args: true,
-					msg: "category Id Required"
+					msg: "category_id Required"
+				},
+			}
+		},
+		currency_id: {
+			type: DataTypes.INTEGER, allowNull: false, trim:true, validate: {
+				notEmpty: {
+					args: true,
+					msg: "currency_id Required"
 				},
 			}
 		},
@@ -144,12 +154,13 @@ module.exports = (sequelize, DataTypes) => {
 	},
 	{
 
-				charset:'utf8',
+		charset:'utf8',
 		collate:'utf8_general_ci'
 	})
 	Events.associate = models => {
 		Events.belongsTo(models.users, { foreignKey: 'user_id' })
 		Events.belongsTo(models.categories, { foreignKey: 'category_id' })
+		Events.belongsTo(models.currencies, { foreignKey: 'currency_id' })
 	}
 	return Events;
 }

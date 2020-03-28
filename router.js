@@ -7,6 +7,7 @@ const countriesController = require('./controllers/countries_controller');
 const statesController = require('./controllers/states_controller');
 const citiesController = require('./controllers/cities_controller');
 const currenciesController = require('./controllers/currencies_controller');
+const eventsController = require('./controllers/events_controller');
 
 
 const jwt = require('jsonwebtoken');
@@ -79,6 +80,7 @@ module.exports.set = (app) => {
 	app.get('/api/users/:id', userController.view);
 	app.get('/api/users', userController.index);
 	app.get('/apoi/open_users', userController.index);
+	app.post('/api/users', userController.add);  
 	app.put('/api/users', userController.update);  
 	app.delete('api/users/:id', userController.delete);
 
@@ -116,7 +118,7 @@ module.exports.set = (app) => {
 	app.put('/api/states', statesController.update); 
 
 	// Cities
-	app.get('/api/cities', citiesController.index);
+	app.get('/api/cities', citiesController.index);	
 	app.get('/api/cities_open', citiesController.index); 
 	app.get('/api/cities/:id', citiesController.view);
 	app.post('/api/cities', citiesController.add);
@@ -135,4 +137,12 @@ module.exports.set = (app) => {
 	app.get('/api/currencies', currenciesController.index);
 	app.get('/api/currencies_open', currenciesController.index);
 	app.delete('/api/currencies/:id', categoriesController.delete);
+
+	// Events	
+	app.get('/api/events', eventsController.index);
+	app.get('/api/events_open', eventsController.index);
+	app.get('/api/events/:id', eventsController.view);
+	app.post('/api/events', eventsController.add);
+	app.delete('/api/events/:id', eventsController.delete);
+	app.put('/api/events', eventsController.update);
 }

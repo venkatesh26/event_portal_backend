@@ -62,7 +62,7 @@ module.exports = {
       })
 	},
 	add(req, res) {
-		return userService.getUserByLogin(req.body.login || '')
+		return userService.getUserByLogin(req.body.user_name || '')
 			.then(exists => {
 				if (exists) {
 					return res.send(encrypt({
