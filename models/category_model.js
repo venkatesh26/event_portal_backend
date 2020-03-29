@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true
 		},
 		name: {
-			type: DataTypes.STRING, allowNull: true,
+			type: DataTypes.STRING,
 			unique: true,
 			validate: {
 				notEmpty: {
@@ -16,21 +16,21 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			unique: {
 				args: true,
-				msg: 'Category name already in use!'
+				msg: 'Nsame already in use!'
 			}
 		},
 		slug: {
-			type: DataTypes.STRING, allowNull: true,
+			type: DataTypes.STRING,
 			unique: true,
 			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Slug Required"
 				},
-			},
-			unique: {
-				args: true,
-				msg: 'Slug already in use!'
+				unique: {
+					args: true,
+					msg: 'Slug already in use!'
+				}
 			}
 		},
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
