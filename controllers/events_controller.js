@@ -16,7 +16,9 @@ module.exports = {
   },
   add(req, res) {
 
-      req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
+      var slug=sluggable_behavior((req.body.name).toString().toLowerCase());
+
+
       var base64ToImage = require('base64-to-image');
       var img_name='';
       var thumb_nail_img_name='';
@@ -41,7 +43,7 @@ module.exports = {
 
       var post_data = {
           name: req.body.name,
-          slug: re.body.slug,
+          slug: slug,
           user_id:req.body.user_id,
           description:req.body.description,
           start_date:req.body.start_date,

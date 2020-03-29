@@ -37,7 +37,7 @@ module.exports.set = (app) => {
 
 			jwt.verify(token, CONFIG.jwtSecret, function (err, decoded) {
 				if (err) {
-					const encrypting = require('./customFunctions').encrypt;
+					const encrypting = require('../customFunctions').encrypt;
 					res.send(encrypting({
 						err: true,
 						msg: 'Failed to authenticate token.'
