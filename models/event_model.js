@@ -158,9 +158,11 @@ module.exports = (sequelize, DataTypes) => {
 		collate:'utf8_general_ci'
 	})
 	Events.associate = models => {
+		
+		Events.belongsTo(models.users, { foreignKey: 'user_id' })
 		Events.belongsTo(models.users, { foreignKey: 'user_id' })
 		Events.belongsTo(models.categories, { foreignKey: 'category_id' })
-		Events.belongsTo(models.currencies, { foreignKey: 'currency_id' })
+		Events.hasMany(models.event_tickets, { foreignKey: 'event_id' })
 	}
 	return Events;
 }

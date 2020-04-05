@@ -16,30 +16,36 @@ module.exports = {
   },
   add(req, res) {
 
-      var slug=sluggable_behavior((req.body.name).toString().toLowerCase());
+      // Required Fields
+      var required_fields=[
+        'name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
+        'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
+        'img_name', 'city', 'city_id', 'tags', 'venue_name', 'address_line_1',"currency_id", 
+        'user_id'
+      ]
 
+      var error = false;
+      var error_field = '';
+      // Required Validation
+      required_fields.forEach(field => {
+          if(typeof req.body[field] =='undefined' || req.body[field]==''){
+            error_field=field;
+            error = true;
+          }
+      });
 
-      var base64ToImage = require('base64-to-image');
-      var img_name='';
-      var thumb_nail_img_name='';
-      var img_dir = 'assets/events_banner_thumb/';
-      var thumb_nail_img_dir = 'assets/events_thumb/';
-
-      // Tumbnail Image Upload
-      try{
-        var info =  base64ToImage(req.body.thumb_nail_image_base64, __basedir+"/public/"+thumb_nail_img_dir);
-        thumb_nail_img_name = info.fileName;
-      }
-      catch{
+      if(error) {
+        return res.send(encrypt({
+                success: false,
+                message: error_field + ' Field Is required'
+        }));
       }
 
-      // Banner Image Upload
-      try{
-        var info =  base64ToImage(req.body.banner_image_base64, __basedir+"/public/"+img_dir);
-        img_name = info.fileName;
-      }
-      catch{
-      }
+      var slug = sluggable_behavior((req.body.name).toString().toLowerCase());
+      var thumb_nail_img_dir = '/events/';
+      var thumb_nail_img_name = '1.png';
+      var img_dir = '/events/';
+      var img_name = '1.png';
 
       var post_data = {
           name: req.body.name,
@@ -62,34 +68,117 @@ module.exports = {
           status:1,
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
+          currency_id:req.body.currency_id,
           event_tickets:req.body.event_tickets
       }
-      console.log(post_data);
-      models.events.create(post_data,
+
+      try
       {
-            include: [
-                {  
-                   model: models.event_tickets,
-                   as: 'event_tickets'
-                }
-            ]
-       })
-      return res.send({
+        models.events.create(post_data,
+        {
+              include: [
+                  {  
+                     model: models.event_tickets,
+                     as: 'event_tickets'
+                  }
+              ]
+         })
+        return res.send({
           status: true,
-          message: "Events Added Sucessfully",
-          redirect_link:req.protocol+"://"+req.headers.host+"/backoffice/events"
-      });
+          message: "Events Added Sucessfully"
+        });
+      }
+      catch(error){
+        return res.send({
+            status: false,
+            message: "Something Went Wrong While creating AAn Event",
+        });
+      }
   },
   update(req, res) {
-    req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
-    eventService.updateEvents(req.body)
-      .then(data => res.send(encrypt({ "success": true, "message": "Category Updated successfully." })))
-      .catch(err => {
-        return res.send(encrypt({
-          success: false,
-          message: err.message
-        }));
+
+    // Required Fields
+      var required_fields=[
+        'id','name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
+        'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
+        'img_name', 'city', 'city_id', 'tags', 'venue_name', 'address_line_1',"currency_id", 
+        'user_id'
+      ]
+
+      var error = false;
+      var error_field = '';
+      // Required Validation
+      required_fields.forEach(field => {
+          if(typeof req.body[field] =='undefined' || req.body[field]==''){
+            error_field=field;
+            error = true;
+          }
       });
+
+      if(error) {
+        return res.send(encrypt({
+                success: false,
+                message: error_field + ' Field Is required'
+        }));
+      }
+
+      var slug = sluggable_behavior((req.body.name).toString().toLowerCase());
+      var thumb_nail_img_dir = '/events/';
+      var thumb_nail_img_name = '1.png';
+      var img_dir = '/events/';
+      var img_name = '1.png';
+
+      var post_data = {
+          name: req.body.name,
+          user_id:req.body.user_id,
+          description:req.body.description,
+          start_date:req.body.start_date,
+          end_date:req.body.end_date,
+          category_id:req.body.category_id,
+          category_name:req.body.category_name,
+          type:req.body.type,
+          event_visibility:req.body.event_visibility,
+          thumb_nail_img_dir:thumb_nail_img_dir,
+          thumb_nail_img_name:thumb_nail_img_name,
+          img_dir:img_dir,
+          img_name:img_name,
+          city:req.body.city_name,
+          city_id:req.body.city_id,
+          tags:req.body.tags,
+          status:1,
+          venue_name:req.body.venue_name,
+          address_line_1:req.body.address_line_1,
+          currency_id:req.body.currency_id,
+          event_tickets:req.body.event_tickets
+      }
+
+      try
+      {
+        models.events.update(post_data,
+        {
+              where: { id: req.body.id },
+              include: [
+                  {  
+                     model: models.event_tickets,
+                     as: 'event_tickets'
+                  }
+              ]
+         });
+        return res.send({
+          status: true,
+          message: "Events Updated Sucessfully"
+        });
+
+
+      }
+      catch(error){
+        console.log(error);
+
+        return res.send({
+            status: false,
+            message: "Something Went Wrong While updating an Event",
+        });
+      }
   },
   view(req, res) {
     eventService.getEventsById(decrypt(decode_id(req.params.id)))

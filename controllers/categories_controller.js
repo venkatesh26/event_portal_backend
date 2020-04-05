@@ -15,12 +15,6 @@ module.exports = {
     })
   },
   add(req, res) {
-
-    var a=models.categories.validate();
-
-    console.log(a);
-
-
     if(typeof req.body.name =='undefined' || req.body.name==''){
       return res.send(encrypt({
             success: false,

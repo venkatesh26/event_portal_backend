@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 
 const getAllData = function (data) {
   let where = {}
-  let limit = 100;
+  let limit = 10;
   let offset = 0;
   let order_query = []
 	if(data.order_key && data.order_param){ 
@@ -26,7 +26,6 @@ const getAllData = function (data) {
 	}
   where.deletedAt = null; 
   const Events = models.events.findAndCountAll({
-    distinct:true,
     limit: limit,
     where: where,
     order: [order_query],
@@ -36,20 +35,6 @@ const getAllData = function (data) {
   return { 'Events': Events}
 };
 
-const updateEvents = function (data) {
-  return models.events.update(
-    {
-      name: data.name,
-      slug:data.slug,
-      is_active: data.is_active
-    },
-    { where: { id: data.id } })
-}
-
-const getEventsById = id => models.events.findById(id);
-
-const addEvents = events_data => models.events.create(events_data, { returning: true });
-
 const deleteEvents = function (id) {
   return models.events.update(
     {
@@ -57,4 +42,4 @@ const deleteEvents = function (id) {
     },
     { where: { id: id } })
 }
-module.exports = { addEvents, getAllData, getEventsById, deleteEvents, updateEvents };
+module.exports = {getAllData, deleteEvents };
