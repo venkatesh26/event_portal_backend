@@ -35,7 +35,7 @@ module.exports = {
     }
     
     // Check  Already Exists
-    var isExist = countryService.isExistOrNot(req.body.name);
+    var isExist = citiesService.isExistOrNot(req.body.name);
     if(isExist==true){
       return res.send(encrypt({
             success: false,
@@ -73,7 +73,7 @@ module.exports = {
       }));
     }
     // Check  Already Exists
-    var isExist = countryService.isExistOrNot(req.body.name, req.body.id);
+    var isExist = citiesService.isExistOrNot(req.body.name, req.body.id);
     if(isExist==true){
       return res.send(encrypt({
             success: false,

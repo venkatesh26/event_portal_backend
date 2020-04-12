@@ -40,7 +40,7 @@ const update = function (data) {
   return models.countries.update(
     {
       name: data.name,
-      iso_code:data.description,
+      iso_code:data.iso_code,
       is_active: data.is_active
     },
     { where: { id: data.id } })

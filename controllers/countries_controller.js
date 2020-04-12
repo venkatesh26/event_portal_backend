@@ -15,6 +15,7 @@ module.exports = {
       })
   },
   add(req, res) {
+    console.log(req.body);
     if(typeof req.body.name =='undefined' || req.body.name==''){
       return res.send(encrypt({
             success: false,
@@ -40,6 +41,7 @@ module.exports = {
       });
   },
   update(req, res) {
+     console.log(req.body);
      if(typeof req.body.name =='undefined' || req.body.name==''){
       return res.send(encrypt({
             success: false,
