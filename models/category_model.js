@@ -13,10 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 					args: true,
 					msg: "Name Required"
 				},
-			},
-			unique: {
-				args: true,
-				msg: 'Nsame already in use!'
+				
 			}
 		},
 		slug: {
@@ -26,10 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 				notEmpty: {
 					args: true,
 					msg: "Slug Required"
-				},
-				unique: {
-					args: true,
-					msg: 'Slug already in use!'
 				}
 			}
 		},
