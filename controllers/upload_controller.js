@@ -3,7 +3,6 @@ const decrypt = require('../customFunctions').decrypt;
 const decode_id = require('../customFunctions').decode_id;
 module.exports = {
   upload(req, res) {
-
       if (typeof req.query.type=='undefined' || req.query.type==null){
         return res.send(encrypt({ "success": false, "message": "type Field Is required"}))
       }
@@ -17,7 +16,7 @@ module.exports = {
       var datetime = require('node-datetime');
       var dt = datetime.create();
       var file_name = req.files.file_data.name;
-      var file_dir = "assets/tmp_files/"+type+"/"
+      var file_dir = "assets/"+req.query.type+"/"
       var fs = require("fs");
       if (!fs.existsSync('assets/')){
          fs.mkdirSync('assets/');

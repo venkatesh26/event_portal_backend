@@ -66,6 +66,10 @@ module.exports.set = (app) => {
 			})
 		}
 	})
+	
+      
+	const fileUpload = require('express-fileupload');
+	app.use(fileUpload());
 
 	app.post('/api/login', authController.login);
 	app.post('/api/logout', authController.logout);
@@ -147,6 +151,6 @@ module.exports.set = (app) => {
 
 
 	// Upload 
-	app.post('/api/uploads', uploadController.upload);
+	app.post('/api/upload', uploadController.upload);
 
 }
