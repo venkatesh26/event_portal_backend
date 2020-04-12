@@ -8,6 +8,7 @@ const statesController = require(__basedir +'/controllers/states_controller');
 const citiesController = require(__basedir +'/controllers/cities_controller');
 const currenciesController = require(__basedir +'/controllers/currencies_controller');
 const eventsController = require(__basedir +'/controllers/events_controller');
+const uploadController = require(__basedir +'/controllers/upload_controller');
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -143,4 +144,9 @@ module.exports.set = (app) => {
 	app.post('/api/events', eventsController.add);
 	app.delete('/api/events/:id', eventsController.delete);
 	app.put('/api/events', eventsController.update);
+
+
+	// Upload 
+	app.post('/api/uploads', uploadController.upload);
+
 }

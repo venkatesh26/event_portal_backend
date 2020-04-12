@@ -148,32 +148,20 @@ module.exports = {
           status:1,
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
-          currency_id:req.body.currency_id,
-          event_tickets:req.body.event_tickets
+          currency_id:req.body.currency_id
       }
 
       try
       {
-        models.events.update(post_data,
-        {
+        models.events.update(post_data,{
               where: { id: req.body.id },
-              include: [
-                  {  
-                     model: models.event_tickets,
-                     as: 'event_tickets'
-                  }
-              ]
-         });
+        });
         return res.send({
           status: true,
           message: "Events Updated Sucessfully"
         });
-
-
       }
       catch(error){
-        console.log(error);
-
         return res.send({
             status: false,
             message: "Something Went Wrong While updating an Event",

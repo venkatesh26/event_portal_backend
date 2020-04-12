@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 
 const getAllData = function (data) {
   let where = {}
-  let limit = 100;
+  let limit = 10;
   let offset = 0;
   let order_query = []
 	if(data.order_key && data.order_param){ 
