@@ -27,6 +27,15 @@ module.exports = {
             message: 'country_id Field Is required'
       }));
     }
+    // Check  Already Exists
+    var isExist = statesService.isExistOrNot(req.body.name);
+    if(isExist==true){
+      return res.send(encrypt({
+            success: false,
+            message: 'State Already Exists'
+      }));
+    }
+
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     statesService.add(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))
@@ -50,6 +59,16 @@ module.exports = {
             message: 'country_id Field Is required'
       }));
     }
+
+    // Check  Already Exists
+    var isExist = countryService.isExistOrNot(req.body.name, req.body.id);
+    if(isExist==true){
+      return res.send(encrypt({
+            success: false,
+            message: 'State Already Exists'
+      }));
+    }
+
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     statesService.update(req.body)
       .then(data => res.send(encrypt({ "success": true, "message": "Updated successfully." })))

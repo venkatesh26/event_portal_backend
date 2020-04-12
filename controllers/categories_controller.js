@@ -21,6 +21,14 @@ module.exports = {
             message: 'name Field Is required'
       }));
     }
+    // Check  Already Exists
+    var isExist = categoryService.isExistOrNot(req.body.name);
+    if(isExist){
+      return res.send(encrypt({
+            success: false,
+            message: 'Category Already Exists'
+      }));
+    }
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     categoryService.addCategory(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))
@@ -36,6 +44,14 @@ module.exports = {
       return res.send(encrypt({
             success: false,
             message: 'name Field Is required'
+      }));
+    }
+    // Check  Already Exists
+    var isExist = categoryService.isExistOrNot(req.body.name, req.body.id);
+    if(isExist==true){
+      return res.send(encrypt({
+            success: false,
+            message: 'Category Already Exists'
       }));
     }
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());

@@ -57,4 +57,23 @@ const deleteData = function (id) {
     },
     { where: { id: id } })
 }
-module.exports = { add, getAllData, getById, deleteData, update};
+
+const isExistOrNot = function(name, id=null) {
+
+  var where ={}
+  where.name = name;
+  if(id){
+    where.id =  { [Op.not]:id}
+  }
+  const data = models.countries.count({
+     where: where
+  });
+  return data.then(function(count){
+      if(count > 1){
+        return true;
+      }
+      return false;
+  });
+}
+
+module.exports = { add, getAllData, getById, deleteData, update, isExistOrNot};

@@ -56,4 +56,23 @@ const deleteCategory = function (id) {
     },
     { where: { id: id } })
 }
-module.exports = { addCategory, getAllData, getCategoryById, deleteCategory, updateCategory };
+
+const isExistOrNot = function(name, id=null) {
+
+  var where ={}
+  where.name = name;
+  if(id){
+    where.id =  { [Op.not]:id}
+  }
+  const data = models.countries.count({
+     where: where
+  });
+  return data.then(function(count){
+      if(count > 1){
+        return true;
+      }
+      return false;
+  });
+}
+
+module.exports = { addCategory, getAllData, getCategoryById, deleteCategory, updateCategory , isExistOrNot};
