@@ -13,35 +13,35 @@ module.exports = (sequelize, DataTypes) => {
 					msg: "Country Required"
 				},
 			}
-		},
-		name: {
-			type: DataTypes.STRING,
-			unique: true,
-			validate: {
-				notEmpty: {
-					args: true,
-					msg: "Name Required"
-				},
 			},
-			unique: {
-				args: true,
-				msg: 'Name already in use!'
-			}
-		},
-		slug: {
-			type: DataTypes.STRING,
-			unique: true,
-			validate: {
-				notEmpty: {
-					args: true,
-					msg: "Slug Required"
+			name: {
+				type: DataTypes.STRING,
+				unique: true,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: "Name Required"
+					},
 				},
+				unique: {
+					args: true,
+					msg: 'Name already in use!'
+				}
 			},
-			unique: {
-				args: true,
-				msg: 'Slug already in use!'
-			}
-		},
+			slug: {
+				type: DataTypes.STRING,
+				unique: true,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: "Slug Required"
+					},
+				},
+				unique: {
+					args: true,
+					msg: 'Slug already in use!'
+				}
+			},
         is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },

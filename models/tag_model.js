@@ -6,27 +6,31 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true
 		},
 		name: {
-			type: DataTypes.STRING, 
-			allowNull: false, 
+			type: DataTypes.STRING,
 			unique: true,
-			trim:true, 
 			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Name Required"
 				},
+			},
+			unique: {
+				args: true,
+				msg: 'Name already in use!'
 			}
 		},
 		slug: {
-			type: DataTypes.STRING, 
-			allowNull: false, 
+			type: DataTypes.STRING,
 			unique: true,
-			trim:true, 
 			validate: {
 				notEmpty: {
 					args: true,
 					msg: "Slug Required"
 				},
+			},
+			unique: {
+				args: true,
+				msg: 'Slug already in use!'
 			}
 		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

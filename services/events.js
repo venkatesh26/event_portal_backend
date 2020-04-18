@@ -42,4 +42,22 @@ const deleteEvents = function (id) {
     },
     { where: { id: id } })
 }
-module.exports = {getAllData, deleteEvents };
+
+
+const getSlugCount = function(slug, id=null) {
+
+  var where ={}
+  where.slug = slug;
+  if(id){
+    where.id =  { [Op.not]:id}
+  }
+  const data = models.events.count({
+     where: where
+  });
+  return data.then(function(count){
+    console.log(count);
+      return count;
+  });
+}
+
+module.exports = {getAllData, deleteEvents, getSlugCount };

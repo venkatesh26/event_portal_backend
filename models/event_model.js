@@ -145,24 +145,25 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		status: {
-			type: DataTypes.BOOLEAN,
-			defaultValue:0
+			type: DataTypes.STRING,
+			allowNull: false, 
+			trim:true
 		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }
 	},
 	{
-
 		charset:'utf8',
 		collate:'utf8_general_ci'
-	})
-	Events.associate = models => {
-		
+	});
+
+	Events.associate = models => {	
 		Events.belongsTo(models.users, { foreignKey: 'user_id' })
 		Events.belongsTo(models.users, { foreignKey: 'user_id' })
 		Events.belongsTo(models.categories, { foreignKey: 'category_id' })
 		Events.hasMany(models.event_tickets, { foreignKey: 'event_id' })
 	}
+	
 	return Events;
 }
