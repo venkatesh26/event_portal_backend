@@ -152,5 +152,4 @@ module.exports.set = (app) => {
 
 	// Upload 
 	app.post('/api/upload', uploadController.upload);
-
 }
