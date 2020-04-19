@@ -258,8 +258,37 @@ module.exports = {
       }
   },
   async view(req, res) {
-
-
+    var where = {};
+    where.id = req.params.id;
+    const Events = models.events.findOne({
+      where: where,
+      include: [
+        {
+            model: models.users,
+            attributes: ['first_name','last_name','user_name']
+        },
+        {
+            model: models.event_tags
+        },
+        {
+            model: models.event_tickets
+        }
+      ]
+    });
+    Events.then(function(data){
+        if(data) {
+            return res.send({
+                status: true,
+                data: data,
+            });
+        }
+        else {
+          return res.send({
+              status: false,
+              data: data,
+          });
+      }
+    });
   },
   async delete(req, res) {
     eventService.deleteEvents(decrypt(decode_id(req.params.id))).then(() => 
