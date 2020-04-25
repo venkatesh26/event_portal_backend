@@ -50,6 +50,13 @@ module.exports = {
          slug = slug+"_"+parseInt(slug_counts+1);   
       }
 
+      var event_tickets = [];
+      req.body.event_tickets.forEach(function(ticket){
+        ticket.slug = sluggable_behavior((req.body.name).toString().toLowerCase());
+        event_tickets.push(ticket);
+      });
+
+
       var post_data = {
           name: req.body.name,
           slug: slug,
@@ -72,7 +79,9 @@ module.exports = {
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
           currency_id:req.body.currency_id,
-          event_tickets:req.body.event_tickets
+          lat:req.body.lat,
+          long:req.body.long,
+          event_tickets:event_tickets
       }
 
       try
@@ -89,7 +98,6 @@ module.exports = {
         event_details.then(function(data){
 
           var event_id = data.id;   
-
           // Tags 
           if(req.body.tags) {
 
@@ -108,18 +116,15 @@ module.exports = {
 
          });
         return res.send({
-          status: true,
+          success: true,
           message: "Events Added Sucessfully"
         });
-
       }
       catch(error) {
-
         return res.send({
-            status: false,
+            success: false,
             message: "Something Went Wrong While creating AAn Event",
         });
-
       }
   },
   async update(req, res) {
@@ -179,6 +184,8 @@ module.exports = {
           address_line_1:req.body.address_line_1,
           currency_id:req.body.currency_id
       }
+
+      console.log(post_data);
 
       try
       {
@@ -278,13 +285,13 @@ module.exports = {
     Events.then(function(data){
         if(data) {
             return res.send({
-                status: true,
+                success: true,
                 data: data,
             });
         }
         else {
           return res.send({
-              status: false,
+              success: false,
               data: data,
           });
       }

@@ -9,6 +9,8 @@ const citiesController = require(__basedir +'/controllers/cities_controller');
 const currenciesController = require(__basedir +'/controllers/currencies_controller');
 const eventsController = require(__basedir +'/controllers/events_controller');
 const uploadController = require(__basedir +'/controllers/upload_controller');
+const orderController = require(__basedir +'/controllers/order_controller');
+
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -152,4 +154,8 @@ module.exports.set = (app) => {
 
 	// Upload 
 	app.post('/api/upload', uploadController.upload);
+
+	// Order Api
+	app.get('/api/orders', orderController.index);
+	app.post('/api/place_order', orderController.place_order);
 }

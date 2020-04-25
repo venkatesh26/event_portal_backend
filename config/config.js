@@ -25,5 +25,9 @@ module.exports = {
 			transportMethod: 'SMTP',
 			user:'dhamodaran@constient.com',
 			pass1:'Damovenkatesh@2610'
+		},
+		stripe:{
+			public_key:'pk_test_vqZwdj6reVGYdCD4QQDnGZ6c00U08F91uY',
+			securet_key:'sk_test_q6k0MJ6k505oyprB19bhj9lW002l06yqmt'
 		}
 }	
