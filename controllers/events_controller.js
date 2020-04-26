@@ -301,5 +301,89 @@ module.exports = {
     eventService.deleteEvents(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));
+  },
+  async event_list(req, res) {
+    const { Events } = eventService.getEventList(req.query)
+      Events.then(data => {
+        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      })
+    .catch(function(error){
+        res.send(encrypt({ "success": false, "message": error }))
+    })
+  },
+  async event_detail(req, res){
+    var where = {};
+    where.id = req.params.id;
+    where.status = 'published';
+    const Events = models.events.findOne({
+      where: where,
+      include: [
+        {
+            model: models.event_tickets
+        }
+      ]
+    });
+    Events.then(function(data){
+        if(data) {
+            return res.send({
+                success: true,
+                data: data,
+            });
+        }
+        else {
+          return res.send({
+              success: false,
+              data: data,
+          });
+      }
+    });
+  },
+  async my_event_list(req, res) {
+    if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'user_id Field Is required'
+      }));
+    }
+    const { Events } = eventService.getmyEventList(req.query, req.params.user_id)
+      Events.then(data => {
+        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      })
+    .catch(function(error){
+        res.send(encrypt({ "success": false, "message": error }))
+    })
+  },
+  async my_event_detail(req, res){
+     if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'user_id Field Is required'
+      }));
+    }
+    var where = {};
+    where.id = req.params.id;
+    where.user_id = req.params.user_id;
+    const Events = models.events.findOne({
+      where: where,
+      include: [
+        {
+            model: models.event_tickets
+        }
+      ]
+    });
+    Events.then(function(data){
+        if(data) {
+            return res.send({
+                success: true,
+                data: data,
+            });
+        }
+        else {
+          return res.send({
+              success: false,
+              data: data,
+          });
+      }
+    });
   }
 }

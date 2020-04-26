@@ -10,7 +10,7 @@ const currenciesController = require(__basedir +'/controllers/currencies_control
 const eventsController = require(__basedir +'/controllers/events_controller');
 const uploadController = require(__basedir +'/controllers/upload_controller');
 const orderController = require(__basedir +'/controllers/order_controller');
-
+const eventEnquiryController = require(__basedir +'/controllers/event_enquiry_controller');
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -152,10 +152,25 @@ module.exports.set = (app) => {
 	app.put('/api/events', eventsController.update);
 
 
+	// Need To Integrate
+	app.get('/api/event_list', eventsController.event_list);
+	app.get('/api/popular_events', eventsController.event_list);
+	app.get('/api/home_events', eventsController.event_list);
+
+	app.get('/api/event_details/:id', eventsController.event_detail);
+	app.get('/api/my_events/:user_id', eventsController.my_event_list);
+	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
+
 	// Upload 
 	app.post('/api/upload', uploadController.upload);
 
 	// Order Api
 	app.get('/api/orders', orderController.index);
 	app.post('/api/place_order', orderController.place_order);
+
+	// Event Enquiry
+	app.get('/api/event_enquiry', eventEnquiryController.index);
+	app.post('/api/event_enquiry', eventEnquiryController.add);
+	app.delete('/api/event_enquiry', eventEnquiryController.delete);
+	app.get('/api/event_enquiry/:id', eventEnquiryController.view);
 }
