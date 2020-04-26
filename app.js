@@ -36,7 +36,6 @@ const decrypt = require('./customFunctions').decrypt;
 
 global.mailer = require('./mailer');
 
-
 app.use(nocache());
 app.use(bodyParser.json({limit: CONFIG.file_upload_limit, extended: true}));
 app.use(bodyParser.urlencoded({
@@ -53,7 +52,6 @@ app.all('*', function (req, res, next) {
         console.log(allowedOrigins)
 
        if(allowedOrigins.indexOf(origin) > -1){
-            console.log('IN if======================')
             res.setHeader('Access-Control-Allow-Origin', origin);
         }else{
              return;
@@ -76,28 +74,27 @@ app.all('*', function (req, res, next) {
         }
     }
     else {
-
-        next()
+      next();
     }
 });
 router.set(app);
 
 global.downloadExcel = require('./excel');
 
-if (CONFIG.is_ssl_enabled){
+if (CONFIG.is_ssl_enabled) {
     var https = require('https');
-    const fs = require('fs')
-    var server = https.createServer(options, app);
-    server.timeout = 0
+    const fs = require('fs');
     var options = {
         cert: fs.readFileSync('./security/localhost.key'),
         key:  fs.readFileSync('./security/localhost.crt')
     };
+    var server = https.createServer(options, app);
+    server.timeout = 0;
     server.listen(CONFIG.port, function(){
          console.log('SSL - App listening on port ' + CONFIG.port);
     });
 }
-else{
+else {
 
     app.listen(CONFIG.port, () => console.log('Non SSL - App listening on port ' + CONFIG.port));
 }

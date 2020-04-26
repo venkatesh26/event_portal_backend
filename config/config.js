@@ -9,7 +9,7 @@ module.exports = {
 		db_migration:false,
 		is_acl_enabled:true,
 		is_ssl_enabled:false,
-		is_allow_origin:false,
+		is_allow_origin:true,
 		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
         disable_multiple_login:false,

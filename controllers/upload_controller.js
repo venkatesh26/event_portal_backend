@@ -19,7 +19,7 @@ module.exports = {
 
         var image_file_types = ['image/jpg', 'image/jpeg', 'image/png'];
         var file_type = ['image'];
-        var folder_type = ['events', 'profile_avatar'];
+        var folder_type = ['events', 'profile_avatar', 'category'];
 
         if(folder_type.indexOf(req.query.folder_type) == -1){
           return res.send(encrypt({ "success": false, "message": "Invalid folder_type"}))   
@@ -31,7 +31,8 @@ module.exports = {
 
         var datetime = require('node-datetime');
         var dt = datetime.create();
-        var file_name = req.files.file_data.name;
+        var slug = sluggable_behavior((req.files.file_data.name).toString().toLowerCase());
+        var file_name = Date.now()+"_"+slug;
         var file_dir = "assets/"+req.query.folder_type+"/"
         var fs = require("fs");
         if (!fs.existsSync('assets/')){
