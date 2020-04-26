@@ -40,6 +40,12 @@ module.exports = (sequelize, DataTypes) => {
 		image_name: {
 			type: DataTypes.STRING, allowNull: true,
 		},
+		event_count: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			defaultValue:0,
+
+		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }

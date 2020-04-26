@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
 		user_id: {
 			type: DataTypes.INTEGER
 		},
+		event_user_id: {
+			type: DataTypes.INTEGER
+		},
 		event_id: {
 			type: DataTypes.INTEGER
 		},

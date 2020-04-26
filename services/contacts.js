@@ -35,7 +35,6 @@ const getAllData = function (data) {
   return { 'Contacts': Contacts}
 };
 
-
 const getContactById = id => models.contacts.findById(id);
 
 const deleteCategory = id => models.contacts.destroy(

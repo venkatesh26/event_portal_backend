@@ -14,6 +14,113 @@ module.exports = {
 	        res.send(encrypt({ "success": false, "message": error }))
 	    })
     },
+    async view(req, res) {
+		var where = {};
+	    where.id = req.params.id;
+	    const Event_Orders = models.event_orders.findOne({
+	      where: where,
+	      include: [
+	        {
+	            model: models.events
+	        },
+	        {
+	            model: models.event_order_items
+	        }
+	      ]
+	    });
+	    Event_Orders.then(function(data){
+	        if(data) {
+	            return res.send({
+	                success: true,
+	                data: data,
+	            });
+	        }
+	        else {
+	          return res.send({
+	              success: false,
+	              data: data,
+	          });
+	      }
+	    });
+    },
+    async my_orders(req, res) {
+	    const { EventOrders } = eventOrderService.getMyOrders(req.query, req.params.user_id)
+	      EventOrders.then(data => {
+	        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+	      })
+	    .catch(function(error){
+	        res.send(encrypt({ "success": false, "message": error }))
+	    })
+    },
+    async my_order_detail(req, res) {
+	    var where = {};
+	    where.id = req.params.id;
+	    where.event_user_id = req.params.user_id;
+	    const Event_Orders = models.event_orders.findOne({
+	      where: where,
+	      include: [
+	        {
+	            model: models.events
+	        },
+	        {
+	            model: models.event_order_items
+	        }
+	      ]
+	    });
+	    Event_Orders.then(function(data){
+	        if(data) {
+	            return res.send({
+	                success: true,
+	                data: data,
+	            });
+	        }
+	        else {
+	          return res.send({
+	              success: false,
+	              data: data,
+	          });
+	      }
+	    });
+    },
+    async my_tickets(req, res) {
+	    const { EventOrders } = eventOrderService.getMyTicketsData(req.query, req.params.user_id)
+	      EventOrders.then(data => {
+	        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+	      })
+	    .catch(function(error){
+	        res.send(encrypt({ "success": false, "message": error }))
+	    })
+    },
+    async my_ticket_detail(req, res) {
+    	var where = {};
+	    where.id = req.params.id;
+	    where.user_id = req.params.user_id;
+	    const Event_Orders = models.event_orders.findOne({
+	      where: where,
+	      include: [
+	        {
+	            model: models.events
+	        },
+	        {
+	            model: models.event_order_items
+	        }
+	      ]
+	    });
+	    Event_Orders.then(function(data){
+	        if(data) {
+	            return res.send({
+	                success: true,
+	                data: data,
+	            });
+	        }
+	        else {
+	          return res.send({
+	              success: false,
+	              data: data,
+	          });
+	      }
+	    });
+    },
 	async place_order(req, res) {
 
 		var payment_types = ['stripe'];
@@ -80,6 +187,7 @@ module.exports = {
 
 		    	var currencies_code = Events.currency.code;
 		    	var curreny_id = Events.currency.id;
+		    	var event_user_id = Events.user_id;
 		    	var total_amount = 0;
 		    	var event_ticket_order_items = [];
 		    	var ticket_data = [];
@@ -106,7 +214,6 @@ module.exports = {
 		
 
 		    	const stripe = require('stripe')(CONFIG.stripe.securet_key);
-
 
 		    	var customer_description = '#'+req.body.user_id+" Event Ticket Purchase";
 
@@ -137,6 +244,7 @@ module.exports = {
 
 						// Create Order 
 						var order_details = {
+							event_user_id:event_user_id,
 							user_id:req.body.user_id,
 							event_id: req.body.event_id,
 							currency_id: curreny_id,

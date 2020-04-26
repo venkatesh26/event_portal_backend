@@ -14,6 +14,49 @@ module.exports = {
         res.send(encrypt({ "success": false, "message": error }))
     })
   },
+  async add(req, res) {
+
+      // Required Fields
+      var required_fields = ['name', 'email', 'contact_no', 'message']
+      var error = false;
+      var error_field = '';
+
+      // Required Validation
+      required_fields.forEach(field => {
+          if(typeof req.body[field] =='undefined' || req.body[field]==''){
+            error_field=field;
+            error = true;
+          }
+      });
+
+      if(error) {
+        return res.send(encrypt({
+                success: false,
+                message: error_field + ' Field Is required'
+        }));
+      }
+
+      try
+      {
+        var post_data = { 
+            name: req.body.name,
+            email: req.body.email,
+            contact_no: req.body.contact_no,
+            message: req.body.message,
+        }
+        var event_enquiries = models.contacts.create(post_data);
+        return res.send(encrypt({
+                  success: true,
+                  message: 'Thanks For Enquires'
+        }));
+      }
+      catch(error){
+          return res.send(encrypt({
+                  success: false,
+                  message: 'Event Enquires Not Saved'
+          }));
+      }
+  },
   view(req, res) {
     contactsService.getContactsById(decrypt(decode_id(req.params.id)))
       .then(data => res.send(encrypt({ "success": true, "data": data })))

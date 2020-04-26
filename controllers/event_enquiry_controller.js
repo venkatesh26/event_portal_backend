@@ -54,7 +54,6 @@ module.exports = {
         }));
       }
       catch(error){
-
           return res.send(encrypt({
                   success: false,
                   message: 'Event Enquires Not Saved'

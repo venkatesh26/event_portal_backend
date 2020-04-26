@@ -2,13 +2,11 @@ const models = require('../models');
 const CustomError = require('../customError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-//const jwtBlacklist = require('jwt-blacklist')(jwt);
 const aes256 = require('aes256');
 var key = CONFIG.Aes_key;
 const decrypt = require('../customFunctions').decrypt;
 var dateTime = require('node-datetime');
 
-// const authenticate = params => {
 async function authenticate(req, res, params){
 	return models.users.findOne({
 		where: {

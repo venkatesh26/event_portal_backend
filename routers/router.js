@@ -165,12 +165,23 @@ module.exports.set = (app) => {
 	app.post('/api/upload', uploadController.upload);
 
 	// Order Api
-	app.get('/api/orders', orderController.index);
+
 	app.post('/api/place_order', orderController.place_order);
+	
+
+	app.get('/api/orders', orderController.index);
+	app.get('/api/orders/:id', orderController.view);
+
+	app.get('/api/my_orders/:user_id', orderController.my_orders);
+	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
+
+	app.get('/api/my_tickets/:user_id', orderController.my_tickets);
+	app.get('/api/my_ticket_detail/:user_id/:id', orderController.my_ticket_detail);
+
 
 	// Event Enquiry
 	app.get('/api/event_enquiry', eventEnquiryController.index);
 	app.post('/api/event_enquiry', eventEnquiryController.add);
 	app.delete('/api/event_enquiry', eventEnquiryController.delete);
-	app.get('/api/event_enquiry/:id', eventEnquiryController.view);
+	app.get('/api/event_enquiry/:id',eventEnquiryController.view);
 }
