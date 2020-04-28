@@ -330,8 +330,10 @@ module.exports = {
     })
   },
   async event_detail(req, res){
+
+    
     var where = {};
-    where.id = req.params.id;
+    where.id = req.query.event_id;
     where.status = 'published';
     const Events = models.events.findOne({
       where: where,

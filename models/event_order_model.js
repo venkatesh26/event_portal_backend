@@ -47,7 +47,9 @@ module.exports = (sequelize, DataTypes) => {
 		collate:'utf8_general_ci'
 	});
 	event_orders.associate = models => {
+		
 		event_orders.hasMany(models.event_order_items, { foreignKey: 'event_order_id' });
+		event_orders.hasMany(models.event_attenders, { foreignKey: 'event_order_id' });
 		event_orders.belongsTo(models.events, { foreignKey: 'event_id' });
 		event_orders.belongsTo(models.users, { foreignKey: 'user_id' });
 	}

@@ -73,7 +73,7 @@ const getmyEventList = function (data, user_id) {
 
 const getSearchEventList = function (data) {
   let where = {}
-  let limit = 10;
+  let limit = 12;
   let offset = 0;
   let order_query = []
   if(data.order_key && data.order_param){ 
@@ -90,8 +90,13 @@ const getSearchEventList = function (data) {
   if (data.name) {
     where.name = { [Op.like]: '%' + data.name + '%' }
   }
-  if (data.is_active) {
-    where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
+  if (data.category_id) {
+     where.category_id = data.category_id;
+  }
+  if (data.start_date && data.end_date) {
+    where.createdAt ={
+      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
+      }
   }
   where.deletedAt = null; 
   where.status = 'published';

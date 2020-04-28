@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
 		event_id: {
 			type: DataTypes.INTEGER
 		},
+		event_order_id: {
+			type: DataTypes.INTEGER
+		},
 		event_ticket_id: {
 			type: DataTypes.INTEGER
 		},
@@ -70,6 +73,7 @@ module.exports = (sequelize, DataTypes) => {
 	event_attenders.associate = models => {
 		event_attenders.belongsTo(models.events, { foreignKey: 'event_id' });
 		event_attenders.belongsTo(models.event_tickets, { foreignKey: 'event_ticket_id' });
+		event_attenders.belongsTo(models.event_orders, { foreignKey: 'event_order_id' });
 	}
 	return event_attenders;
 }

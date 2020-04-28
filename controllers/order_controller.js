@@ -145,6 +145,13 @@ module.exports = {
 				message: 'ticket_details Field Is required'
 			}));
 		}
+		if(typeof req.body.event_attenders =='undefined' || req.body.event_attenders==''){
+
+			return res.send(encrypt({
+				success: false,
+				message: 'event_attenders Field Is required'
+			}));
+		}
 		if(typeof req.body.stripe_token =='undefined' || req.body.stripe_token==''){
 
 			return res.send(encrypt({
@@ -159,13 +166,6 @@ module.exports = {
 				message: 'user_id Field Is required'
 			}));
 		}
-
-		var ticket = ['ticket_id', 'quantity'];
-
-		// Ticket Validate
-		req.body.ticket_details.forEach(field => {
-			console.log(field);
-		});
 
 		try 
 		{
@@ -193,11 +193,11 @@ module.exports = {
 		    	var ticket_data = [];
 		    	var total_tickets = 0;
 
-				Events.event_tickets.forEach(function(ticket){
+				Events.event_tickets.map(function(ticket){
 					ticket_data[ticket.id]=ticket.price;
 				});	  
 
-				req.body.ticket_details.forEach(field => {	
+				req.body.ticket_details.map(field => {	
 					var ticket_price =  ticket_data[field.ticket_id];
 					var  ticket_amount  = parseFloat(field.quantity * ticket_price);
 					total_amount = parseFloat(total_amount) + ticket_amount;
@@ -206,12 +206,11 @@ module.exports = {
 						'event_ticket_id': field.ticket_id,
 						'no_of_tickets':field.quantity,
 						'amount':ticket_price,
-						'total_amount':total_amount
+						'total_amount':ticket_amount
 					});
 			    });
 
 				let amount = total_amount * 100;
-		
 
 		    	const stripe = require('stripe')(CONFIG.stripe.securet_key);
 
@@ -224,15 +223,7 @@ module.exports = {
 			    	name:req.body.customer_name,
 			    	description:customer_description,
 			        email: req.body.email, 
-			        source: req.body.stripe_token ,
-			        address: {
-			        	city : '', 
-			        	country :'', 
-			        	line1 :'',
-			         	line2 : "", 
-			         	postal_code: '', 
-			         	state : ''
-			        }
+			        source: req.body.stripe_token
 			    }).then(function(customer){
 
 					stripe.charges.create({ // charge the customer
@@ -242,32 +233,46 @@ module.exports = {
 						customer: customer.id
 					}).then(function(transaction) {
 
-						// Create Order 
-						var order_details = {
-							event_user_id:event_user_id,
-							user_id:req.body.user_id,
-							event_id: req.body.event_id,
-							currency_id: curreny_id,
-							no_of_tickets: total_tickets,
-							total_amount: amount,
-							payment_source:'Stripe Payment',
-							transaction_id:transaction.id,
-							status:transaction.status,
-							event_order_items: event_ticket_order_items
+						if(typeof transaction.status=='succeeded'){
+
+							// Create Order 
+							var order_details = {
+								event_user_id:event_user_id,
+								user_id:req.body.user_id,
+								event_id: req.body.event_id,
+								currency_id: curreny_id,
+								no_of_tickets: total_tickets,
+								total_amount: total_amount,
+								payment_source:'Stripe Payment',
+								transaction_id:transaction.id,
+								status:transaction.status,
+								event_order_items: event_ticket_order_items,
+								event_attenders: req.body.event_attenders
+							}
+					        var order_details = models.event_orders.create(order_details, {
+					          include: [
+					              {  
+					                 model: models.event_order_items
+					              },
+					              {  
+					                 model: models.event_attenders
+					              }
+					          ]
+					        });
+
+							return res.send(encrypt({
+								success: true,
+								message: 'Order Placed Successfully'
+							}));
 						}
-				        var order_details = models.event_orders.create(order_details, {
-				          include: [
-				              {  
-				                 model: models.event_order_items
-				              }
-				          ]
-				        });
+						else {
 
-						return res.send(encrypt({
-							success: true,
-							message: 'Order Placed Successfully'
-						}));
-
+							return res.send(encrypt({
+								success: false,
+								message: 'Sorry ! Your Order Not Placed.Check Your Card Details.'
+							}));
+						}
+						
 					});
 			    });
 		    }

@@ -73,5 +73,15 @@ module.exports = {
     categoryService.deleteCategory(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));
-  }
+  },
+  home_categories(req, res) {
+    const { Categories } = categoryService.getHomeCategories(req.query)
+      Categories.then(data => {
+        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      })
+    .catch(function(error){
+        res.send(encrypt({ "success": false, "message": error }))
+    })
+  },
+
 }

@@ -28,11 +28,9 @@ module.exports.set = (app) => {
 		'/api/popular_events',
 		'/api/home_events',
 		'/api/search_events',
+		'/api/home_categories',
+		'/api/event_details'
 	]
-	const unAuthrorizedDynamicUrl = [
-		'/api/event_details/*'
-	]
-	
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
 		console.log(req.baseUrl);
@@ -166,10 +164,13 @@ module.exports.set = (app) => {
 
 
 	// Front End Router
+	
+	// Unauthorize Router
 	app.get('/api/popular_events', eventsController.popular_event_list);
 	app.get('/api/home_events', eventsController.home_event_list);
 	app.get('/api/search_events', eventsController.search_event_list);
-	app.get('/api/event_details/:id', eventsController.event_detail);
+	app.get('/api/event_details', eventsController.event_detail);
+	app.get('/api/home_categories', categoriesController.home_categories);
 
 	
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);

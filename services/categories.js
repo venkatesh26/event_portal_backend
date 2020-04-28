@@ -35,6 +35,22 @@ const getAllData = function (data) {
   return { 'Categories': Categories}
 };
 
+
+const getHomeCategories = function (data) {
+  let where = {}
+  let limit = 18;
+  let order_query = []
+  order_query = ['event_count', 'DESC'];
+  where.deletedAt = null; 
+  where.is_active = 1
+  const Categories = models.categories.findAndCountAll({
+    limit: limit,
+    where: where,
+    order: [order_query]
+  });
+  return { 'Categories': Categories}
+};
+
 const updateCategory = function (data) {
   return models.categories.update(
     {
@@ -77,4 +93,4 @@ const isExistOrNot = function(name, id=null) {
   });
 }
 
-module.exports = { addCategory, getAllData, getCategoryById, deleteCategory, updateCategory , isExistOrNot};
+module.exports = { addCategory, getAllData, getCategoryById, deleteCategory, updateCategory , isExistOrNot, getHomeCategories};
