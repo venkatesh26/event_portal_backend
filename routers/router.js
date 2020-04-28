@@ -24,8 +24,15 @@ module.exports.set = (app) => {
 		'/api/logout', 
 		'/api/forgot_password',
 		'/api/reset_password',
-		'/api/forgot_password_token_validate'
+		'/api/forgot_password_token_validate',
+		'/api/popular_events',
+		'/api/home_events',
+		'/api/search_events',
 	]
+	const unAuthrorizedDynamicUrl = [
+		'/api/event_details/*'
+	]
+	
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
 		console.log(req.baseUrl);
@@ -151,33 +158,31 @@ module.exports.set = (app) => {
 	app.delete('/api/events/:id', eventsController.delete);
 	app.put('/api/events', eventsController.update);
 
-
-	// Need To Integrate
-	app.get('/api/event_list', eventsController.event_list);
-	app.get('/api/popular_events', eventsController.event_list);
-	app.get('/api/home_events', eventsController.event_list);
-
-	app.get('/api/event_details/:id', eventsController.event_detail);
-	app.get('/api/my_events/:user_id', eventsController.my_event_list);
-	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
-
 	// Upload 
 	app.post('/api/upload', uploadController.upload);
 
-	// Order Api
-
-	app.post('/api/place_order', orderController.place_order);
-	
-
 	app.get('/api/orders', orderController.index);
 	app.get('/api/orders/:id', orderController.view);
+
+
+	// Front End Router
+	app.get('/api/popular_events', eventsController.popular_event_list);
+	app.get('/api/home_events', eventsController.home_event_list);
+	app.get('/api/search_events', eventsController.search_event_list);
+	app.get('/api/event_details/:id', eventsController.event_detail);
+
+	
+	app.get('/api/my_events/:user_id', eventsController.my_event_list);
+	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
+
+	// Order Api
+	app.post('/api/place_order', orderController.place_order);
 
 	app.get('/api/my_orders/:user_id', orderController.my_orders);
 	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
 
 	app.get('/api/my_tickets/:user_id', orderController.my_tickets);
 	app.get('/api/my_ticket_detail/:user_id/:id', orderController.my_ticket_detail);
-
 
 	// Event Enquiry
 	app.get('/api/event_enquiry', eventEnquiryController.index);

@@ -149,6 +149,11 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false, 
 			trim:true
 		},
+		is_popular: {
+			type: DataTypes.BOOLEAN,
+			defaultValue:0
+		},
+		
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }

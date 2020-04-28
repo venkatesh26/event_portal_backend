@@ -2,6 +2,39 @@ const models = require('../models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
+const getPopularEventList = function (data, user_id) {
+  let where = {}
+  let limit = 3;
+  let order_query = ['createdAt', 'DESC']
+  where.deletedAt = null; 
+  where.status = 'published';
+  where.is_popular = 1;
+  const Events = models.events.findAndCountAll({
+    limit: limit,
+    where: where,
+    order: [order_query],
+    $sort: { id: 1 }
+  });
+  return { 'Events': Events}
+};
+
+
+const getHomeEventList = function (data, user_id) {
+  let where = {}
+  let limit = 12;
+  let order_query = [];
+  order_query = ['createdAt', 'DESC'];
+  where.deletedAt = null; 
+  where.status = 'published';
+  const Events = models.events.findAndCountAll({
+    limit: limit,
+    where: where,
+    order: [order_query],
+    $sort: { id: 1 }
+  });
+  return { 'Events': Events}
+};
+
 
 const getmyEventList = function (data, user_id) {
   let where = {}
@@ -38,7 +71,7 @@ const getmyEventList = function (data, user_id) {
 };
 
 
-const getEventList = function (data) {
+const getSearchEventList = function (data) {
   let where = {}
   let limit = 10;
   let offset = 0;
@@ -73,7 +106,7 @@ const getEventList = function (data) {
 };
 
 
-const getAllData = function (data) {
+const getAdminListData = function (data) {
   let where = {}
   let limit = 10;
   let offset = 0;
@@ -131,4 +164,4 @@ const getSlugCount = function(slug, id=null) {
   });
 }
 
-module.exports = {getAllData, deleteEvents, getSlugCount, getEventList, getmyEventList };
+module.exports = {getAdminListData, deleteEvents, getSlugCount, getSearchEventList, getmyEventList, getPopularEventList, getHomeEventList};

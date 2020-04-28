@@ -91,5 +91,4 @@ const isExistOrNot = function(name, id=null) {
   });
 }
 
-
 module.exports = { add, getAllData, getById, deleteData, update, isExistOrNot};

@@ -7,7 +7,25 @@ const decrypt = require('../customFunctions').decrypt;
 const decode_id = require('../customFunctions').decode_id;
 module.exports = {
   async index(req, res) {
-    const { Events } = eventService.getAllData(req.query)
+    const { Events } = eventService.getAdminListData(req.query)
+      Events.then(data => {
+        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      })
+    .catch(function(error){
+        res.send(encrypt({ "success": false, "message": error }))
+    })
+  },
+  async popular_event_list(req, res) {
+    const { Events } = eventService.getPopularEventList(req.query)
+      Events.then(data => {
+        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      })
+    .catch(function(error){
+        res.send(encrypt({ "success": false, "message": error }))
+    })
+  },
+  async home_event_list(req, res) {
+    const { Events } = eventService.getHomeEventList(req.query)
       Events.then(data => {
         res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
       })
@@ -302,8 +320,8 @@ module.exports = {
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));
   },
-  async event_list(req, res) {
-    const { Events } = eventService.getEventList(req.query)
+  async search_event_list(req, res) {
+    const { Events } = eventService.getSearchEventList(req.query)
       Events.then(data => {
         res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
       })
