@@ -31,8 +31,14 @@ module.exports = {
 
         var datetime = require('node-datetime');
         var dt = datetime.create();
-        var slug = sluggable_behavior((req.files.file_data.name).toString().toLowerCase());
-        var file_name = Date.now()+"_"+slug;
+
+        var file_path = req.files.file_data.name;
+        
+        var file_name = file_path.substr(0, file_path.lastIndexOf('.'));
+        var ext = file_path.substr((file_path.lastIndexOf('.') + 1));
+
+        var slug = sluggable_behavior((file_name).toString().toLowerCase());
+        var file_name = Date.now()+"_"+slug+"."+ext;
         var file_dir = "assets/"+req.query.folder_type+"/"
         var fs = require("fs");
         if (!fs.existsSync('assets/')){
@@ -53,8 +59,27 @@ module.exports = {
           var data = {};
           data.file_dir = file_dir;
           data.file_name = file_name;
+          module.exports.compress_image(file_dir+file_name, file_dir);
           return res.send(encrypt({ "success": true, "data":data}));
         }
       });
+    },
+    compress_image(image_path, image_dir){
+
+        var compress_images = require('compress-images'), INPUT_path_to_your_images, OUTPUT_path;
+        INPUT_path_to_your_images = image_path;
+        OUTPUT_path = image_dir+"compress/";
+        compress_images(INPUT_path_to_your_images, OUTPUT_path, {compress_force: false, statistic: true, autoupdate: true}, false,
+                                                    {jpg: {engine: 'mozjpeg', command: ['-quality', '60']}},
+                                                    {png: {engine: 'pngquant', command: ['--quality=20-50']}},
+                                                    {svg: {engine: 'svgo', command: '--multipass'}},
+                                                    {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}}, function(error, completed, statistic){
+                    console.log('-------------');
+                    console.log(error);
+                    console.log(completed);
+                    console.log(statistic);
+                    console.log('-------------');                                   
+        });
     }
+
 }
