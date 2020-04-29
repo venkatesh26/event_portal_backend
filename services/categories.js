@@ -86,6 +86,7 @@ const isExistOrNot = function(name, id=null) {
      where: where
   });
   return data.then(function(count){
+    console.log(count);
       if(count > 1){
         return true;
       }

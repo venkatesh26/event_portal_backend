@@ -14,21 +14,24 @@ module.exports = {
         res.send(encrypt({ "success": false, "message": error }))
     })
   },
-  add(req, res) {
+  async add(req, res) {
+    
     if(typeof req.body.name =='undefined' || req.body.name==''){
       return res.send(encrypt({
             success: false,
             message: 'name Field Is required'
       }));
     }
+
     // Check  Already Exists
-    var isExist = categoryService.isExistOrNot(req.body.name);
-    if(isExist){
+    var isExist = await categoryService.isExistOrNot(req.body.name);
+    if(isExist) {
       return res.send(encrypt({
             success: false,
             message: 'Category Already Exists'
       }));
     }
+
     req.body.slug=sluggable_behavior((req.body.name).toString().toLowerCase());
     categoryService.addCategory(req.body)
       .then(data => res.send(encrypt({ "success": true, "data": data })))

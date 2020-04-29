@@ -34,7 +34,6 @@ module.exports = {
     })
   },
   async add(req, res) {
-
       // Required Fields
       var required_fields=[
         'name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
@@ -73,6 +72,8 @@ module.exports = {
         ticket.slug = sluggable_behavior((req.body.name).toString().toLowerCase());
         event_tickets.push(ticket);
       });
+
+      console.log(req.body);
 
 
       var post_data = {
@@ -331,7 +332,7 @@ module.exports = {
   },
   async event_detail(req, res){
 
-    
+
     var where = {};
     where.id = req.query.event_id;
     where.status = 'published';
