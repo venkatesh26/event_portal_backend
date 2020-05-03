@@ -20,6 +20,7 @@ const aes256 = require('aes256');
 
 module.exports.set = (app) => {
 	const unAuthrorizedUrl = [
+		'/api/customer/register',
 		'/api/login', 
 		'/api/logout', 
 		'/api/forgot_password',
@@ -165,7 +166,6 @@ module.exports.set = (app) => {
 	app.get('/api/orders/:id', orderController.view);
 
 
-
 	// Event Enquiry
 	app.get('/api/event_enquiry', eventEnquiryController.index);
 	app.delete('/api/event_enquiry/:id', eventEnquiryController.delete);
@@ -174,6 +174,7 @@ module.exports.set = (app) => {
 	// Front End Router
 
 	// Unauthorize Router
+	app.post('/api/customer/register', userController.register);
 	app.get('/api/popular_events', eventsController.popular_event_list);
 	app.get('/api/home_events', eventsController.home_event_list);
 	app.get('/api/search_events', eventsController.search_event_list);
@@ -188,6 +189,4 @@ module.exports.set = (app) => {
 	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
 	app.get('/api/my_tickets/:user_id', orderController.my_tickets);
 	app.get('/api/my_ticket_detail/:user_id/:id', orderController.my_ticket_detail);
-
-
 }

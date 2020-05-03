@@ -149,6 +149,11 @@ module.exports = {
 			.catch(
 				(error) => res.status(400).send(encrypt({ "success": false, "message": error })));
 	},
+	async register(req, res){
+
+
+
+	},
 	async forgot_password(req, res) {
 	 	if (typeof req.body.email=='undefined'){
 	       return res.send(encrypt({ "success": false, "message": "email field is required"}))

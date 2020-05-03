@@ -15,19 +15,6 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		last_name: { type: DataTypes.STRING, allowNull: true },
-		user_name: {
-			type: DataTypes.STRING, allowNull: false,
-			validate: {
-				notEmpty: {
-					args: true,
-					msg: "User Name Required"
-				},
-			},
-			unique: {
-				args: true,
-				msg: 'User name already in use!'
-			}
-		},
 		password: {
 			type: DataTypes.STRING, allowNull: false,
 			validate: {
@@ -37,26 +24,23 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			}
 		},
-		gender: DataTypes.INTEGER,
-		dob: DataTypes.DATEONLY,
+		gender: { type:DataTypes.INTEGER, allowNull: true},
+		dob: { type:DataTypes.DATEONLY, allowNull: true },
 		email: { type: DataTypes.STRING, allowNull: true,
 			unique: {
 				args: true,
 				msg: 'Email id already in use!'
 			}
 		},
-		area_code: { type: DataTypes.STRING, allowNull: true },
+		area_code: { type:DataTypes.STRING, allowNull: true },
 		mobile_no: {
-			type: DataTypes.STRING, allowNull: false, unique: true,
+			type: DataTypes.STRING, 
+			allowNull: true,
 			validate: {
 				len: {
 					args: [10],
 					msg: "Mobile number must be 10 digit"
 				}
-			},
-			unique: {
-				args: true,
-				msg: 'Mobile number already in use!'
 			}
 		},
 		address_1: { type: DataTypes.STRING, allowNull: true },
