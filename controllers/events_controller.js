@@ -1,4 +1,4 @@
-const eventService = require('../services/events');
+sconst eventService = require('../services/events');
 const countryService = require('../services/countries');
 const stateService = require('../services/states');
 const cityService = require('../services/cities');
@@ -326,37 +326,37 @@ module.exports = {
       }
   },
   async view(req, res) {
-    var where = {};
-    where.id = req.params.id;
-    const Events = models.events.findOne({
-      where: where,
-      include: [
-        {
-            model: models.users,
-            attributes: ['first_name','last_name','user_name']
-        },
-        {
-            model: models.event_tags
-        },
-        {
-            model: models.event_tickets
-        }
-      ]
-    });
-    Events.then(function(data){
-        if(data) {
+      var where = {};
+      where.id = req.params.id;
+      const Events = models.events.findOne({
+        where: where,
+        include: [
+          {
+              model: models.users,
+              attributes: ['first_name','last_name','user_name']
+          },
+          {
+              model: models.event_tags
+          },
+          {
+              model: models.event_tickets
+          }
+        ]
+      });
+      Events.then(function(data){
+          if(data) {
+              return res.send({
+                  success: true,
+                  data: data,
+              });
+          }
+          else {
             return res.send({
-                success: true,
+                success: false,
                 data: data,
             });
         }
-        else {
-          return res.send({
-              success: false,
-              data: data,
-          });
-      }
-    });
+      });
   },
   async delete(req, res) {
     eventService.deleteEvents(decrypt(decode_id(req.params.id))).then(() => 
@@ -417,36 +417,36 @@ module.exports = {
     })
   },
   async my_event_detail(req, res){
-     if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
-      return res.send(encrypt({
-            success: false,
-            message: 'user_id Field Is required'
-      }));
-    }
-    var where = {};
-    where.id = req.params.id;
-    where.user_id = req.params.user_id;
-    const Events = models.events.findOne({
-      where: where,
-      include: [
-        {
-            model: models.event_tickets
-        }
-      ]
-    });
-    Events.then(function(data){
-        if(data) {
+      if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'user_id Field Is required'
+        }));
+      }
+      var where = {};
+      where.id = req.params.id;
+      where.user_id = req.params.user_id;
+      const Events = models.events.findOne({
+        where: where,
+        include: [
+          {
+              model: models.event_tickets
+          }
+        ]
+      });
+      Events.then(function(data){
+          if(data) {
+              return res.send({
+                  success: true,
+                  data: data,
+              });
+          }
+          else {
             return res.send({
-                success: true,
+                success: false,
                 data: data,
             });
         }
-        else {
-          return res.send({
-              success: false,
-              data: data,
-          });
-      }
-    });
+      });
   }
 }
