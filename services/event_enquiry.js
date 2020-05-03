@@ -41,7 +41,9 @@ const getAllData = function (data) {
   return { 'EventEnquiry': EventEnquiry}
 };
 
-const getById = id => models.event_enquiries.findById(id);
+const getById = function (data) {
+   return models.event_enquiries.findOne({where:{id:data}});
+}
 
 const deleteData = id => models.event_enquiries.destroy(
   {

@@ -29,7 +29,9 @@ module.exports.set = (app) => {
 		'/api/home_events',
 		'/api/search_events',
 		'/api/home_categories',
-		'/api/event_details'
+		'/api/event_details',
+		'/api/place_order',
+		'/api/add_enquiry'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -163,31 +165,29 @@ module.exports.set = (app) => {
 	app.get('/api/orders/:id', orderController.view);
 
 
+
+	// Event Enquiry
+	app.get('/api/event_enquiry', eventEnquiryController.index);
+	app.delete('/api/event_enquiry/:id', eventEnquiryController.delete);
+	app.get('/api/event_enquiry/:id',eventEnquiryController.view);
+
 	// Front End Router
-	
+
 	// Unauthorize Router
 	app.get('/api/popular_events', eventsController.popular_event_list);
 	app.get('/api/home_events', eventsController.home_event_list);
 	app.get('/api/search_events', eventsController.search_event_list);
 	app.get('/api/event_details', eventsController.event_detail);
 	app.get('/api/home_categories', categoriesController.home_categories);
+	app.post('/api/place_order', orderController.place_order);
+	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
 
-	
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);
 	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
-
-	// Order Api
-	app.post('/api/place_order', orderController.place_order);
-
 	app.get('/api/my_orders/:user_id', orderController.my_orders);
 	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
-
 	app.get('/api/my_tickets/:user_id', orderController.my_tickets);
 	app.get('/api/my_ticket_detail/:user_id/:id', orderController.my_ticket_detail);
 
-	// Event Enquiry
-	app.get('/api/event_enquiry', eventEnquiryController.index);
-	app.post('/api/event_enquiry', eventEnquiryController.add);
-	app.delete('/api/event_enquiry', eventEnquiryController.delete);
-	app.get('/api/event_enquiry/:id',eventEnquiryController.view);
+
 }

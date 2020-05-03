@@ -192,31 +192,38 @@ module.exports = {
 		    	var event_ticket_order_items = [];
 		    	var ticket_data = [];
 		    	var total_tickets = 0;
-
 				Events.event_tickets.map(function(ticket){
 					ticket_data[ticket.id]=ticket.price;
 				});	  
-
 				req.body.ticket_details.map(field => {	
-					var ticket_price =  ticket_data[field.ticket_id];
-					var  ticket_amount  = parseFloat(field.quantity * ticket_price);
-					total_amount = parseFloat(total_amount) + ticket_amount;
-					total_tickets = parseInt(total_tickets)+field.quantity;
-					event_ticket_order_items.push({
-						'event_ticket_id': field.ticket_id,
-						'no_of_tickets':field.quantity,
-						'amount':ticket_price,
-						'total_amount':ticket_amount
-					});
+
+					try
+					{
+						var ticket_price =  ticket_data[field.ticket_id];
+						if(typeof ticket_price!='undefined'){
+							var  ticket_amount  = parseFloat(field.quantity * ticket_price);
+							total_amount = parseFloat(total_amount) + ticket_amount;
+							total_tickets = parseInt(total_tickets)+parseInt(field.quantity);
+							event_ticket_order_items.push({
+								'event_ticket_id': field.ticket_id,
+								'no_of_tickets':field.quantity,
+								'amount':ticket_price,
+								'total_amount':ticket_amount
+							});
+						}
+					}
+					catch(error){
+
+
+					}
 			    });
 
 				let amount = total_amount * 100;
-
 		    	const stripe = require('stripe')(CONFIG.stripe.securet_key);
-
 		    	var customer_description = '#'+req.body.user_id+" Event Ticket Purchase";
-
 		    	var charge_description = '#'+req.body.user_id+" Event Charge";
+
+		    	console.log(customer_description);
 
 			    // create a customer 
 			    stripe.customers.create({
@@ -226,14 +233,19 @@ module.exports = {
 			        source: req.body.stripe_token
 			    }).then(function(customer){
 
+			    	console.log("====================================")	
+			    	console.log(customer);
+
+			    	console.log("====================================")
+
 					stripe.charges.create({ // charge the customer
 						amount,
 						description: charge_description,
-						currency: currencies_code,
+						currency: 'inr',
 						customer: customer.id
 					}).then(function(transaction) {
 
-						if(typeof transaction.status=='succeeded'){
+						if(typeof transaction.status!='undefined' && transaction.status=='succeeded'){
 
 							// Create Order 
 							var order_details = {
@@ -249,6 +261,7 @@ module.exports = {
 								event_order_items: event_ticket_order_items,
 								event_attenders: req.body.event_attenders
 							}
+
 					        var order_details = models.event_orders.create(order_details, {
 					          include: [
 					              {  

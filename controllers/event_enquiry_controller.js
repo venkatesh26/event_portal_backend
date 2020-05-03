@@ -14,7 +14,7 @@ module.exports = {
         res.send(encrypt({ "success": false, "message": error }))
     })
   },
-  async add(req, res) {
+  async add_enquiry(req, res) {
       // Required Fields
       var required_fields=[
         'event_id', 'name', 'email', 'contact_no', 'message'
@@ -37,7 +37,7 @@ module.exports = {
                 message: error_field + ' Field Is required'
         }));
       }
-
+      
       try
       {
         var post_data = { 
@@ -50,7 +50,7 @@ module.exports = {
         var event_enquiries = models.event_enquiries.create(post_data);
         return res.send(encrypt({
                   success: true,
-                  message: 'Thanks For Enquires'
+                  message: 'Thanks For your Enquires. We will shortly Contact you.'
         }));
       }
       catch(error){
