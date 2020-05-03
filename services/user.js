@@ -2,7 +2,9 @@ const models = require('../models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const addUser = user => models.users.create(user);
+const customerRegister = user => models.users.create(user);
 const getUserByLogin = user_name => models.users.findOne({ where: { user_name } });
+const getUserByEmail = email => models.users.findOne({ where: { email } });
 
 const getUser = function (data) {
 	return models.users.findOne({
@@ -205,5 +207,7 @@ module.exports = {
 	getUsersLog,
 	getUserDetails,
 	updateUserData,
-	approveUser
+	approveUser,
+	getUserByEmail,
+	customerRegister
 }

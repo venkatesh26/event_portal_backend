@@ -72,6 +72,8 @@ module.exports = (sequelize, DataTypes) => {
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
 		is_admin: { type: DataTypes.BOOLEAN, defaultValue: false },
 		is_login: { type: DataTypes.BOOLEAN, defaultValue: false },
+		is_email_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
+		email_verified_date: { type: DataTypes.DATE, allowNull: true },
 		last_login: { type: DataTypes.DATE, allowNull: true },
 		token_expiry_hours: { type: DataTypes.STRING, allowNull: true },
 		forgot_pass_token: { type: DataTypes.STRING, allowNull: true },

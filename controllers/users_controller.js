@@ -151,8 +151,53 @@ module.exports = {
 	},
 	async register(req, res){
 
+	  // Required Fields
+      var required_fields=[
+        'first_name', 'email', 'password'
+      ]
 
+      var error = false;
+      var error_field = '';
 
+      // Required Validation
+      required_fields.forEach(field => {
+          if(typeof req.body[field] =='undefined' || req.body[field]==''){
+            error_field=field;
+            error = true;
+          }
+      });
+
+       if(error) {
+	        return res.send(encrypt({
+	                success: false,
+	                message: error_field + ' Field Is required'
+	        }));
+        }
+		return userService.getUserByEmail(req.body.email || '')
+		.then(exists => {
+			if (exists) {
+				return res.send(encrypt({
+					success: false,
+					message: 'Registration failed. Email already registered.'
+				}));
+			}
+			var user = {
+				first_name: req.body.first_name,
+				password: bcrypt.hashSync(req.body.password, CONFIG.saltRounds),
+				email: req.body.email,
+				is_active: 1,
+				is_email_verfied: 0,
+				role_id:2
+			}
+			return userService.customerRegister(user)
+				.then(() => res.send(encrypt({ success: true,message:"Customer Register Succesfully..Please Check Your Email to Verify Your Account" })))
+				.catch(err => {
+					return res.send(encrypt({
+						success: false,
+						message: err.message
+					}));
+			});
+		});
 	},
 	async forgot_password(req, res) {
 	 	if (typeof req.body.email=='undefined'){

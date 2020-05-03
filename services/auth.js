@@ -35,7 +35,6 @@ async function authenticate(req, res, params){
 			time: bcrypt.hashSync(aes256.encrypt(key, new Date().toString()), CONFIG.saltRounds),
 			r_token: aes256.encrypt(key, user.role.name),
 			super_admin_token: aes256.encrypt(key, (user.role.is_super_admin).toString()),
-			user_name_token:aes256.encrypt(key, (user.user_name).toString()),
 			role_id: aes256.encrypt(key, (user.role_id).toString()),
 			user_id: aes256.encrypt(key, (user.id).toString())
 		};
