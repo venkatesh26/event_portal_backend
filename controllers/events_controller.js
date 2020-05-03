@@ -248,8 +248,6 @@ module.exports = {
           long:req.body.long
       }
 
-      console.log(post_data);
-
       try
       {
           await models.events.update(post_data,{
