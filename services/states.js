@@ -83,4 +83,27 @@ const isExistOrNot = function(name, id=null) {
   });
 }
 
-module.exports = { add, getAllData, getById, deleteData, update, isExistOrNot};
+
+const findOrSaveAndGetId = async function(name, country_id) {
+  var where ={}
+  where.name = name;
+  const data = models.states.findOne({
+      where: where,
+      limit: 1
+  });
+  return data.then(async function(data){
+      if(data){
+        return data.id; 
+      }
+      var slug = sluggable_behavior((name).toString().toLowerCase());
+      var country_data = {
+        country_id:country_id,
+        name:name,
+        slug:slug
+      }
+      var country = await models.states.create(country_data, { returning: true });
+      return country.id;
+  });
+}
+
+module.exports = { add, getAllData, getById, deleteData, update, isExistOrNot, findOrSaveAndGetId};

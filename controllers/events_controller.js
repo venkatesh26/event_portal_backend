@@ -1,4 +1,7 @@
 const eventService = require('../services/events');
+const countryService = require('../services/countries');
+const stateService = require('../services/states');
+const cityService = require('../services/cities');
 const tagService = require('../services/tag');
 const models = require('../models');
 var crypto = require('crypto');
@@ -34,12 +37,13 @@ module.exports = {
     })
   },
   async add(req, res) {
+
       // Required Fields
       var required_fields=[
-        'name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
-        'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
-        'img_name', 'city', 'city_id', 'tags', 'venue_name', 'address_line_1',"currency_id", 
-        'user_id'
+        'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+        'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+        'thumb_nail_img_name', 'img_dir', 'img_name', 'city', 'tags', 'venue_name', 
+        'address_line_1',"currency_id", 'user_id', 'state', 'country', 'pincode'
       ]
 
       var error = false;
@@ -73,8 +77,18 @@ module.exports = {
         event_tickets.push(ticket);
       });
 
-      console.log(req.body);
+      var country_id = '';
+      var state_id = '';
+      var city_id = '';
 
+      // Save Country And GET ID
+      country_id = await countryService.findOrSaveAndGetId(req.body.country);
+
+      // Save State And GET ID
+      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+      
+      // Save City And GET ID
+      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id);
 
       var post_data = {
           name: req.body.name,
@@ -92,20 +106,26 @@ module.exports = {
           img_dir:req.body.img_dir,
           img_name:req.body.img_name,
           city:req.body.city_name,
-          city_id:req.body.city_id,
+          city_id:city_id,
+          state:req.body.state,
+          state_id:city_id,
+          country:req.body.country,
+          country_id:country_id,
+          pincode:req.body.pincode,
           tags:req.body.tags,
           status:'published',
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
+          address_line_2:req.body.address_line_2,
           currency_id:req.body.currency_id,
           lat:req.body.lat,
           long:req.body.long,
+          is_popular:req.body.is_popular,
           event_tickets:event_tickets
       }
 
       try
       {
-
         var event_details = models.events.create(post_data, {
           include: [
               {  
@@ -180,6 +200,21 @@ module.exports = {
          slug = slug+"_"+parseInt(slug_counts+1);   
       }
 
+
+      var country_id = '';
+      var state_id = '';
+      var city_id = '';
+
+      // Save Country And GET ID
+      country_id = await countryService.findOrSaveAndGetId(req.body.country);
+
+      // Save State And GET ID
+      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+      
+      // Save City And GET ID
+      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id);
+
+
       var post_data = {
           name: req.body.name,
           slug: slug,
@@ -195,13 +230,22 @@ module.exports = {
           thumb_nail_img_name:req.body.thumb_nail_img_name,
           img_dir:req.body.img_dir,
           img_name:req.body.img_name,
-          city:req.body.city_name,
-          city_id:req.body.city_id,
           tags:req.body.tags,
           status:'published',
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
-          currency_id:req.body.currency_id
+          address_line_2:req.body.address_line_2,
+          is_popular:req.body.is_popular,
+          currency_id:req.body.currency_id,
+          city:req.body.city_name,
+          city_id:city_id,
+          state:req.body.state,
+          state_id:city_id,
+          country:req.body.country,
+          country_id:country_id,
+          pincode:req.body.pincode,
+          lat:req.body.lat,
+          long:req.body.long
       }
 
       console.log(post_data);

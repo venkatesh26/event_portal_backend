@@ -32,8 +32,11 @@ module.exports = (sequelize, DataTypes) => {
 
 			}
 		},
-		start_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-		end_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+		start_date: { type: DataTypes.DATE },
+		end_date: { type: DataTypes.DATE },
+		start_time: { type: DataTypes.STRING, allowNull: true},
+		end_time: { type: DataTypes.STRING, allowNull: true },
+		time_zone: { type: DataTypes.STRING, allowNull: true },
 		type: {
 			type: DataTypes.STRING, allowNull: true, trim:true
 		},
@@ -105,7 +108,35 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		city_id: {
-			type: DataTypes.INTEGER
+			type: DataTypes.INTEGER,
+			allowNull: true
+		},
+		state: {
+			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
+				notEmpty: {
+					args: true,
+					msg: "State  Required"
+				},
+			}
+		},
+		state_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true
+		},
+		country: {
+			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
+				notEmpty: {
+					args: true,
+					msg: "Country  Required"
+				},
+			}
+		},
+		country_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true
+		},
+		pincode: {
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		lat: {
 			type: DataTypes.STRING,
@@ -153,7 +184,6 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.BOOLEAN,
 			defaultValue:0
 		},
-		
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }
