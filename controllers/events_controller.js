@@ -1,4 +1,4 @@
-sconst eventService = require('../services/events');
+const eventService = require('../services/events');
 const countryService = require('../services/countries');
 const stateService = require('../services/states');
 const cityService = require('../services/cities');
