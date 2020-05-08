@@ -44,29 +44,37 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('client'));
 
 app.all('*', function (req, res, next) {
+
+  //      next();
   
   if(CONFIG.is_allow_origin==true){   
         var allowedOrigins = CONFIG.allowedOrigins
         var origin = req.headers.origin;
+
+        console.log(req.headers);
         console.log(origin)
         console.log(allowedOrigins)
+
+        var origin = req.headers.origin ? req.headers.origin : req.headers.host
 
        if(allowedOrigins.indexOf(origin) > -1){
             res.setHeader('Access-Control-Allow-Origin', origin);
         }else{
+
              return;
         }
         var responseSettings = {
-            "AccessControlAllowOrigin": req.headers.origin,
+            "AccessControlAllowOrigin": req.headers.origin ? req.headers.origin : req.headers.host,
             "AccessControlAllowHeaders": "Content-Type,X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name",
             "AccessControlAllowMethods": "POST, GET, PUT, DELETE, OPTIONS",
-            "AccessControlAllowCredentials": true
+           "AccessControlAllowCredentials": true
         };
-
         res.header("Access-Control-Allow-Credentials", responseSettings.AccessControlAllowCredentials);
         res.header("Access-Control-Allow-Headers", (req.headers['access-control-request-headers']) ? req.headers['access-control-request-headers'] : "x-requested-with");
         res.header("Access-Control-Allow-Methods", (req.headers['access-control-request-method']) ? req.headers['access-control-request-method'] : responseSettings.AccessControlAllowMethods);
         if ('OPTIONS' == req.method) {
+          
+         // next();
             res.send(200);
         }
         else {

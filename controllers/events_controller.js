@@ -90,6 +90,9 @@ module.exports = {
       // Save City And GET ID
       city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id);
 
+
+      console.log(req.body);
+
       var post_data = {
           name: req.body.name,
           slug: slug,
@@ -105,7 +108,7 @@ module.exports = {
           thumb_nail_img_name:req.body.thumb_nail_img_name,
           img_dir:req.body.img_dir,
           img_name:req.body.img_name,
-          city:req.body.city_name,
+          city:req.body.city,
           city_id:city_id,
           state:req.body.state,
           state_id:city_id,
@@ -121,6 +124,9 @@ module.exports = {
           lat:req.body.lat,
           long:req.body.long,
           is_popular:req.body.is_popular,
+          start_time:req.body.start_time,
+          end_time:req.body.end_time,
+          time_zone:req.body.time_zone,
           event_tickets:event_tickets
       }
 
@@ -237,7 +243,7 @@ module.exports = {
           address_line_2:req.body.address_line_2,
           is_popular:req.body.is_popular,
           currency_id:req.body.currency_id,
-          city:req.body.city_name,
+          city:req.body.city,
           city_id:city_id,
           state:req.body.state,
           state_id:city_id,
@@ -245,9 +251,12 @@ module.exports = {
           country_id:country_id,
           pincode:req.body.pincode,
           lat:req.body.lat,
-          long:req.body.long
+          long:req.body.long,
+          start_time:req.body.start_time,
+          end_time:req.body.end_time,
+          time_zone:req.body.time_zone,
       }
-
+      
       try
       {
           await models.events.update(post_data,{
