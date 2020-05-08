@@ -121,6 +121,113 @@ module.exports = {
 	      }
 	    });
     },
+    async payment_intents(req, res){
+
+		const stripe = require('stripe')(CONFIG.stripe.securet_key);
+
+		if(typeof req.body.event_id =='undefined' || req.body.event_id==''){
+
+			return res.send(encrypt({
+				success: false,
+				message: 'event_id Field Is required'
+			}));
+		}
+
+		if(typeof req.body.ticket_details =='undefined' || req.body.ticket_details==''){
+
+			return res.send(encrypt({
+				success: false,
+				message: 'ticket_details Field Is required'
+			}));
+		}
+
+		try
+		{
+			// Get Event Details
+			var where = {};
+	        where.id = req.body.event_id;
+			const Events = await models.events.findOne({
+		      where: where,
+		      include: [
+		        {
+		            model: models.event_tickets
+		        },
+		        {
+		            model: models.currencies
+		        }
+		      ]
+		    });
+		    if(Events) {
+
+		    	var currencies_code = Events.currency.code;
+		    	var curreny_id = Events.currency.id;
+		    	var event_user_id = Events.user_id;
+		    	var total_amount = 0;
+		    	var event_ticket_order_items = [];
+		    	var ticket_data = [];
+		    	var total_tickets = 0;
+				Events.event_tickets.map(function(ticket){
+					ticket_data[ticket.id]=ticket.price;
+				});	  
+				req.body.ticket_details.map(field => {	
+
+					try
+					{
+						var ticket_price =  ticket_data[field.ticket_id];
+						if(typeof ticket_price!='undefined'){
+							var  ticket_amount  = parseFloat(field.quantity * ticket_price);
+							total_amount = parseFloat(total_amount) + ticket_amount;
+							total_tickets = parseInt(total_tickets)+parseInt(field.quantity);
+							event_ticket_order_items.push({
+								'event_ticket_id': field.ticket_id,
+								'no_of_tickets':field.quantity,
+								'amount':ticket_price,
+								'total_amount':ticket_amount
+							});
+						}
+					}
+					catch(error){
+
+
+					}
+				});
+
+				let amount = total_amount;
+		    	var currencies_code = Events.currency.code;
+
+				stripe.paymentIntents.create(
+				{
+					amount: amount,
+					currency: currencies_code,
+					payment_method_types: ['card'],
+				},
+				function(err, paymentIntent) {
+
+					console.log(paymentIntent);
+
+					return res.send(encrypt({
+						success: true,
+						data:paymentIntent.client_secret,
+						client_secret:paymentIntent.client_secret,
+						message: 'success'
+					}));
+				});
+			}
+			else {
+
+				return res.send(encrypt({
+					success: false,
+					message: 'Somethig Went Wrong'
+				}));
+			}
+		}
+		catch(error) {
+			return res.send(encrypt({
+				success: false,
+				message: error
+			}));
+		}
+    },
 	async place_order(req, res) {
 
 		var payment_types = ['stripe'];
