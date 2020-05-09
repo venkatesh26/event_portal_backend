@@ -192,13 +192,14 @@ module.exports = {
 					}
 				});
 
-				let amount = total_amount;
+				let amount = total_amount * 100;
 		    	var currencies_code = Events.currency.code;
 
 				stripe.paymentIntents.create(
 				{
 					amount: amount,
-					currency: currencies_code,
+					description:"event ticket purchase",
+					currency: 'inr',//currencies_code,
 					payment_method_types: ['card'],
 				},
 				function(err, paymentIntent) {
@@ -229,7 +230,6 @@ module.exports = {
 		}
     },
 	async place_order(req, res) {
-
 		var payment_types = ['stripe'];
 		if(typeof req.body.payment_type =='undefined' || req.body.payment_type==''){
 
@@ -257,13 +257,6 @@ module.exports = {
 			return res.send(encrypt({
 				success: false,
 				message: 'event_attenders Field Is required'
-			}));
-		}
-		if(typeof req.body.stripe_token =='undefined' || req.body.stripe_token==''){
-
-			return res.send(encrypt({
-				success: false,
-				message: 'stripe_token Field Is required'
 			}));
 		}
 		if(typeof req.body.user_id =='undefined' || req.body.user_id==''){
@@ -321,81 +314,38 @@ module.exports = {
 					}
 					catch(error){
 
-
 					}
 			    });
 
-				let amount = total_amount * 100;
-		    	const stripe = require('stripe')(CONFIG.stripe.securet_key);
-		    	var customer_description = '#'+req.body.user_id+" Event Ticket Purchase";
-		    	var charge_description = '#'+req.body.user_id+" Event Charge";
-
-		    	console.log(customer_description);
-
-			    // create a customer 
-			    stripe.customers.create({
-			    	name:req.body.customer_name,
-			    	description:customer_description,
-			        email: req.body.email, 
-			        source: req.body.stripe_token
-			    }).then(function(customer){
-
-			    	console.log("====================================")	
-			    	console.log(customer);
-
-			    	console.log("====================================")
-
-					stripe.charges.create({ // charge the customer
-						amount,
-						description: charge_description,
-						currency: 'inr',
-						customer: customer.id
-					}).then(function(transaction) {
-
-						if(typeof transaction.status!='undefined' && transaction.status=='succeeded'){
-
-							// Create Order 
-							var order_details = {
-								event_user_id:event_user_id,
-								user_id:req.body.user_id,
-								event_id: req.body.event_id,
-								currency_id: curreny_id,
-								no_of_tickets: total_tickets,
-								total_amount: total_amount,
-								payment_source:'Stripe Payment',
-								transaction_id:transaction.id,
-								status:transaction.status,
-								event_order_items: event_ticket_order_items,
-								event_attenders: req.body.event_attenders
-							}
-
-					        var order_details = models.event_orders.create(order_details, {
-					          include: [
-					              {  
-					                 model: models.event_order_items
-					              },
-					              {  
-					                 model: models.event_attenders
-					              }
-					          ]
-					        });
-
-							return res.send(encrypt({
-								success: true,
-								message: 'Order Placed Successfully'
-							}));
-						}
-						else {
-
-							return res.send(encrypt({
-								success: false,
-								message: 'Sorry ! Your Order Not Placed.Check Your Card Details.'
-							}));
-						}
-						
-					});
-			    });
-		    }
+				// Create Order 
+				var order_details = {
+					event_user_id:event_user_id,
+					user_id:req.body.user_id,
+					event_id: req.body.event_id,
+					currency_id: curreny_id,
+					no_of_tickets: total_tickets,
+					total_amount: total_amount,
+					payment_source:'Stripe Payment',
+					transaction_id:'1111111111111111',
+					status:'success',
+					event_order_items: event_ticket_order_items,
+					event_attenders: req.body.event_attenders
+				}
+			    var order_details = models.event_orders.create(order_details, {
+			          include: [
+			              {  
+			                 model: models.event_order_items
+			              },
+			              {  
+			                 model: models.event_attenders
+			              }
+			          ]
+			        });
+				return res.send(encrypt({
+					success: true,
+					message: 'Order Placed Successfully'
+				}));
+			}
 		    else 
 		    {
 				return res.send(encrypt({
