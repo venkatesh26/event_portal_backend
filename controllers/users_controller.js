@@ -251,7 +251,8 @@ module.exports = {
 					'forgot_password_link':CONFIG.forgot_password_link,
 					'expiry_hours':expiry_hours
 				}
-	            mailer.send_mail(user_data.email, "UP Event - Password Reset Link", data, 'forgot_password')
+				var email_config=EMAIL_CONFIG['forgot_password'];
+	            mailer.send_mail(user_data.email,email_config.subject, data, email_config.template_name)
 				res.send(encrypt({ "success": true, "message": "Please check you mail to Reset your Password"}))
 			}
 			else{

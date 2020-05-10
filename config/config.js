@@ -14,8 +14,8 @@ module.exports = {
   	 	file_upload_limit:'50mb',
         disable_multiple_login:false,
         reset_password_link_expiry_hours:3,
-        reset_password_link:"http://10.9.161.85:8013/reset_password",
-        forgot_password_link:"http://10.9.161.85:8013/forgot_password",
+        reset_password_link:"http://10.9.161.85:8012/reset_password",
+        forgot_password_link:"http://10.9.161.85:8012/forgot_password",
         account_verification_link:"http://localhost:8012/email_verification",
 		allowedOrigins:[
 			'localhost:8012', 
