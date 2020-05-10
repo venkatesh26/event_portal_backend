@@ -1,0 +1,7 @@
+File from: [assets/events/1588962855993_event-bg.jpg]
+
+File to: [assets/events/compress/1588962855993_event-bg.jpg]
+
+Compression algorithm: [mozjpeg]
+
+Description: Error: spawn /var/www/html/event_portal_backend/node_modules/compress-images/node_modules/mozjpeg/vendor/cjpeg ENOENT

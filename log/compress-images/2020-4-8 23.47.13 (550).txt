@@ -1,0 +1,7 @@
+File from: [assets/events/1588961833519_https___cdnevbuccom_images_96944440_432371562_1_original.jpeg]
+
+File to: [assets/events/compress/1588961833519_https___cdnevbuccom_images_96944440_432371562_1_original.jpeg]
+
+Compression algorithm: [mozjpeg]
+
+Description: Error: spawn /var/www/html/event_portal_backend/node_modules/compress-images/node_modules/mozjpeg/vendor/cjpeg ENOENT

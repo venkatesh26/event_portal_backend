@@ -1,0 +1,7 @@
+File from: [assets/category/1588962250938_sports.jpg]
+
+File to: [assets/category/compress/1588962250938_sports.jpg]
+
+Compression algorithm: [mozjpeg]
+
+Description: Error: spawn /var/www/html/event_portal_backend/node_modules/compress-images/node_modules/mozjpeg/vendor/cjpeg ENOENT

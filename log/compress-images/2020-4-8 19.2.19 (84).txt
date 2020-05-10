@@ -1,0 +1,7 @@
+File from: [assets/events/1588944739031_overshield-slider-produkte.jpg]
+
+File to: [assets/events/compress/1588944739031_overshield-slider-produkte.jpg]
+
+Compression algorithm: [mozjpeg]
+
+Description: Error: spawn /var/www/html/event_portal_backend/node_modules/compress-images/node_modules/mozjpeg/vendor/cjpeg ENOENT
