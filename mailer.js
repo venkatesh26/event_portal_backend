@@ -1,27 +1,34 @@
 var mailer = require('express-mailer');
 var config = require('./config/config');
-var EMAIL_CONFIG = {
-    from: config.email.from,
-    host: config.email.host, // hostname
-    secureConnection: config.email.secureSSLConnection, // use SSL
-    port: config.email.port, // port for secure SMTP
-    transportMethod: config.email.transportMethod, // default is SMTP. Accepts anything that nodemailer accepts
+var default_mail_server = (config.default_mail_server ) ? config.default_mail_server:'default' ;
+if(typeof config.email_servers[default_mail_server]!='undefined') {
+  var mail_server = config.email_servers[default_mail_server];
+  var EMAIL_CONFIG = {
+      from: mail_server.from,
+      host: mail_server.host, // hostname
+      secureConnection: mail_server.secureSSLConnection, // use SSL
+      port: mail_server.port, // port for secure SMTP
+      transportMethod: mail_server.transportMethod, // default is SMTP. Accepts anything that nodemailer accepts
+  }
+  if(typeof mail_server.user!='undefined' && typeof mail_server.pass!='undefined' ) {
+      EMAIL_CONFIG.auth = {}
+      EMAIL_CONFIG.auth = {
+        user: mail_server.user,
+        pass: mail_server.pass
+      }
+  }
 }
-if(typeof config.email.user!='undefined' && typeof config.email.pass!='undefined' ) {
-    EMAIL_CONFIG.auth = {}
-    EMAIL_CONFIG.auth = {
-      user: config.email.user,
-      pass: config.email.pass
-    }
-}
+
+console.log(EMAIL_CONFIG);
+
 mailer.extend(app, EMAIL_CONFIG);
 async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) {
-
-    var config = require('./config');
-    if(typeof config.email.send_to_test_email!='undefined' && typeof config.email.test_email!='undefined' && config.email.send_to_test_email==true){
-       
+    var config = require('./config/config');
+    var default_mail_server = (config.default_mail_server ) ? config.default_mail_server:'default' ;
+  
+    if(typeof config.send_to_test_email!='undefined' && typeof config.test_email!='undefined' && config.send_to_test_email==true){
        console.log("E-mail sending to test_email")
-       toEmail=config.email.test_email
+       toEmail=config.test_email
     }
     if (attachments!=''){
         const path = require('path');

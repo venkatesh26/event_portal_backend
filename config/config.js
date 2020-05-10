@@ -14,18 +14,31 @@ module.exports = {
   	 	file_upload_limit:'50mb',
         disable_multiple_login:false,
         reset_password_link_expiry_hours:3,
-        reset_password_link:"http://10.9.161.85:8013/#/reset_password",
-        forgot_password_link:"http://10.9.161.85:8013/#/forgot_password",
-		allowedOrigins:['localhost:8012', 
-		'https://up-events.now.sh', 'http://localhost:8012', 'http://localhost:8015', 'http://127.0.0.1:8012', 'chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop'],
-		email:{
-			from:'damovenkatesh@gmail.com',
-			host: 'smtp.gmail.com', // hostname
-			port: 465, 	
-			secureSSLConnection:false,
-			transportMethod: 'SMTP',
-			user:'dhamodaran@constient.com',
-			pass1:'Damovenkatesh@2610'
+        reset_password_link:"http://10.9.161.85:8013/reset_password",
+        forgot_password_link:"http://10.9.161.85:8013/forgot_password",
+        account_verification_link:"http://localhost:8012/email_verification",
+		allowedOrigins:[
+			'localhost:8012', 
+			'https://up-events.now.sh', 
+			'http://localhost:8012', 
+			'http://localhost:8015', 
+			'http://127.0.0.1:8012', 
+			'chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop'
+		],
+		default_mail_server:'default',
+		email_servers:{
+			default : {	            
+			from:'dhamodaran@constient.com',
+            host: 'smtp.gmail.com', // hostname
+            port: 465,  
+            secureSSLConnection:false,
+            transportMethod: 'SMTP',
+            user:'damovenkatesh@gmail.com',
+            pass:'damovenkatesh@2610',
+            send_to_test_email:true,
+            test_email:'dhamodaran@constient.com'
+
+			}
 		},
 		stripe:{
 			public_key:'pk_test_vqZwdj6reVGYdCD4QQDnGZ6c00U08F91uY',

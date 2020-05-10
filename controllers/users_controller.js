@@ -181,6 +181,7 @@ module.exports = {
 					message: 'Registration failed. Email already registered.'
 				}));
 			}
+
 			var user = {
 				first_name: req.body.first_name,
 				password: bcrypt.hashSync(req.body.password, CONFIG.saltRounds),
@@ -189,13 +190,30 @@ module.exports = {
 				is_email_verfied: 0,
 				role_id:2
 			}
-			return userService.customerRegister(user)
-				.then(() => res.send(encrypt({ success: true,message:"Customer Register Succesfully..Please Check Your Email to Verify Your Account" })))
-				.catch(err => {
-					return res.send(encrypt({
-						success: false,
-						message: err.message
-					}));
+			userService.customerRegister(user).then(function(user){
+
+				var email_config=EMAIL_CONFIG['customer_register'];
+				var token = aes256.encrypt(CONFIG.Aes_key, user.id.toString())
+				token = base64.encode(token);
+				var verfication_link=CONFIG.reset_password_link+"?token="+token
+				var email_data = {
+					'customer_name':req.body.first_name,
+					'verfication_link':verfication_link,
+				}
+				var update_data ={
+					'email_verification_token':token
+				}
+				userService.updateUserData(update_data, user.id)
+			    mailer.send_mail(user.email, email_config.subject, email_data, email_config.template_name);
+			    res.send(encrypt({ 
+			    	success: true, 
+			    	message:"Customer Register Succesfully..Please Check Your Email to Verify Your Account" 
+			    }))
+			}).catch(function(error) {
+				return res.send(encrypt({
+					success: false,
+					message: error.message
+				}));
 			});
 		});
 	},

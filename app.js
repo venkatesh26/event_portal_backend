@@ -28,13 +28,11 @@ sequelize
 .catch(err => {
     console.error('Unable to connect to the database:', err);
 });
-
 const router = require('./routers/router');
 const encrypt = require('./customFunctions').encrypt;
 const decrypt = require('./customFunctions').decrypt;
-
-
 global.mailer = require('./mailer');
+require('./email_config');
 
 app.use(nocache());
 app.use(bodyParser.json({limit: CONFIG.file_upload_limit, extended: true}));
@@ -45,23 +43,14 @@ app.use(express.static('client'));
 
 app.all('*', function (req, res, next) {
 
-  //      next();
-  
   if(CONFIG.is_allow_origin==true){   
         var allowedOrigins = CONFIG.allowedOrigins
         var origin = req.headers.origin;
-
-        console.log(req.headers);
-        console.log(origin)
-        console.log(allowedOrigins)
-
         var origin = req.headers.origin ? req.headers.origin : req.headers.host
-
        if(allowedOrigins.indexOf(origin) > -1){
             res.setHeader('Access-Control-Allow-Origin', origin);
-        }else{
-
-             return;
+        }else {
+            return;
         }
         var responseSettings = {
             "AccessControlAllowOrigin": req.headers.origin ? req.headers.origin : req.headers.host,

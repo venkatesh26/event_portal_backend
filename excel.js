@@ -28,9 +28,6 @@ const downloadExcelSheet = function (headers, Data, sheet_name="Report") {
   };
 
 
-
-
-
   var all_headers = {}
   headers.forEach(function(element, l) {
     all_headers[element['column_name']] = {}
