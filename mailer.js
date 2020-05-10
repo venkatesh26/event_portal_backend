@@ -25,10 +25,11 @@ mailer.extend(app, EMAIL_CONFIG);
 async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) {
     var config = require('./config/config');
     var default_mail_server = (config.default_mail_server ) ? config.default_mail_server:'default' ;
-  
-    if(typeof config.send_to_test_email!='undefined' && typeof config.test_email!='undefined' && config.send_to_test_email==true){
+    var mail_server = config.email_servers[default_mail_server];
+
+    if(typeof mail_server.send_to_test_email!='undefined' && typeof mail_server.test_email!='undefined' && mail_server.send_to_test_email==true){
        console.log("E-mail sending to test_email")
-       toEmail=config.test_email
+       toEmail= mail_server.test_email
     }
     if (attachments!=''){
         const path = require('path');

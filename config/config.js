@@ -9,7 +9,7 @@ module.exports = {
 		db_migration:false,
 		is_acl_enabled:true,
 		is_ssl_enabled:false,
-		is_allow_origin:true,
+		is_allow_origin:false,
 		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
         disable_multiple_login:false,
@@ -31,10 +31,10 @@ module.exports = {
 			from:'dhamodaran@constient.com',
             host: 'smtp.gmail.com', // hostname
             port: 465,  
-            secureSSLConnection:false,
+            secureSSLConnection:true,
             transportMethod: 'SMTP',
-            user:'damovenkatesh@gmail.com',
-            pass:'damovenkatesh@2610',
+            user:'dhamodaran@constient.com',
+            pass:'damo@2610',
             send_to_test_email:true,
             test_email:'dhamodaran@constient.com'
 
