@@ -8,7 +8,7 @@ EMAIL_CONFIG.customer_register = {
 EMAIL_CONFIG.forgot_password = {
 	name: "ForGot Password",
 	subject : "BuyUrTicket - Forgot Password",
-	template_name: "forgort_password"
+	template_name: "forgot_password"
 }
 
 EMAIL_CONFIG.reset_password = {

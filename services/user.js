@@ -187,8 +187,7 @@ const getUserDetails = async function (where) {
 		where: where,
 		attributes: ['id', 'first_name', 'last_name','gender','dob',
 		'email','area_code','mobile_no','address_1','address_2',
-		'city','state','pincode','country', 'role_id',
-		'user_name', 'is_active', 'is_admin', 'forgot_pass_exp_timestamp', 
+		'city','state','pincode','country', 'role_id', 'is_active', 'is_admin', 'forgot_pass_exp_timestamp', 
 		'forgot_pass_token']
 	});
 };

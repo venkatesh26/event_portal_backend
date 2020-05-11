@@ -230,6 +230,8 @@ module.exports = {
 		}
     },
 	async place_order(req, res) {
+
+		console.log(req.body);
 		var payment_types = ['stripe'];
 		if(typeof req.body.payment_type =='undefined' || req.body.payment_type==''){
 
@@ -317,34 +319,44 @@ module.exports = {
 					}
 			    });
 
-				// Create Order 
-				var order_details = {
-					event_user_id:event_user_id,
-					user_id:req.body.user_id,
-					event_id: req.body.event_id,
-					currency_id: curreny_id,
-					no_of_tickets: total_tickets,
-					total_amount: total_amount,
-					payment_source:'Stripe Payment',
-					transaction_id:'1111111111111111',
-					status:'success',
-					event_order_items: event_ticket_order_items,
-					event_attenders: req.body.event_attenders
+			    if(typeof req.body.paymentIntent.status!='undefined' && req.body.paymentIntent.status=='succeeded'){
+
+					// Create Order 
+					var order_details = {
+						event_user_id:event_user_id,
+						user_id:req.body.user_id,
+						event_id: req.body.event_id,
+						currency_id: curreny_id,
+						no_of_tickets: total_tickets,
+						total_amount: total_amount,
+						payment_source:'Stripe Payment',
+						transaction_id:req.body.paymentIntent.id,
+						status:req.body.paymentIntent.status,
+						event_order_items: event_ticket_order_items,
+						event_attenders: req.body.event_attenders
+					}
+				    var order_details = models.event_orders.create(order_details, {
+				          include: [
+				              {  
+				                 model: models.event_order_items
+				              },
+				              {  
+				                 model: models.event_attenders
+				              }
+				          ]
+				        });
+					return res.send(encrypt({
+						success: true,
+						message: 'Order Placed Successfully'
+					}));
 				}
-			    var order_details = models.event_orders.create(order_details, {
-			          include: [
-			              {  
-			                 model: models.event_order_items
-			              },
-			              {  
-			                 model: models.event_attenders
-			              }
-			          ]
-			        });
-				return res.send(encrypt({
-					success: true,
-					message: 'Order Placed Successfully'
-				}));
+				else
+				{
+					return res.send(encrypt({
+						success: false,
+						message: 'Invalid Event ID'
+					}));
+				}
 			}
 		    else 
 		    {

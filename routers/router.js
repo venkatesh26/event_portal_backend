@@ -33,7 +33,8 @@ module.exports.set = (app) => {
 		'/api/event_details',
 		'/api/place_order',
 		'/api/add_enquiry',
-		'/api/payment_intents'
+		'/api/payment_intents',
+		'/api/add_enquiry'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
