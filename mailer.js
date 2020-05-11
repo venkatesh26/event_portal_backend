@@ -63,6 +63,18 @@ async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) 
       viewData:Data,
       attachments: attachments,
     }, function (err) {
+
+        const models = require('./models');
+        // Save Email Log 
+        var email_log = {
+          'subject':Subject,
+          'email':toEmail,
+          'template_name':template_name,
+          'source':default_mail_server,
+          'status': (err) ? 'failed':'success'
+        }
+        models.email_log.create(email_log);
+
         if (err) {
           console.log(err);
           console.log('There was an error sending the email');

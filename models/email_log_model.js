@@ -5,11 +5,19 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true,
 			autoIncrement: true
 		},
-		name: {
+		email:{
 			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
 				notEmpty: {
 					args: true,
-					msg: "Name Required"
+					msg: "Email Required"
+				},
+			}
+		},
+		template_name: {
+			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
+				notEmpty: {
+					args: true,
+					msg: "template_name Required"
 				},
 			}
 		},
@@ -21,19 +29,19 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			}
 		},
-		content: {
+		source: {
 			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
 				notEmpty: {
 					args: true,
-					msg: "Subject Required"
+					msg: "Source Required"
 				},
 			}
 		},
-		email:{
+		status: {
 			type: DataTypes.STRING, allowNull: false, trim:true, validate: {
 				notEmpty: {
 					args: true,
-					msg: "Email Required"
+					msg: "Status Required"
 				},
 			}
 		},
