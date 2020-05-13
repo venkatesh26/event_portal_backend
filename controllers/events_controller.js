@@ -392,6 +392,9 @@ module.exports = {
       include: [
         {
             model: models.event_tickets
+        },
+        {
+            model: models.currencies
         }
       ]
     });
