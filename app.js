@@ -126,3 +126,17 @@ global.sluggable_behavior.defaults.modes['rfc3986'] = {
     charmap: sluggable_behavior.charmap, // replace special characters
     multicharmap: sluggable_behavior.multicharmap // replace multi-characters
 };
+/*
+
+var pdf = require('html-pdf');
+var fs=require('fs');
+var body="<h1>hello</h1>";
+var generate_pdf_file_name="f.pdf";
+var html = fs.readFileSync('invoice_pdf.html', 'utf8');
+
+        
+                        var options = { 'format': 'A4' };
+                        pdf.create(html, options).toFile(generate_pdf_file_name, function (err, response) {
+
+
+                        });*/

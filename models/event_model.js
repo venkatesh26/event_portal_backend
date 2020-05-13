@@ -198,6 +198,7 @@ module.exports = (sequelize, DataTypes) => {
 		Events.belongsTo(models.currencies, { foreignKey: 'currency_id' })
 		Events.belongsTo(models.categories, { foreignKey: 'category_id' })
 		Events.hasMany(models.event_tickets, { foreignKey: 'event_id' })
+		Events.hasMany(models.event_schedule_details, { foreignKey: 'event_id' })
 		Events.hasMany(models.event_tags, { foreignKey: 'event_id' })
 	}
 	

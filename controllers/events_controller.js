@@ -127,18 +127,30 @@ module.exports = {
           start_time:req.body.start_time,
           end_time:req.body.end_time,
           time_zone:req.body.time_zone,
-          event_tickets:event_tickets
+          event_tickets:event_tickets,
+          event_schedule_details:req.body.event_schedule_details
       }
 
       try
       {
-        var event_details = models.events.create(post_data, {
-          include: [
-              {  
+
+
+        var include_models=[];
+
+        include_models.push( {  
                  model: models.event_tickets,
                  as: 'event_tickets'
-              }
-          ]
+        });
+
+        if(typeof req.body.event_schedule_details!='undefined' ){
+
+            include_models.push( {  
+                     model: models.event_schedule_details,
+                     as: 'event_schedule_details'
+            });
+        }
+        var event_details = models.events.create(post_data, {
+          include: include_models
         });
         event_details.then(function(data){
 
@@ -166,9 +178,10 @@ module.exports = {
         });
       }
       catch(error) {
+        console.log(error);
         return res.send({
             success: false,
-            message: "Something Went Wrong While creating AAn Event",
+            message: "Something Went Wrong While creating An Event",
         });
       }
   },
@@ -254,7 +267,7 @@ module.exports = {
           long:req.body.long,
           start_time:req.body.start_time,
           end_time:req.body.end_time,
-          time_zone:req.body.time_zone,
+          time_zone:req.body.time_zone
       }
       
       try

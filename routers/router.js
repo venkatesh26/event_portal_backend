@@ -36,7 +36,9 @@ module.exports.set = (app) => {
 		'/api/add_enquiry',
 		'/api/payment_intents',
 		'/api/add_enquiry',
-		'/api/email_verification'
+		'/api/email_verification',
+		'/api/customer_login',
+		'/api/customer_logout',
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -87,6 +89,9 @@ module.exports.set = (app) => {
 
 	app.post('/api/login', authController.login);
 	app.post('/api/logout', authController.logout);
+
+	app.post('/api/customer_login', authController.customer_login);
+	app.post('/api/customer_logout', authController.customer_logout);
 
 	app.post('/api/forgot_password', userController.forgot_password);
 	app.post('/api/reset_password', userController.reset_password);

@@ -12,7 +12,6 @@ module.exports = {
 		is_allow_origin:false,
 		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
-        disable_multiple_login:false,
         reset_password_link_expiry_hours:3,
         reset_password_link:"http://localhost:8012/reset_password",
         forgot_password_link:"http://localhost:8012/forgot_password",
