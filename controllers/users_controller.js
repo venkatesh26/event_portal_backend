@@ -49,7 +49,6 @@ module.exports = {
 			return res.send(encrypt({ "success": true, "base64_data": base64_data, 'file_name':file_name}))
 			}
 		   else{
-		   	console.log(data.rows)
 			res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
 		   }
 		})		
@@ -263,6 +262,49 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid Email ID" }))
 		});
 	},
+
+	async account_verification(req, res){
+		if (typeof req.body.token=='undefined'){
+			return res.send(encrypt({ "success": false, "message": "token field is required"}))
+		}
+		if (typeof req.body.token==''){
+			return res.send(encrypt({ "success": false, "message": "token field is required"}))
+		}
+		var dt = dateTime.create();
+		var where={
+			email_verification_token: req.body.token,
+			is_email_verified	: 0
+		}
+		const user_data  = userService.getUserDetails(where)		
+		user_data.then(function(data){	
+			if (data==null){
+				res.send(encrypt({ "success": false, "message": "Invalid Token" }))
+			}
+			else {
+               if(data.forgot_pass_exp_timestamp=='' || data.forgot_pass_exp_timestamp==null){
+					res.send(encrypt({ "success": true, "message": "Token Expired" }))
+               }
+               else {
+
+				   var dt = dateTime.create();
+				   var current_date = dt.format('Y-m-d H:M:S');
+	               var update_data ={
+						'is_email_verified	':1,
+						'email_verified_date':current_date
+				   }
+				   userService.updateUserData(update_data, user.id);
+				   var email_config=EMAIL_CONFIG['email_verification'];
+	               mailer.send_mail(user_data.email,email_config.subject, data, email_config.template_name)
+               	   res.send(encrypt({ "success": true, "message": "Account Verified Successfully" }))
+               }
+			
+			}
+		}).catch(function(error){
+			console.log(error)
+			res.send(encrypt({ "success": false, "message": "Invalid1Token" }))
+		});
+	},
+
 	async forgot_password_token_validate(req, res){
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))

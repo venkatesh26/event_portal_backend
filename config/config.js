@@ -6,7 +6,7 @@ module.exports = {
 		tokenExpireTimeInHours: '6',
 		Aes_key : 'b093986d5fdbafbc23f23ab35696042d',
 		is_encryption: false,
-		db_migration:true,
+		db_migration:false,
 		is_acl_enabled:true,
 		is_ssl_enabled:false,
 		is_allow_origin:true,
@@ -36,7 +36,7 @@ module.exports = {
             user:'dhamodaran@constient.com',
             pass:'damo@2610',
             send_to_test_email:true,
-            test_email:'dhamodaran@constient.com'
+            test_email:'damovenkatesh@gmail.com'
 
 			}
 		},

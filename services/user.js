@@ -39,23 +39,26 @@ const getUsers = function (data) {
 		page = data.page_no;
 	}
 	offset = limit * (page - 1);
-	if (data.name) {
-		where.first_name = { [Op.iLike]: '%' + data.name + '%' }
+	if (data.first_name) {
+		where.first_name = { [Op.like]: '%' + data.first_name + '%' }
 	}
 	if (data.login) {
-		where.login = { [Op.iLike]: '%' + data.login + '%' }
+		where.login = { [Op.like]: '%' + data.login + '%' }
 	}
 	if (data.role_id) {
 		where.role_id = data.role_id
 	}
 	if (data.email) {
-		where.email = { [Op.iLike]: '%' + data.email + '%' }
+		where.email = { [Op.like]: '%' + data.email + '%' }
 	}
 	if (data.mobile_no) {
-		where.mobile_no = { [Op.iLike]: '%' + data.mobile_no + '%' }
+		where.mobile_no = { [Op.like]: '%' + data.mobile_no + '%' }
 	}
-	if (data.is_active) {
-		where.is_active = data.is_active
+	if (data.is_active==true || data.is_active=='true') {
+		where.is_active = 1
+	}
+	if (data.is_active==false || data.is_active=='false') {
+		where.is_active = 0
 	}
 	where.deletedAt = null
 	const User = models.users.findAndCountAll({
@@ -67,9 +70,6 @@ const getUsers = function (data) {
 			as : 'role'
 		}
 	],
-	attributes: ['id', 'first_name', 'last_name','gender','dob','email','area_code',
-		'mobile_no','address_1','address_2','city','state','pincode','country', 'role_id',
-		 'is_active', 'is_admin'],
 		limit: parseInt(limit),
 		order: [order_query],
 		offset: parseInt(offset),

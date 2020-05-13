@@ -34,7 +34,8 @@ module.exports.set = (app) => {
 		'/api/place_order',
 		'/api/add_enquiry',
 		'/api/payment_intents',
-		'/api/add_enquiry'
+		'/api/add_enquiry',
+		'/api/email_verification'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -185,6 +186,8 @@ module.exports.set = (app) => {
 	app.post('/api/place_order', orderController.place_order);
 	app.post('/api/payment_intents', orderController.payment_intents);
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
+
+    app.post('/api/email_verification', userController.account_verification);
 
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);
 	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
