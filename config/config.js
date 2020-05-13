@@ -9,7 +9,7 @@ module.exports = {
 		db_migration:false,
 		is_acl_enabled:true,
 		is_ssl_enabled:false,
-		is_allow_origin:true,
+		is_allow_origin:false,
 		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
         disable_multiple_login:false,
@@ -37,7 +37,6 @@ module.exports = {
             pass:'damo@2610',
             send_to_test_email:true,
             test_email:'damovenkatesh@gmail.com'
-
 			}
 		},
 		stripe:{

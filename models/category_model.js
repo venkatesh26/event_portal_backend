@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			unique: {
 				args: true,
-				msg: 'Country name already in use!'
+				msg: 'Category name already in use!'
 			}
 		},
 		slug: {
