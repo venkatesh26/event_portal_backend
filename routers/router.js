@@ -35,7 +35,6 @@ module.exports.set = (app) => {
 		'/api/place_order',
 		'/api/add_enquiry',
 		'/api/payment_intents',
-		'/api/add_enquiry',
 		'/api/email_verification',
 		'/api/customer_login',
 		'/api/customer_logout',

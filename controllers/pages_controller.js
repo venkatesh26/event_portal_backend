@@ -6,8 +6,8 @@ const decrypt = require('../customFunctions').decrypt;
 const decode_id = require('../customFunctions').decode_id;
 module.exports = {
   index(req, res) {
-    const { Categories } = pageService.getAllData(req.query)
-      Categories.then(data => {
+    const { Pages } = pageService.getAllData(req.query)
+      Pages.then(data => {
         res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
       })
     .catch(function(error){
