@@ -13,6 +13,10 @@ const getAllData = function (data) {
 	}else{
 		order_query = ['createdAt', 'DESC']
 	}
+
+  if (data.limit) {
+    limit = parseInt(data.limit);
+  }
   var page = 1;
   if(data.page_no){
     page = data.page_no;

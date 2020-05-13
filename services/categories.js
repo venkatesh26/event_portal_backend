@@ -52,12 +52,13 @@ const getHomeCategories = function (data) {
 };
 
 const updateCategory = function (data) {
+
   return models.categories.update(
     {
       name: data.name,
       slug:data.slug,
-      image_path:data.image_path,
-      image_name:data.image_name,
+      image_path:data.img_dir,
+      image_name:data.img_name,
       is_active: data.is_active
     },
     { where: { id: data.id } })
