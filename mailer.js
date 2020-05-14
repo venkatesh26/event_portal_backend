@@ -19,8 +19,6 @@ if(typeof config.email_servers[default_mail_server]!='undefined') {
   }
 }
 
-console.log(EMAIL_CONFIG);
-
 mailer.extend(app, EMAIL_CONFIG);
 async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) {
     var config = require('./config/config');

@@ -172,4 +172,8 @@ const getSlugCount = function(slug, id=null) {
   });
 }
 
-module.exports = {getAdminListData, deleteEvents, getSlugCount, getSearchEventList, getmyEventList, getPopularEventList, getHomeEventList};
+const updateData = function (update_data, event_id) {
+  return models.events.update(update_data,{ where: { id: event_id } })
+}
+
+module.exports = {getAdminListData, deleteEvents, getSlugCount, getSearchEventList, getmyEventList, getPopularEventList, getHomeEventList, updateData};

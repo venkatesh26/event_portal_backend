@@ -23,8 +23,6 @@ module.exports = {
       }));
     }
 
-    console.log(req.body);
-
     // Check  Already Exists
     var isExist = await categoryService.isExistOrNot(req.body.name);
     if(isExist) {

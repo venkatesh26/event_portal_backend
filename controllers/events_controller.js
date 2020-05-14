@@ -384,6 +384,39 @@ module.exports = {
         }
       });
   },
+  async update_status(req, res){
+
+      if(typeof req.body.event_id =='undefined' || req.body.event_id==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'event_id Field Is required'
+        }));
+      }
+      if(typeof req.body.status =='undefined' || req.body.status==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'status Field Is required'
+        }));
+      }
+
+      var status = ['published', 'waiting_for_approval', 'declined', 'unpublished', 'expired'];
+      if(status.indexOf(origin) > -1){
+        var update_data ={
+          'status':req.body.status
+        }
+        eventService.updateData(update_data, req.body.event_id);
+        return res.send({
+            status: true,
+            message: "Status Updated Sucessfully"
+        });
+      }
+      else {
+        return res.send(encrypt({
+              success: false,
+              message: 'Invalid Status'
+        }));
+      }
+  },
   async delete(req, res) {
     eventService.deleteEvents(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
