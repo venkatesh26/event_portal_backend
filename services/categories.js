@@ -57,8 +57,8 @@ const updateCategory = function (data) {
     {
       name: data.name,
       slug:data.slug,
-      image_path:data.img_dir,
-      image_name:data.img_name,
+      img_dir:data.img_dir,
+      img_name:data.img_name,
       is_active: data.is_active
     },
     { where: { id: data.id } })

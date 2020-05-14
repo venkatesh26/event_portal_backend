@@ -73,7 +73,7 @@ module.exports = {
 
       var event_tickets = [];
       req.body.event_tickets.forEach(function(ticket){
-        ticket.slug = sluggable_behavior((req.body.name).toString().toLowerCase());
+        ticket.slug = sluggable_behavior((ticket.name).toString().toLowerCase());
         event_tickets.push(ticket);
       });
 
@@ -191,7 +191,7 @@ module.exports = {
       var required_fields=[
         'id','name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
         'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
-        'img_name', 'city', 'city_id', 'tags', 'venue_name', 'address_line_1',"currency_id", 
+        'img_name', 'city', 'tags', 'venue_name', 'address_line_1',"currency_id", 
         'user_id'
       ]
 
@@ -283,6 +283,8 @@ module.exports = {
 
             req.body.event_tickets.forEach(async function(data) {
 
+                data.slug = sluggable_behavior((data.name).toString().toLowerCase());
+
                 if(typeof data.id!='undefined') {
 
                     if(typeof data.action!='undefined' && data.action=='delete') {
@@ -301,6 +303,8 @@ module.exports = {
                 }
                 else {
 
+
+      
                     data.event_id = req.body.id;
                     models.event_tickets.create(data,{
                           where: { id: data.id },
@@ -408,6 +412,9 @@ module.exports = {
         },
         {
             model: models.currencies
+        },
+        {
+            model: models.event_schedule_details
         }
       ]
     });

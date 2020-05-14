@@ -34,10 +34,10 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: false },
-		image_path: {
+		img_dir: {
 			type: DataTypes.STRING, allowNull: true,
 		},
-		image_name: {
+		img_name: {
 			type: DataTypes.STRING, allowNull: true,
 		},
 		event_count: {

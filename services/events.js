@@ -130,6 +130,9 @@ const getAdminListData = function (data) {
   if (data.name) {
     where.name = { [Op.like]: '%' + data.name + '%' }
   }
+  if (data.category_id) {
+    where.category_id = data.category_id
+  }
   if (data.is_active) {
 		where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
 	}

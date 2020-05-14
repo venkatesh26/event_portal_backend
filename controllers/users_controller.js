@@ -194,7 +194,7 @@ module.exports = {
 				var email_config=EMAIL_CONFIG['customer_register'];
 				var token = aes256.encrypt(CONFIG.Aes_key, user.id.toString())
 				token = base64.encode(token);
-				var verfication_link=CONFIG.reset_password_link+"?token="+token
+				var verfication_link=CONFIG.account_verification_link+"?token="+token
 				var email_data = {
 					'customer_name':req.body.first_name,
 					'verfication_link':verfication_link,
