@@ -7,8 +7,51 @@ const decode_id = require('../customFunctions').decode_id;
 module.exports = {
 	async index(req, res) {
 	    const { EventOrders } = eventOrderService.getAllData(req.query)
-	      EventOrders.then(data => {
-	        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+	      	EventOrders.then(async function(data){
+		   if(req.query.is_download == 'true' || req.query.is_download == true){
+		      	var excel_data = [];			
+				await Promise.all(
+					data.rows.map(async (my_data,i) => {	
+					  var obj={}
+					  obj['created']=my_data['createdAt'];
+					  obj['first_name']=my_data['user']['first_name'];
+					  obj['email']=my_data['user']['email'];
+					  obj['no_of_tickets']=my_data['no_of_tickets'];
+					  obj['total_amount']=my_data['total_amount'];
+					  obj['currency']=my_data['currency']['name'];
+					  obj['payment_source']=my_data['payment_source'];
+					  obj['transaction_id']=my_data['transaction_id'];
+					  obj['event_name']=my_data['event']['name'];
+					  obj['status']=my_data['status'];
+					  excel_data.push(obj);
+				  })
+				);
+				var new_file_header=[
+					{'column_name':'created', displayName:'Order Date'},
+					{'column_name':'first_name', displayName:'First Name'},
+					{'column_name':'email', displayName:'Email'},
+					{'column_name':'no_of_tickets', displayName:'No. Of Tickets'},
+					{'column_name':'total_amount', displayName:'Total Sale'},
+					{'column_name':'currency', displayName:'Currency'},
+					{'column_name':'payment_source', displayName:'Payment Source'},
+					{'column_name':'transaction_id', displayName:'Transaction ID'},
+					{'column_name':'event_name', displayName:'Event Name'},
+					{'column_name':'status', displayName:'Status'},                    
+				]
+				var reports = downloadExcel.downloadExcelSheet(new_file_header, excel_data)
+				var file_name = "order-list.xlsx"
+				var file_dir = "assets/"
+				writeFileSync(file_dir+file_name, reports);
+				var base64_data='';
+				var fs = require('fs');
+				var bitmap = fs.readFileSync(file_dir+file_name);
+				base64_data = new Buffer.from(bitmap).toString('base64');
+				fs.unlinkSync(file_dir+file_name)
+				return res.send(encrypt({ "success": true, "base64_data": base64_data, 'file_name':file_name}))
+	      	}
+	      	else {
+	        	res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+	    	}
 	      })
 	    .catch(function(error){
 	        res.send(encrypt({ "success": false, "message": error }))

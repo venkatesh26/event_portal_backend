@@ -29,6 +29,7 @@
     "mysql2": "^2.1.0",
     "nocache": "^2.1.0",
     "node-datetime": "^2.1.2",
+    "node-excel-export": "^1.4.4",
     "node-mandrill": "^1.0.1",
     "pngquant-bin": "^5.0.2",
     "sequelize": "^5.21.5",

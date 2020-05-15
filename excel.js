@@ -2,11 +2,16 @@ const downloadExcelSheet = function (headers, Data, sheet_name="Report") {
   const excel = require('node-excel-export');
   const styles = {
     headerDark: {
+      fill: {
+      fgColor: {
+        rgb: 'FF00FF00'
+      }
+      },
       font: {
         color: {
           rgb: 'FF000000'
         },
-        sz: 12,
+        sz: 10,
         bold: true,
         underline: false
       }

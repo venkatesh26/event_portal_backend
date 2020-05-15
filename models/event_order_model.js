@@ -52,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 		event_orders.hasMany(models.event_attenders, { foreignKey: 'event_order_id' });
 		event_orders.belongsTo(models.events, { foreignKey: 'event_id' });
 		event_orders.belongsTo(models.users, { foreignKey: 'user_id' });
+		event_orders.belongsTo(models.currencies, { foreignKey: 'currency_id' })
 	}
 	return event_orders;
 }

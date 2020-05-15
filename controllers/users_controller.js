@@ -18,24 +18,19 @@ module.exports = {
 				data.rows.map(async (my_data,i) => {					
 				  var obj={}
 				  obj['first_name']=my_data['first_name'];
-				  obj['user_name']=my_data['user_name'];
-				  obj['user_type']=(my_data['user_type']!=null) ? my_data['user_type']:'';
+				  obj['last_name']=my_data['last_name'];
 				  obj['role']=my_data['role']['name'];
 				  obj['email']=my_data['email'];
-				  obj['is_active']=(my_data['is_active']==true) ? 'Approved':'Pending',
-				  obj['is_branch_connect']=(my_data['is_branch_connect']==true) ? 'Yes':'No'				  
+				  obj['is_active']=(my_data['is_active']==true) ? 'Active':'Pending',			  
 				  excel_data.push(obj);
 			  })
 			);
 			var new_file_header=[
 				{'column_name':'first_name', displayName:'First Name'},
 				{'column_name':'user_name', displayName:'User Name'},
-				{'column_name':'user_type', displayName:'User Type'},
 				{'column_name':'role', displayName:'Role'},
 				{'column_name':'email', displayName:'Email'},
-				{'column_name':'department', displayName:'Department'},
-				{'column_name':'is_active', displayName:'Status'},
-				{'column_name':'is_branch_connect', displayName:'Branch Connect User'}                    
+				{'column_name':'is_active', displayName:'Status'},                   
 			]
 			var reports = downloadExcel.downloadExcelSheet(new_file_header, excel_data)
 			var file_name = "user-list.xlsx"
@@ -47,17 +42,13 @@ module.exports = {
 			base64_data = new Buffer.from(bitmap).toString('base64');
 			fs.unlinkSync(file_dir+file_name)  //Delete the file
 			return res.send(encrypt({ "success": true, "base64_data": base64_data, 'file_name':file_name}))
-			}
-		   else{
-			res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
-		   }
+		}
+		else {
+		 res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+		}
 		})		
 		.catch(function(error){
-
-        console.log(error);
-
-        res.send(encrypt({ "success": false, "message": error }))
-
+        	res.send(encrypt({ "success": false, "message": error }))
       })
 	},
 	add(req, res) {
