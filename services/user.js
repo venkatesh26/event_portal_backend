@@ -169,7 +169,7 @@ const getUsersLog = function (data) {
 		where: where,
 		include: [{
 			model: models.users,
-			attributes: ['first_name','last_name','user_name'],
+			attributes: ['first_name','last_name'],
 			as: 'user',
 			where :user_where
 		}],
