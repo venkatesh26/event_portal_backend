@@ -67,7 +67,10 @@ module.exports = {
 	            model: models.events
 	        },
 	        {
-	            model: models.event_order_items
+	            model: models.event_order_items,
+	            include: [
+	            	models.event_tickets
+	            ]	
 	        }
 	      ]
 	    });
@@ -84,6 +87,45 @@ module.exports = {
 	              data: data,
 	          });
 	      }
+	    });
+    },
+    async download_invoice(req, res) {
+	    if(typeof req.body.order_id =='undefined' || req.body.order_id==''){
+	      return res.send(encrypt({
+	            success: false,
+	            message: 'order_id Field Is required'
+	      }));
+	    }
+	    var where = {};
+	    where.id = req.body.order_id;
+	    const Event_Orders = models.event_orders.findOne({
+	      where: where,
+	      include: [
+	        {
+	            model: models.events,
+	            attributes:['name']
+	        },
+	        {
+	            model: models.event_order_items,
+	            include: [
+		            {
+		            	model: models.event_tickets
+		            }
+	            ]	
+	        }
+	      ]
+	    });
+	    Event_Orders.then(async function(data){
+	       
+
+ 			   var ejs = require("ejs")
+
+	               const html = await ejs
+          .renderFile("order_invoice,ejs", {model: {'value':1} })
+          .then(output => output);
+
+
+
 	    });
     },
     async my_orders(req, res) {

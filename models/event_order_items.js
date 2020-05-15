@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	event_order_items.associate = models => {
 		event_order_items.belongsTo(models.event_orders, { foreignKey: 'event_order_id' })
+		event_order_items.belongsTo(models.event_tickets, { foreignKey: 'event_ticket_id' })
 	}
 	return event_order_items;
 }
