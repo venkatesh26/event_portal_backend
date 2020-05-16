@@ -92,7 +92,7 @@ const isExistOrNot = function(name, id=null) {
 }
 
 
-const findOrSaveAndGetId = async function(name, state_id) {
+const findOrSaveAndGetId = async function(name, state_id, country_id) {
   var where ={}
   where.name = name;
   const data = models.cities.findOne({
@@ -106,6 +106,7 @@ const findOrSaveAndGetId = async function(name, state_id) {
       var slug = sluggable_behavior((name).toString().toLowerCase());
       var country_data = {
         state_id:state_id,
+        country_id:country_id,
         name:name,
         slug:slug
       }

@@ -71,6 +71,8 @@ module.exports = {
          slug = slug+"_"+parseInt(slug_counts+1);   
       }
 
+      var dateTime = require('node-datetime');
+
       var event_tickets = [];
       req.body.event_tickets.forEach(function(ticket){
         ticket.slug = sluggable_behavior((ticket.name).toString().toLowerCase());
@@ -88,18 +90,25 @@ module.exports = {
       state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
       
       // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id);
+      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+
+      var start_date='';
+      var end_date='';
+
+      var dt = dateTime.create(req.body.start_date);
+      var start_date = dt.format('Y-m-d');
 
 
-      console.log(req.body);
+      var dt = dateTime.create(req.body.end_date);
+      var end_date = dt.format('Y-m-d');
 
       var post_data = {
           name: req.body.name,
           slug: slug,
           user_id:req.body.user_id,
           description:req.body.description,
-          start_date:req.body.start_date,
-          end_date:req.body.end_date,
+          start_date:start_date,
+          end_date:end_date,
           category_id:req.body.category_id,
           category_name:req.body.category_name,
           type:req.body.type,
@@ -224,6 +233,20 @@ module.exports = {
       var state_id = '';
       var city_id = '';
 
+      var start_date='';
+      var end_date='';
+
+
+      var dateTime = require('node-datetime');
+
+      var dt = dateTime.create(req.body.start_date);
+      var start_date = dt.format('Y-m-d');
+
+
+      var dt = dateTime.create(req.body.end_date);
+      var end_date = dt.format('Y-m-d');
+      
+
       // Save Country And GET ID
       country_id = await countryService.findOrSaveAndGetId(req.body.country);
 
@@ -231,16 +254,15 @@ module.exports = {
       state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
       
       // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id);
-
+      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
 
       var post_data = {
           name: req.body.name,
           slug: slug,
           user_id:req.body.user_id,
           description:req.body.description,
-          start_date:req.body.start_date,
-          end_date:req.body.end_date,
+          start_date:start_date,
+          end_date:end_date,
           category_id:req.body.category_id,
           category_name:req.body.category_name,
           type:req.body.type,
@@ -269,7 +291,7 @@ module.exports = {
           end_time:req.body.end_time,
           time_zone:req.body.time_zone
       }
-      
+
       try
       {
           await models.events.update(post_data,{
@@ -302,8 +324,6 @@ module.exports = {
                     }
                 }
                 else {
-
-
       
                     data.event_id = req.body.id;
                     models.event_tickets.create(data,{
@@ -317,7 +337,7 @@ module.exports = {
           // Delete All Events Tags
           models.event_tags.destroy({
             where: {
-              'event_id': event_details
+              'event_id': req.body.id
             }
           });  
 
@@ -337,15 +357,18 @@ module.exports = {
           } 
 
           return res.send({
-              status: true,
+              success: true,
               message: "Events Updated Sucessfully"
           });
 
       }
       catch(error){
+console.log("======================================")
+        console.log(error);
         
+console.log("======================================")
         return res.send({
-            status: false,
+            success: false,
             message: "Something Went Wrong While updating an Event",
         });
 
@@ -366,6 +389,9 @@ module.exports = {
           },
           {
               model: models.event_tickets
+          },
+          {
+              model: models.currencies
           },
           {
             model: models.event_schedule_details
