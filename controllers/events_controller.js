@@ -435,8 +435,6 @@ module.exports = {
     })
   },
   async event_detail(req, res){
-
-
     var where = {};
     where.id = req.query.event_id;
     where.status = 'published';

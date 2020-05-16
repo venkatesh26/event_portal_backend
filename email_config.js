@@ -11,12 +11,19 @@ EMAIL_CONFIG.forgot_password = {
 	template_name: "forgot_password"
 }
 
-
 EMAIL_CONFIG.email_verification = {
 	name: "Email Verification",
 	subject : "BuyUrTicket - Email Verification",
 	template_name: "email_verification_success"
 }
+
+
+EMAIL_CONFIG.event_book_ticket_buyer_invoice = {
+	name: "Buyer Ticket Booked Notification",
+	subject : "BuyUrTicket - Your Tickets Booked Successfully",
+	template_name: "event_book_ticket_buyer_invoice"
+}
+
 
 EMAIL_CONFIG.reset_password = {
 	name: "Reset Password",

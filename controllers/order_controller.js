@@ -343,8 +343,6 @@ module.exports = {
 		}
     },
 	async place_order(req, res) {
-
-		console.log(req.body);
 		var payment_types = ['stripe'];
 		if(typeof req.body.payment_type =='undefined' || req.body.payment_type==''){
 
@@ -392,6 +390,9 @@ module.exports = {
 		      include: [
 		        {
 		            model: models.event_tickets
+		        },
+		        {
+		            model: models.users
 		        },
 		        {
 		            model: models.currencies
@@ -448,7 +449,7 @@ module.exports = {
 						event_order_items: event_ticket_order_items,
 						event_attenders: req.body.event_attenders
 					}
-				    var order_details = models.event_orders.create(order_details, {
+				    var order_details = await models.event_orders.create(order_details, {
 				          include: [
 				              {  
 				                 model: models.event_order_items
@@ -457,11 +458,81 @@ module.exports = {
 				                 model: models.event_attenders
 				              }
 				          ]
-				        });
-					return res.send(encrypt({
-						success: true,
-						message: 'Order Placed Successfully'
-					}));
+				    });
+
+				    if(order_details){
+
+					    var where={};
+
+					    where.id = order_details.id;
+
+					    // Get Order Details
+					    const Event_Orders = await models.event_orders.findOne({
+					      where: where,
+					      include: [
+					        {
+					            model: models.events,
+					            attributes:['name']
+					        },
+					        {
+						        model: models.currencies,
+					            attributes:['name', 'code']
+						    },
+					        {
+					            model: models.users,
+					            attributes:['first_name', 'last_name', 'email']
+					        },
+					        {
+					            model: models.event_order_items,
+					            include: [
+						            {
+						            	model: models.event_tickets
+						            },
+						            
+					            ]	
+					        }
+					      ]
+					    });
+
+					    var ejs = require("ejs");
+						const html = await ejs.renderFile("views/order_invoice.ejs", {viewData: Event_Orders })
+						.then(output => output);
+						var pdf = require('html-pdf');
+						var options = { 'format': 'A4',   "orientation": "portait" };
+						var file_name = "order_invoice" + Date.now() + ".pdf";
+
+					    pdf.create(html, options).toFile('assets/order_invoice/'+file_name,async  function (err, response) {
+
+
+							// Get Buyer Details
+							var buyer_details = await models.users.findOne({
+								where: { id: req.body.user_id }, 
+								attributes: ['id', 'first_name', 'last_name','email']
+							});
+
+						    // Send Email To Buyer
+							var email_config = EMAIL_CONFIG['event_book_ticket_buyer_invoice'];
+							var email_data = {
+								'customer_name':buyer_details.first_name+" "+buyer_details.last_name,
+								'customer_email':buyer_details.email
+							}
+							mailer.send_mail(buyer_details.email, email_config.subject, email_data,
+							 email_config.template_name, 'assets/order_invoice/'+file_name);
+						});
+
+						return res.send(encrypt({
+							success: true,
+							message: 'Order Placed Successfully'
+						}));
+					}
+					else{
+
+
+						return res.send(encrypt({
+							success: false,
+							message: 'Order Not Placed'
+						}));
+					}
 				}
 				else
 				{
@@ -480,6 +551,10 @@ module.exports = {
 		    }
 		}
 		catch(error) {
+			console.log('=================================================')
+			console.log(error)
+
+			console.log('=================================================')
 			return res.send(encrypt({
 				success: false,
 				message: error

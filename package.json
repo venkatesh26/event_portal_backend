@@ -12,6 +12,7 @@
   "dependencies": {
     "aes256": "^1.0.4",
     "base-64": "^0.1.0",
+    "base64-img": "^1.0.4",
     "bcrypt": "^4.0.1",
     "compress-images": "^1.7.8",
     "ejs": "^3.0.1",
