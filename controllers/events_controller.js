@@ -359,7 +359,7 @@ module.exports = {
         include: [
           {
               model: models.users,
-              attributes: ['first_name','last_name','user_name']
+              attributes: ['first_name','last_name']
           },
           {
               model: models.event_tags

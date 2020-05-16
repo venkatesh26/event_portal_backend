@@ -64,12 +64,23 @@ module.exports = {
 	      where: where,
 	      include: [
 	        {
-	            model: models.events
+	            model: models.events,
+	            attributes : ['name']
+	        },
+	        {
+	            model: models.event_attenders
+	        },
+	        {
+	            model: models.currencies,
+	            attributes:['name', 'code']
 	        },
 	        {
 	            model: models.event_order_items,
 	            include: [
-	            	models.event_tickets
+	           	 	{
+	            		model: models.event_tickets,
+	            		attributes:['name']
+	            	}
 	            ]	
 	        }
 	      ]
@@ -117,11 +128,8 @@ module.exports = {
 	    });
 	    Event_Orders.then(async function(data){
 	       
-
- 			   var ejs = require("ejs")
-
-	               const html = await ejs
-          .renderFile("order_invoice,ejs", {model: {'value':1} })
+ 		  var ejs = require("ejs");
+	       const html = await ejs.renderFile("views/order_invoice,ejs", {viewData: data })
           .then(output => output);
 
 

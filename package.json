@@ -31,6 +31,7 @@
     "node-datetime": "^2.1.2",
     "node-excel-export": "^1.4.4",
     "node-mandrill": "^1.0.1",
+    "phantom-html-to-pdf": "^0.6.0",
     "pngquant-bin": "^5.0.2",
     "sequelize": "^5.21.5",
     "slug": "^2.1.1",
