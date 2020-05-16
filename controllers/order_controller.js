@@ -68,6 +68,10 @@ module.exports = {
 	            attributes : ['name']
 	        },
 	        {
+	            model: models.users,
+	            attributes : ['first_name', 'last_name', 'email', ]
+	        },
+	        {
 	            model: models.event_attenders
 	        },
 	        {
@@ -107,8 +111,9 @@ module.exports = {
 	            message: 'order_id Field Is required'
 	      }));
 	    }
-	    var where = {};
-	    where.id = req.body.order_id;
+
+		var where = {};
+	    where.id = 5;//req.body.order_id;
 	    const Event_Orders = models.event_orders.findOne({
 	      where: where,
 	      include: [
@@ -117,23 +122,38 @@ module.exports = {
 	            attributes:['name']
 	        },
 	        {
+		        model: models.currencies,
+	            attributes:['name', 'code']
+		    },
+	        {
+	            model: models.users,
+	            attributes:['first_name', 'last_name', 'email']
+	        },
+	        {
 	            model: models.event_order_items,
 	            include: [
 		            {
 		            	model: models.event_tickets
-		            }
+		            },
+		            
 	            ]	
 	        }
 	      ]
 	    });
 	    Event_Orders.then(async function(data){
-	       
- 		  var ejs = require("ejs");
-	       const html = await ejs.renderFile("views/order_invoice,ejs", {viewData: data })
-          .then(output => output);
+
+			var ejs = require("ejs");
+			const html = await ejs.renderFile("views/order_invoice.ejs", {viewData: data })
+			.then(output => output);
+
+			var pdf = require('html-pdf');
 
 
+			var options = { 'format': 'A4',   "orientation": "portait" };
+			pdf.create(html, options).toFile('test.pdf', function (err, response) {
 
+
+			});
 	    });
     },
     async my_orders(req, res) {
