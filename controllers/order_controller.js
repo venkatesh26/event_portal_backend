@@ -527,7 +527,6 @@ module.exports = {
 					}
 					else{
 
-
 						return res.send(encrypt({
 							success: false,
 							message: 'Order Not Placed'

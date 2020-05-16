@@ -138,6 +138,13 @@ const getAdminListData = function (data) {
 	}
   where.deletedAt = null; 
   const Events = models.events.findAndCountAll({
+    distinct:true,
+    include: [
+          {
+              model: models.users,
+              attributes: ['first_name','last_name', 'email']
+          },
+    ],
     limit: limit,
     where: where,
     order: [order_query],
