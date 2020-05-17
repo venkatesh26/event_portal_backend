@@ -7,10 +7,8 @@ module.exports = {
 		Aes_key : 'b093986d5fdbafbc23f23ab35696042d',
 		is_encryption: false,
 		db_migration:false,
-		is_acl_enabled:true,
 		is_ssl_enabled:false,
 		is_allow_origin:false,
-		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
         reset_password_link_expiry_hours:3,
         reset_password_link:"http://localhost:8012/reset_password",
@@ -26,15 +24,15 @@ module.exports = {
 		default_mail_server:'default',
 		email_servers:{
 			default : {	            
-			from:'dhamodaran@constient.com',
-            host: 'smtp.gmail.com',
-            port: 465,  
-            secureSSLConnection:true,
-            transportMethod: 'SMTP',
-            user:'dhamodaran@constient.com',
-            pass:'damo@2610',
-            send_to_test_email:true,
-            test_email:'damovenkatesh@gmail.com'
+				from:'dhamodaran@constient.com',
+	            host: 'smtp.gmail.com',
+	            port: 465,  
+	            secureSSLConnection:true,
+	            transportMethod: 'SMTP',
+	            user:'dhamodaran@constient.com',
+	            pass:'damo@2610',
+	            send_to_test_email:true,
+	            test_email:'damovenkatesh@gmail.com'
 			}
 		},
 		stripe:{

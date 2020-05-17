@@ -12,6 +12,7 @@ const uploadController = require(__basedir +'/controllers/upload_controller');
 const orderController = require(__basedir +'/controllers/order_controller');
 const eventEnquiryController = require(__basedir +'/controllers/event_enquiry_controller');
 const pagesController = require(__basedir +'/controllers/pages_controller');
+const emailLogController = require(__basedir +'/controllers/email_log_controller');
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -166,9 +167,10 @@ module.exports.set = (app) => {
 	app.post('/api/events', eventsController.add);
 	app.delete('/api/events/:id', eventsController.delete);
 	app.put('/api/events', eventsController.update);
-	
+
 	app.post('/api/update_event_status', eventsController.update_status);
 
+	app.get('/api/email_logs', emailLogController.index);
 
 	// Pages
 	app.get('/api/pages', pagesController.index);
