@@ -39,6 +39,7 @@ module.exports.set = (app) => {
 		'/api/email_verification',
 		'/api/customer_login',
 		'/api/customer_logout',
+		'/api/page_details'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -205,6 +206,13 @@ module.exports.set = (app) => {
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
     app.post('/api/email_verification', userController.account_verification);
 
+
+    app.post('/api/download_invoice', orderController.download_invoice);
+
+
+    
+
+    app.post('/api/page_details', pagesController.get_page_details);
 
 	app.put('/api/customer', userController.update);  
 	app.put('/api/avatar_update', userController.avatar_update);  

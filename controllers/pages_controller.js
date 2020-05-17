@@ -83,5 +83,32 @@ module.exports = {
     pageService.deleteCategory(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));
+  },
+  get_page_details(req, res){
+    if(typeof req.body.slug =='undefined' || req.body.slug==''){
+      return res.send(encrypt({
+            success: false,
+            message: 'slug Field Is required'
+      }));
+    }
+    var where = {};
+    where.slug = req.body.slug;
+    const Pages = models.pages.findOne({
+        where: where
+    });
+    Pages.then(function(data){
+      if(data) {
+              return res.send({
+                  success: true,
+                  data: data,
+              });
+      }
+      else {
+            return res.send({
+                success: false,
+                message: "Invalid page"
+            });
+      }
+    });
   }
 }

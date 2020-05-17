@@ -113,7 +113,7 @@ module.exports = {
 	    }
 
 		var where = {};
-	    where.id = 5;//req.body.order_id;
+	    where.id = req.body.order_id;
 	    const Event_Orders = models.event_orders.findOne({
 	      where: where,
 	      include: [
@@ -141,19 +141,28 @@ module.exports = {
 	      ]
 	    });
 	    Event_Orders.then(async function(data){
+	    	if(data){
+				var ejs = require("ejs");
+				const html = await ejs.renderFile("views/order_invoice.ejs", {viewData: data })
+				.then(output => output);
 
-			var ejs = require("ejs");
-			const html = await ejs.renderFile("views/order_invoice.ejs", {viewData: data })
-			.then(output => output);
-
-			var pdf = require('html-pdf');
-
-
-			var options = { 'format': 'A4',   "orientation": "portait" };
-			pdf.create(html, options).toFile('test.pdf', function (err, response) {
-
-
-			});
+				var pdf = require('html-pdf');
+				var options = { 'format': 'A4',   "orientation": "portait" };
+				await pdf.create(html, options).toFile('assets/order_invoice.pdf', function (err, response) {
+					var base64_data='';
+					var fs = require('fs');
+					var bitmap = fs.readFileSync('assets/order_invoice.pdf');
+					base64_data = new Buffer.from(bitmap).toString('base64');
+					fs.unlinkSync('assets/order_invoice.pdf')
+					return res.send(encrypt({ "success": true, "base64_data": base64_data, 'file_name':'order_invoice.pdf'}));
+				});
+			}
+			else {
+				return res.send(encrypt({
+	            	success: false,
+	            	message: 'Invalid Order'
+	      		}));
+			}
 	    });
     },
     async my_orders(req, res) {
