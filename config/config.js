@@ -9,7 +9,7 @@ module.exports = {
 		db_migration:false,
 		is_acl_enabled:true,
 		is_ssl_enabled:false,
-		is_allow_origin:true,
+		is_allow_origin:false,
 		base_url:'http://localhost:8012',
   	 	file_upload_limit:'50mb',
         reset_password_link_expiry_hours:3,
@@ -21,14 +21,13 @@ module.exports = {
 			'https://up-events.now.sh', 
 			'http://localhost:8012', 
 			'http://localhost:8015', 
-			'http://127.0.0.1:8012', 
-			'chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop'
+			'http://127.0.0.1:8012'
 		],
 		default_mail_server:'default',
 		email_servers:{
 			default : {	            
 			from:'dhamodaran@constient.com',
-            host: 'smtp.gmail.com', // hostname
+            host: 'smtp.gmail.com',
             port: 465,  
             secureSSLConnection:true,
             transportMethod: 'SMTP',

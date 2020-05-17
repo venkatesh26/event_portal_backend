@@ -11,9 +11,10 @@ const getUser = function (data) {
 		where: { id: data.id },
 		include: [{
 			model: models.role,
-			attributes: ['role']
+			attributes: ['name']
 		}], 
-		attributes: ['id', 'first_name', 'last_name','gender','dob','email','area_code','mobile_no','address_1','address_2','city','state','pincode','country', 'role_id', 'user_name', 'is_active', 'is_admin', 'joining_date','user_type','is_branch_connect']
+		attributes: ['id', 'first_name', 'last_name','gender','dob','email','area_code',
+		'mobile_no','address_1','address_2','city','state','pincode','country', 'role_id', 'is_active']
 	});
 };
 
@@ -156,9 +157,6 @@ const getUsersLog = function (data) {
 			[Op.between]: [data.startDate+" 00:00:00.000 +00:00", data.endDate+" 23:59:00.000 +00:00"]
 		  }
 	}
-	if(data.user_name){
-		user_where.user_name = { [Op.like]: '%' + data.user_name + '%' }
-	}
 	if(data.first_name){
 		user_where.first_name = { [Op.like]: '%' + data.first_name + '%' }
 	}
@@ -169,7 +167,7 @@ const getUsersLog = function (data) {
 		where: where,
 		include: [{
 			model: models.users,
-			attributes: ['first_name','last_name'],
+			attributes: ['first_name','last_name', 'email'],
 			as: 'user',
 			where :user_where
 		}],

@@ -45,6 +45,8 @@ module.exports = {
 		}
 		user_id= req.body.user_id;
 		token= req.body.token;
+
+		console.log(token)
 		const  user  = models.users.update(  // to maintain logout time log
 			{
 				is_login: false
@@ -103,6 +105,8 @@ module.exports = {
 		}
 		user_id= req.body.user_id;
 		token= req.body.token;
+
+
 		const  user  = models.users.update(  // to maintain logout time log
 			{
 				is_login: false

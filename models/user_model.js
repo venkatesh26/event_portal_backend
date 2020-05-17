@@ -81,6 +81,12 @@ module.exports = (sequelize, DataTypes) => {
 		forgot_pass_date: { type: DataTypes.DATE, allowNull: true },
 		forgot_pass_exp_timestamp: { type: DataTypes.DATE, allowNull: true },
 		user_type: { type: DataTypes.STRING, allowNull: true, defaultValue:null },
+		img_dir: {
+			type: DataTypes.STRING, allowNull: true,
+		},
+		img_name: {
+			type: DataTypes.STRING, allowNull: true,
+		},
 	});
 	User.associate = models => {
 			User.belongsTo(models.role, { foreignKey: 'role_id' })

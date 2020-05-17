@@ -166,8 +166,11 @@ module.exports.set = (app) => {
 	app.post('/api/events', eventsController.add);
 	app.delete('/api/events/:id', eventsController.delete);
 	app.put('/api/events', eventsController.update);
+	
+	app.post('/api/update_event_status', eventsController.update_status);
 
-	// Events	
+
+	// Pages
 	app.get('/api/pages', pagesController.index);
 	app.get('/api/pages/:id', pagesController.view);
 	app.post('/api/pages', pagesController.add);
@@ -198,8 +201,12 @@ module.exports.set = (app) => {
 	app.post('/api/place_order', orderController.place_order);
 	app.post('/api/payment_intents', orderController.payment_intents);
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
-
     app.post('/api/email_verification', userController.account_verification);
+
+
+	app.put('/api/customer', userController.update);  
+	app.put('/api/avatar_update', userController.avatar_update);  
+    app.post('/api/change_password', userController.change_password);  
 
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);
 	app.get('/api/my_event_details/:id', eventsController.my_event_detail);

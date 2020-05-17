@@ -93,21 +93,27 @@ module.exports = {
 			gender: req.body.gender,
 			dob: req.body.dob,
 			email: req.body.email,
-			pan: req.body.pan,
 			area_code: req.body.area_code,
 			mobile_no: req.body.mobile_no,
 			address_1: req.body.address_1,
 			address_2: req.body.address_2,
-			role_id: req.body.role_id,
 			is_active: req.body.is_active,
-			id: req.body.id,
-			is_admin: req.body.is_admin
-		}
-		if (req.body.user_name) {
-			req_data.user_name = req.body.user_name
+			id: req.body.id
 		}
 		if (req.body.password) {
 			req_data.password = bcrypt.hashSync(req.body.password, CONFIG.saltRounds)
+		}
+		userService.updateUser(req_data)
+			.then(
+				data => res.send(encrypt({ "success": true, "message": "Updated successfully." })))
+			.catch(
+				(err) => res.status(200).send(encrypt({ "success": false, "message": err.message })));
+	},
+	avatar_update(req, res) {
+		const req_data = {
+			img_dir: req.body.img_dir,
+			img_name: req.body.img_name,
+			id: req.body.id
 		}
 		userService.updateUser(req_data)
 			.then(
@@ -295,7 +301,6 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid1Token" }))
 		});
 	},
-
 	async forgot_password_token_validate(req, res){
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))
@@ -378,6 +383,48 @@ module.exports = {
 			}
 			else{
 				res.send(encrypt({ "success": false, "message": "Invalid Token" }))
+			}
+		}).catch(function(error){
+			res.send(encrypt({ "success": false, "message": "Invalid Token" }))
+		});
+	},
+	async change_password(req, res) {
+		if (typeof req.body.user_id=='undefined'){
+			return res.send(encrypt({ "success": false, "message": "user_id field is required"}))
+		}
+		if (req.body.user_id==''){
+			return res.send(encrypt({ "success": false, "message": "user_id field is required"}))
+		}
+		if (typeof req.body.password=='undefined'){
+			return res.send(encrypt({ "success": false, "message": "password field is required"}))
+		}
+		if (req.body.password==''){
+			return res.send(encrypt({ "success": false, "message": "password field is required"}))
+		}
+		if (typeof req.body.confirm_password=='undefined'){
+			return res.send(encrypt({ "success": false, "message": "confirm_password field is required"}))
+		}
+		if (req.body.confirm_password==''){
+			return res.send(encrypt({ "success": false, "message": "confirm_password field is required"}))
+		}
+		if (req.body.password!=req.body.confirm_password){
+			return res.send(encrypt({ "success": false, "message": "password and confirm_password field mismatched"}))
+		}
+		var where={
+			id: req.body.user_id
+		}
+		const user_data  = userService.getUserDetails(where)
+		user_data.then(function(data){	
+			if (data!=null){
+				var user_data = data.dataValues
+				var update_data ={
+					'password':bcrypt.hashSync(req.body.password, CONFIG.saltRounds)
+				}
+				userService.updateUserData(update_data, user_data.id)
+				res.send(encrypt({ "success": true, "message": "Password Updated Successfully" }))
+			}
+			else{
+				res.send(encrypt({ "success": false, "message": "Invalid Customer" }))
 			}
 		}).catch(function(error){
 			res.send(encrypt({ "success": false, "message": "Invalid Token" }))

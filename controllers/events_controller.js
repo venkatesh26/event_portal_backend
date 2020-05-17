@@ -363,15 +363,10 @@ module.exports = {
 
       }
       catch(error){
-console.log("======================================")
-        console.log(error);
-        
-console.log("======================================")
         return res.send({
             success: false,
             message: "Something Went Wrong While updating an Event",
         });
-
       }
   },
   async view(req, res) {
@@ -427,9 +422,8 @@ console.log("======================================")
               message: 'status Field Is required'
         }));
       }
-
       var status = ['published', 'waiting_for_approval', 'declined', 'unpublished', 'expired'];
-      if(status.indexOf(origin) > -1){
+      if(status.indexOf(req.body.status) > -1){
         var update_data ={
           'status':req.body.status
         }
