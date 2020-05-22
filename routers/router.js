@@ -205,21 +205,15 @@ module.exports.set = (app) => {
 	app.post('/api/payment_intents', orderController.payment_intents);
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
     app.post('/api/email_verification', userController.account_verification);
-
-
     app.post('/api/download_invoice', orderController.download_invoice);
 
 
-    
-
     app.post('/api/page_details', pagesController.get_page_details);
-
 	app.put('/api/customer', userController.update);  
 	app.put('/api/avatar_update', userController.avatar_update);  
     app.post('/api/change_password', userController.change_password);  
-
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);
-	app.get('/api/my_event_details/:id', eventsController.my_event_detail);
+	app.get('/api/my_event_details/:user_id/:id', eventsController.my_event_detail);
 	app.get('/api/my_orders/:user_id', orderController.my_orders);
 	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
 	app.get('/api/my_tickets/:user_id', orderController.my_tickets);

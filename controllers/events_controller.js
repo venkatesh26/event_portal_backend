@@ -508,31 +508,43 @@ module.exports = {
               success: false,
               message: 'user_id Field Is required'
         }));
-      }
-      var where = {};
-      where.id = req.params.id;
-      where.user_id = req.params.user_id;
-      const Events = models.events.findOne({
-        where: where,
-        include: [
-          {
-              model: models.event_tickets
-          }
-        ]
-      });
-      Events.then(function(data){
-          if(data) {
-              return res.send({
-                  success: true,
-                  data: data,
-              });
-          }
-          else {
+     }
+    if(typeof req.params.id =='undefined' || req.params.id==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'id Field Is required'
+        }));
+     }
+     var where = {};
+     where.id = req.params.id;
+     where.id = req.params.user_id;
+     const Events = models.events.findOne({
+      where: where,
+      include: [
+        {
+            model: models.event_tickets
+        },
+        {
+            model: models.currencies
+        },
+        {
+            model: models.event_schedule_details
+        }
+      ]
+    });
+    Events.then(function(data){
+        if(data) {
             return res.send({
-                success: false,
+                success: true,
                 data: data,
             });
         }
-      });
+        else {
+          return res.send({
+              success: false, 
+              data: data,
+          });
+      }
+    });
   }
 }
