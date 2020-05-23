@@ -33,10 +33,16 @@ const getMyOrders = function (data,  user_id) {
     where: where,
     include: [
         {
-            model: models.event_order_items
+            model: models.users,
+            attributes: ['first_name', 'email']
         },
         {
-            model: models.users
+            model: models.currencies,
+            attributes: ['name']
+        },
+        {
+            model: models.events,
+            attributes: ['name']
         }
     ],
     order: [order_query],
