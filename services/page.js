@@ -50,7 +50,13 @@ const updatePage = function (data) {
     { where: { id: data.id } })
 }
 
-const getPageById = id => models.pages.findById(id);
+
+const getPageById = function (id) {
+return models.pages.findOne({
+		where: { id:id },
+	
+	});
+}
 
 const addPage = page_data => models.pages.create(page_data, { returning: true });
 

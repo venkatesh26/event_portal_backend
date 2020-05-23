@@ -178,14 +178,32 @@ module.exports = {
 	    var where = {};
 	    where.id = req.params.id;
 	    where.event_user_id = req.params.user_id;
-	    const Event_Orders = models.event_orders.findOne({
+	     const Event_Orders = models.event_orders.findOne({
 	      where: where,
 	      include: [
 	        {
-	            model: models.events
+	            model: models.events,
+	            attributes : ['name']
 	        },
 	        {
-	            model: models.event_order_items
+	            model: models.users,
+	            attributes : ['first_name', 'last_name', 'email', ]
+	        },
+	        {
+	            model: models.event_attenders
+	        },
+	        {
+	            model: models.currencies,
+	            attributes:['name', 'code']
+	        },
+	        {
+	            model: models.event_order_items,
+	            include: [
+	           	 	{
+	            		model: models.event_tickets,
+	            		attributes:['name']
+	            	}
+	            ]	
 	        }
 	      ]
 	    });
