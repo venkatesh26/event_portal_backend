@@ -206,7 +206,8 @@ module.exports.set = (app) => {
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
     app.post('/api/email_verification', userController.account_verification);
     app.post('/api/download_invoice', orderController.download_invoice);
-
+	app.post('/api/my_events', eventsController.add_my_event);
+	app.put('/api/my_events', eventsController.update_my_event);
 
     app.post('/api/page_details', pagesController.get_page_details);
 	app.put('/api/customer', userController.update);  
