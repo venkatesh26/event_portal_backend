@@ -90,6 +90,8 @@ module.exports = {
 		const req_data = {
 			first_name: req.body.first_name,
 			last_name: req.body.last_name,
+			img_dir: req.body.img_dir,
+			img_name: req.body.img_name,
 			gender: req.body.gender,
 			dob: req.body.dob,
 			email: req.body.email,

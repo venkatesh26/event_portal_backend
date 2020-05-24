@@ -126,15 +126,17 @@ const getMyTicketsData = function (data,  user_id) {
   where.deletedAt = null; 
   where.user_id = user_id; 
   const EventOrders = models.event_orders.findAndCountAll({
-        distinct:true,
+    distinct:true,
     limit: limit,
     where: where,
     include: [
         {
-            model: models.event_order_items
+            model: models.currencies,
+            attributes: ['name']
         },
         {
-            model: models.users
+            model: models.events,
+            attributes: ['name']
         }
     ],
     order: [order_query],

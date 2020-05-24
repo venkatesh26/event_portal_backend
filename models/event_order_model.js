@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER
 		},
 		total_amount: {
-			type: DataTypes.INTEGER
+			type: DataTypes.FLOAT
 		},
 		transaction_id: {
 			type: DataTypes.STRING,

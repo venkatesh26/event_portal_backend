@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER
 		},
 		amount: {
-			type: DataTypes.INTEGER
+			type: DataTypes.FLOAT
 		},
 		total_amount: {
-			type: DataTypes.INTEGER
+			type: DataTypes.FLOAT
 		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },

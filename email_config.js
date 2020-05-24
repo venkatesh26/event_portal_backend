@@ -5,6 +5,12 @@ EMAIL_CONFIG.customer_register = {
 	template_name: "customer_register"
 }
 
+EMAIL_CONFIG.guest_customer_register = {
+	name: "Customer Register",
+	subject : "BuyUrTicket - Welcome",
+	template_name: "guest_customer_register"
+}
+
 EMAIL_CONFIG.forgot_password = {
 	name: "ForGot Password",
 	subject : "BuyUrTicket - Forgot Password",

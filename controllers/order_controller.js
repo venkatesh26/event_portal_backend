@@ -328,7 +328,6 @@ module.exports = {
 					}
 					catch(error){
 
-
 					}
 				});
 
@@ -338,14 +337,11 @@ module.exports = {
 				stripe.paymentIntents.create(
 				{
 					amount: amount,
-					description:"event ticket purchase",
+					description:"BuyUrTicket - Event Ticket Booking",
 					currency: 'inr',//currencies_code,
-					payment_method_types: ['card'],
+					payment_method_types: ['card']
 				},
 				function(err, paymentIntent) {
-
-					console.log(paymentIntent);
-
 					return res.send(encrypt({
 						success: true,
 						data:paymentIntent.client_secret,
@@ -355,7 +351,6 @@ module.exports = {
 				});
 			}
 			else {
-
 				return res.send(encrypt({
 					success: false,
 					message: 'Somethig Went Wrong'
@@ -370,6 +365,7 @@ module.exports = {
 		}
     },
 	async place_order(req, res) {
+
 		var payment_types = ['stripe'];
 		if(typeof req.body.payment_type =='undefined' || req.body.payment_type==''){
 
@@ -405,6 +401,62 @@ module.exports = {
 				success: false,
 				message: 'user_id Field Is required'
 			}));
+		}
+
+		if(typeof req.body.customer_name =='undefined' || req.body.customer_name==''){
+
+			return res.send(encrypt({
+				success: false,
+				message: 'customer_name Field Is required'
+			}));
+		}
+
+		console.log(req.body);
+
+
+		if(typeof req.body.user_logged_in!='undefined' && req.body.user_logged_in==false || req.body.user_logged_in=='false'){
+
+			var random_password  = Math.random().toString(36).slice(-6);
+			const userService = require('../services/user');
+			var user_data = await userService.getUserByEmail(req.body.email);
+			const bcrypt = require('bcrypt');
+			const base64 = require('base-64');
+			const aes256 = require('aes256');
+			const dateTime = require('node-datetime');
+
+			if(typeof user_data!='undefined' &&  user_data!=null && user_data.id!=''){
+				req.body.user_id = user_data.id
+			}
+			else {
+				// create new user 
+				var user = {
+						first_name: req.body.customer_name,
+						password: bcrypt.hashSync(random_password, CONFIG.saltRounds),
+						email: req.body.email,
+						is_active: 1,
+						is_email_verfied: 0,
+						role_id:2
+				}
+				req.body.user_id = await userService.customerRegister(user).then(function(user){
+					var email_config=EMAIL_CONFIG['guest_customer_register'];
+					var token = aes256.encrypt(CONFIG.Aes_key, user.id.toString())
+					token = base64.encode(token);
+					var verfication_link=CONFIG.account_verification_link+"?token="+token
+					var email_data = {
+						'password':random_password,
+						'customer_name':req.body.first_name,
+						'verfication_link':verfication_link,
+					}
+					var update_data ={
+						'email_verification_token':token
+					}
+					userService.updateUserData(update_data, user.id)
+				    mailer.send_mail(user.email, email_config.subject, email_data, email_config.template_name);
+				    return user.id;
+				});
+
+				console.log(	req.body.user_id )
+			}
 		}
 
 		try 
@@ -527,9 +579,7 @@ module.exports = {
 						var pdf = require('html-pdf');
 						var options = { 'format': 'A4',   "orientation": "portait" };
 						var file_name = "order_invoice" + Date.now() + ".pdf";
-
 					    pdf.create(html, options).toFile('assets/order_invoice/'+file_name,async  function (err, response) {
-
 
 							// Get Buyer Details
 							var buyer_details = await models.users.findOne({
