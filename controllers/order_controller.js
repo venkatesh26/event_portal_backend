@@ -239,10 +239,18 @@ module.exports = {
 	      where: where,
 	      include: [
 	        {
-	            model: models.events
+	            model: models.events,
+	            attributes:['name']
 	        },
 	        {
 	            model: models.event_order_items
+	        },
+	        {
+	            model: models.event_attenders
+	        },
+	        {
+	            model: models.currencies,
+	            attributes:['name', 'code']
 	        }
 	      ]
 	    });
@@ -411,11 +419,7 @@ module.exports = {
 			}));
 		}
 
-		console.log(req.body);
-
-
 		if(typeof req.body.user_logged_in!='undefined' && req.body.user_logged_in==false || req.body.user_logged_in=='false'){
-
 			var random_password  = Math.random().toString(36).slice(-6);
 			const userService = require('../services/user');
 			var user_data = await userService.getUserByEmail(req.body.email);
@@ -423,7 +427,6 @@ module.exports = {
 			const base64 = require('base-64');
 			const aes256 = require('aes256');
 			const dateTime = require('node-datetime');
-
 			if(typeof user_data!='undefined' &&  user_data!=null && user_data.id!=''){
 				req.body.user_id = user_data.id
 			}
@@ -454,8 +457,6 @@ module.exports = {
 				    mailer.send_mail(user.email, email_config.subject, email_data, email_config.template_name);
 				    return user.id;
 				});
-
-				console.log(	req.body.user_id )
 			}
 		}
 

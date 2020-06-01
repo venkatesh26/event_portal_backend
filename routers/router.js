@@ -211,7 +211,7 @@ module.exports.set = (app) => {
 
     app.post('/api/page_details', pagesController.get_page_details);
 	app.put('/api/customer', userController.update);  
-	
+
 	app.put('/api/avatar_update', userController.avatar_update);  
     app.post('/api/change_password', userController.change_password);  
 	app.get('/api/my_events/:user_id', eventsController.my_event_list);

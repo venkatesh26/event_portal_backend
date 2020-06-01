@@ -259,7 +259,6 @@ module.exports = {
       var post_data = {
           name: req.body.name,
           slug: slug,
-          user_id:req.body.user_id,
           description:req.body.description,
           start_date:start_date,
           end_date:end_date,
@@ -503,12 +502,12 @@ module.exports = {
     })
   },
   async my_event_detail(req, res){
-      if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
+    if(typeof req.params.user_id =='undefined' || req.params.user_id==''){
         return res.send(encrypt({
               success: false,
               message: 'user_id Field Is required'
         }));
-     }
+    }
     if(typeof req.params.id =='undefined' || req.params.id==''){
         return res.send(encrypt({
               success: false,
@@ -770,7 +769,6 @@ module.exports = {
       var post_data = {
           name: req.body.name,
           slug: slug,
-          user_id:req.body.user_id,
           description:req.body.description,
           start_date:start_date,
           end_date:end_date,

@@ -108,7 +108,8 @@ const findOrSaveAndGetId = async function(name, state_id, country_id) {
         state_id:state_id,
         country_id:country_id,
         name:name,
-        slug:slug
+        slug:slug,
+        is_active:1
       }
       var country = await models.cities.create(country_data, { returning: true });
       return country.id;

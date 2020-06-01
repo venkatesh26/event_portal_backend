@@ -83,7 +83,6 @@ const isExistOrNot = function(name, id=null) {
   });
 }
 
-
 const findOrSaveAndGetId = async function(name, country_id) {
   var where ={}
   where.name = name;
@@ -99,7 +98,8 @@ const findOrSaveAndGetId = async function(name, country_id) {
       var country_data = {
         country_id:country_id,
         name:name,
-        slug:slug
+        slug:slug,
+        is_active:1
       }
       var country = await models.states.create(country_data, { returning: true });
       return country.id;

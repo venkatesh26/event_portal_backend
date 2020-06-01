@@ -90,7 +90,8 @@ const findOrSaveAndGetId = async function(name) {
       var slug = sluggable_behavior((name).toString().toLowerCase());
       var country_data = {
         name:name,
-        slug:slug
+        slug:slug,
+        is_active:1
       }
       var country = await models.countries.create(country_data, { returning: true });
       return country.id;

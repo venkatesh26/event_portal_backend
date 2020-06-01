@@ -8,6 +8,7 @@ const getPopularEventList = function (data, user_id) {
   let order_query = ['createdAt', 'DESC']
   where.deletedAt = null; 
   where.status = 'published';
+  where.event_visibility = 'public';
   where.is_popular = 1;
   const Events = models.events.findAndCountAll({
     limit: limit,
@@ -26,6 +27,7 @@ const getHomeEventList = function (data, user_id) {
   order_query = ['createdAt', 'DESC'];
   where.deletedAt = null; 
   where.status = 'published';
+  where.event_visibility = 'public';
   const Events = models.events.findAndCountAll({
     limit: limit,
     where: where,
@@ -55,8 +57,16 @@ const getmyEventList = function (data, user_id) {
   if (data.name) {
     where.name = { [Op.like]: '%' + data.name + '%' }
   }
+  if (data.category_id) {
+     where.category_id = data.category_id
+  }
+  if (data.start_date && data.end_date) {
+    where.createdAt ={
+      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
+      }
+  }
   if (data.is_active) {
-    where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
+      where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
   }
   where.deletedAt = null; 
   where.user_id = user_id;
@@ -69,7 +79,6 @@ const getmyEventList = function (data, user_id) {
   });
   return { 'Events': Events}
 };
-
 
 const getSearchEventList = function (data) {
   let where = {}
@@ -93,13 +102,15 @@ const getSearchEventList = function (data) {
   if (data.category_id) {
      where.category_id = data.category_id;
   }
-  if (data.start_date && data.end_date) {
-    where.createdAt ={
-      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
-      }
+  if (data.start_date) {
+      where.start_date = { [Op.gte]: data.start_date }
+  }
+  if (data.end_date) {
+     where.end_date = { [Op.lte]: data.end_date }
   }
   where.deletedAt = null; 
   where.status = 'published';
+  where.event_visibility = 'public';
   const Events = models.events.findAndCountAll({
     limit: limit,
     where: where,
@@ -131,7 +142,15 @@ const getAdminListData = function (data) {
     where.name = { [Op.like]: '%' + data.name + '%' }
   }
   if (data.category_id) {
-    where.category_id = data.category_id
+     where.category_id = data.category_id
+  }
+  if (data.user_id) {
+     where.user_id = data.user_id
+  }
+  if (data.start_date && data.end_date) {
+    where.createdAt ={
+      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
+      }
   }
   if (data.is_active) {
 		where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;

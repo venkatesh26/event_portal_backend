@@ -41,6 +41,8 @@ module.exports = (sequelize, DataTypes) => {
 		message_to_attendee: {
 			type: DataTypes.TEXT, allowNull: true, trim:true
 		},
+		no_of_tickets_sold: { type: DataTypes.INTEGER, defaultValue:0},
+		is_active: { type: DataTypes.BOOLEAN, defaultValue: true},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }
