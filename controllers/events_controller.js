@@ -873,5 +873,30 @@ module.exports = {
             message: "Something Went Wrong While updating an Event",
         });
       }
+  },
+  async auto_complete(req, res){
+    const Sequelize = require('sequelize');
+    const Op = Sequelize.Op;
+    var q=req.query.q;
+    var order_query = ['id', 'DESC']
+    var where = {};
+    where.deletedAt = null;
+    where.status = 'published';
+    where.event_visibility="public";
+    if(req.query.city_id){
+       where.city_id=req.query.city_id;
+    }    
+    where[Op.or] = [
+      {'name':{ [Op.like]: '%' + q + '%' }},
+      {'venue_name':{ [Op.like]: '%' + q + '%' }},
+      {'category_name':{ [Op.like]: '%' + q + '%' }}
+    ]
+    const Events = await models.events.findAndCountAll({
+      where: where,
+      order: [order_query],
+      attributes:['id','name', 'city', 'state', 'slug', 'venue_name'],
+      $sort: { id: 1 }
+    });
+    return res.send(encrypt({ "success": true, "data": Events.rows, "count":Events.count }));
   }
 }

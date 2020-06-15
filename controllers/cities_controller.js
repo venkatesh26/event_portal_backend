@@ -99,5 +99,22 @@ module.exports = {
     citiesService.deleteData(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));
+  },
+  async auto_complete(req, res){
+    const Sequelize = require('sequelize');
+    const Op = Sequelize.Op;
+    var q=req.query.q;
+    var order_query = ['name', 'ASC']
+    var where = {};
+    where.deletedAt = null;
+    where.is_active = 1;  
+    where.name = { [Op.like]: '%' + q + '%' };
+    const City = await models.cities.findAndCountAll({
+      where: where,
+      order: [order_query],
+      attributes:['id','name', 'slug'],
+      $sort: { id: 1 }
+    });
+    return res.send(encrypt({ "success": true, "data": City.rows, "count":City.count }));
   }
 }

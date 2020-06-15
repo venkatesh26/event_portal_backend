@@ -6,7 +6,7 @@ module.exports = {
 		tokenExpireTimeInHours: '6',
 		Aes_key : 'b093986d5fdbafbc23f23ab35696042d',
 		is_encryption: false,
-		db_migration:true,
+		db_migration:false,
 		is_ssl_enabled:false,
 		is_allow_origin:true,
   	 	file_upload_limit:'50mb',

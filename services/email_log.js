@@ -27,9 +27,12 @@ const getAllData = function (data) {
   if (data.subject) {
     where.subject = { [Op.like]: '%' + data.subject + '%' }
   }
-  if (data.startDate && data.endDate) {
+  if (data.status) {
+    where.status = data.status
+  }
+  if (data.start_date && data.end_date) {
     where.createdAt ={
-      [Op.between]: [data.startDate+" 00:00:00.000 +00:00", data.endDate+" 23:59:00.000 +00:00"]
+      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
       }
   }
   where.deletedAt = null; 

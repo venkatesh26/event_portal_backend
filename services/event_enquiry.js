@@ -19,7 +19,13 @@ const getAllData = function (data) {
   }
   offset = limit * (page - 1);
   if (data.name) {
-    where.name = { [Op.iLike]: '%' + data.name + '%' }
+    where.name = { [Op.like]: '%' + data.name + '%' }
+  }
+  if (data.email) {
+    where.email = { [Op.like]: '%' + data.email + '%' }
+  }
+  if (data.contact_no ) {
+    where.contact_no   = { [Op.like]: '%' + data.contact_no   + '%' }
   }
   if (data.is_active) {
 		where.is_active = data.is_active

@@ -28,7 +28,7 @@ const getMyOrders = function (data,  user_id) {
   where.deletedAt = null;
   where.event_user_id = user_id; 
   const EventOrders = models.event_orders.findAndCountAll({
-        distinct:true,
+    distinct:true,
     limit: limit,
     where: where,
     include: [
@@ -69,11 +69,19 @@ const getAllData = function (data) {
     page = data.page_no;
   }
   offset = limit * (page - 1);
-  if (data.name) {
-    where.name = { [Op.like]: '%' + data.name + '%' }
+  if (data.user_id) {
+     where.user_id = data.user_id
   }
-  if (data.is_active) {
-		where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
+  if (data.transaction_id) {
+    where.transaction_id = { [Op.like]: '%' + data.transaction_id + '%' }
+  }
+  if (data.start_date && data.end_date) {
+    where.createdAt ={
+      [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
+      }
+  }
+  if (data.status) {
+		where.status = data.status
 	}
   where.deletedAt = null; 
   const EventOrders = models.event_orders.findAndCountAll({

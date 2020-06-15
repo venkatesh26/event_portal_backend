@@ -39,7 +39,10 @@ module.exports.set = (app) => {
 		'/api/email_verification',
 		'/api/customer_login',
 		'/api/customer_logout',
-		'/api/page_details'
+		'/api/page_details',
+		'/api/user_auto_complete',
+		'/api/city_auto_complete',
+		'/api/event_auto_complete',
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -107,6 +110,11 @@ module.exports.set = (app) => {
 	app.put('/api/users', userController.update);  
 	app.delete('api/users/:id', userController.delete);
 
+	app.get('/api/user_auto_complete', userController.auto_complete);
+
+
+	
+
     // Log in Logs
 	app.get('/api/login_log', userController.getUsersLog);
 
@@ -148,6 +156,8 @@ module.exports.set = (app) => {
 	app.delete('/api/cities/:id', citiesController.delete);
 	app.put('/api/cities', citiesController.update);
 
+	app.get('/api/city_auto_complete', citiesController.auto_complete);	
+
 	// Categories
 	app.get('/api/categories', categoriesController.index);
 	app.get('/api/categories_open', categoriesController.index); 
@@ -168,8 +178,9 @@ module.exports.set = (app) => {
 	app.post('/api/events', eventsController.add);
 	app.delete('/api/events/:id', eventsController.delete);
 	app.put('/api/events', eventsController.update);
-
 	app.post('/api/update_event_status', eventsController.update_status);
+	app.get('/api/event_auto_complete', eventsController.auto_complete);
+	
 
 	app.get('/api/email_logs', emailLogController.index);
 

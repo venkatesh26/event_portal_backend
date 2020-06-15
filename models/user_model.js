@@ -81,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
 		forgot_pass_date: { type: DataTypes.DATE, allowNull: true },
 		forgot_pass_exp_timestamp: { type: DataTypes.DATE, allowNull: true },
 		user_type: { type: DataTypes.STRING, allowNull: true, defaultValue:null },
+		register_type: { type: DataTypes.STRING, allowNull: true, defaultValue:'site', comment:'site, facebook, google_plus, twitter' },
 		img_dir: {
 			type: DataTypes.STRING, allowNull: true,
 		},

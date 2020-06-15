@@ -272,7 +272,6 @@ module.exports = {
     async payment_intents(req, res){
 
 		const stripe = require('stripe')(CONFIG.stripe.securet_key);
-
 		if(typeof req.body.event_id =='undefined' || req.body.event_id==''){
 
 			return res.send(encrypt({
@@ -282,18 +281,21 @@ module.exports = {
 		}
 
 		if(typeof req.body.ticket_details =='undefined' || req.body.ticket_details==''){
-
 			return res.send(encrypt({
 				success: false,
 				message: 'ticket_details Field Is required'
 			}));
 		}
 
+		var ref_number='';
+		var event_ticket_log_details=[];
+
 		try
 		{
 			// Get Event Details
 			var where = {};
 	        where.id = req.body.event_id;
+	        where.status = 'published';
 			const Events = await models.events.findOne({
 		      where: where,
 		      include: [
@@ -315,10 +317,13 @@ module.exports = {
 		    	var ticket_data = [];
 		    	var total_tickets = 0;
 				Events.event_tickets.map(function(ticket){
-					ticket_data[ticket.id]=ticket.price;
-				});	  
-				req.body.ticket_details.map(field => {	
+				    if(ticket.is_active==1){
+					   ticket_data[ticket.id]=ticket.price;
+					}
+				});	
 
+				var ticket_error = false;
+				req.body.ticket_details.map(field => {	
 					try
 					{
 						var ticket_price =  ticket_data[field.ticket_id];
@@ -326,7 +331,10 @@ module.exports = {
 							var  ticket_amount  = parseFloat(field.quantity * ticket_price);
 							total_amount = parseFloat(total_amount) + ticket_amount;
 							total_tickets = parseInt(total_tickets)+parseInt(field.quantity);
-							event_ticket_order_items.push({
+							if(field.no_of_tickets_sold > field.quantity){
+								ticket_error=true;
+							}
+							event_ticket_log_details.push({
 								'event_ticket_id': field.ticket_id,
 								'no_of_tickets':field.quantity,
 								'amount':ticket_price,
@@ -339,9 +347,9 @@ module.exports = {
 					}
 				});
 
+
 				let amount = total_amount * 100;
 		    	var currencies_code = Events.currency.code;
-
 				stripe.paymentIntents.create(
 				{
 					amount: amount,
@@ -350,10 +358,21 @@ module.exports = {
 					payment_method_types: ['card']
 				},
 				function(err, paymentIntent) {
+
+					// Save Ticket Log
+					var ticket_log = {
+						"event_id":req.body.event_id,
+						"ref_number":ref_number,
+						"no_of_tickets":no_of_tickets,
+						"status":"processing",
+						"event_ticket_log_details":event_ticket_log_details
+					}
+
 					return res.send(encrypt({
 						success: true,
 						data:paymentIntent.client_secret,
 						client_secret:paymentIntent.client_secret,
+						ref_number:ref_number,
 						message: 'success'
 					}));
 				});

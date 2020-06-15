@@ -261,7 +261,6 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid Email ID" }))
 		});
 	},
-
 	async account_verification(req, res){
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))
@@ -442,5 +441,27 @@ module.exports = {
 			console.log(error)
 			res.send(encrypt({ "success": false, "message":error}));
 		}
+	},
+	async auto_complete(req, res){
+		const Sequelize = require('sequelize');
+		const Op = Sequelize.Op;
+		var q=req.query.q;
+		var order_query = ['id', 'DESC']
+		var where = {};
+		where.deletedAt = null;
+		where.is_active = 1;	
+		where[Op.or] = [
+			{'first_name':{ [Op.like]: '%' + q + '%' }},
+			{'last_name':{ [Op.like]: '%' + q + '%' }},
+		    {'email':{ [Op.like]: '%' + q + '%' }}
+		]
+
+		const User = await models.users.findAndCountAll({
+			where: where,
+			order: [order_query],
+			attributes:['id','first_name', 'last_name', 'email'],
+			$sort: { id: 1 }
+		});
+		return res.send(encrypt({ "success": true, "data": User.rows, "count":User.count }));
 	}
 }

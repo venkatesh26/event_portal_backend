@@ -67,7 +67,7 @@ const getmyEventList = function (data, user_id) {
   }
   if (data.is_active) {
       where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
-  }
+  } 
   where.deletedAt = null; 
   where.user_id = user_id;
   const Events = models.events.findAndCountAll({
@@ -102,11 +102,22 @@ const getSearchEventList = function (data) {
   if (data.category_id) {
      where.category_id = data.category_id;
   }
+  if (data.city_id) {
+     where.city_id = data.city_id;
+  }
   if (data.start_date) {
       where.start_date = { [Op.gte]: data.start_date }
   }
   if (data.end_date) {
      where.end_date = { [Op.lte]: data.end_date }
+  }
+  if (data.keyword) {
+      var q=data.keyword;
+      where[Op.or] = [
+      {'name':{ [Op.like]: '%' + q + '%' }},
+      {'venue_name':{ [Op.like]: '%' + q + '%' }},
+      {'category_name':{ [Op.like]: '%' + q + '%' }}
+    ]
   }
   where.deletedAt = null; 
   where.status = 'published';
@@ -127,7 +138,7 @@ const getAdminListData = function (data) {
   let limit = 10;
   let offset = 0;
   let order_query = []
-	if(data.order_key && data.order_param){ 
+	if(data.order_key && data.order_paraom){ 
 		order_query.push(data.order_key)  
 		order_query.push(data.order_param)
 	}else{
@@ -152,9 +163,18 @@ const getAdminListData = function (data) {
       [Op.between]: [data.start_date+" 00:00:00.000 +00:00", data.end_date+" 23:59:00.000 +00:00"]
       }
   }
-  if (data.is_active) {
-		where.is_active = ((data.is_active==true || data.is_active=='true') ) ? 1:0;
-	}
+  if (data.event_start_date) {
+      where.start_date = { [Op.gte]: data.event_start_date }
+  }
+  if (data.event_end_date) {
+     where.end_date = { [Op.lte]: data.event_end_date }
+  }
+  if (data.user_id) {
+     where.user_id = data.user_id
+  }
+  if (data.status) {
+    where.status = data.status;
+  }  
   where.deletedAt = null; 
   const Events = models.events.findAndCountAll({
     distinct:true,
