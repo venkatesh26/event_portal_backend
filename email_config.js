@@ -66,3 +66,9 @@ EMAIL_CONFIG.event_ticket_booked = {
 	subject : "BuyUrTicket - Your Tickets Booked Successfully",
 	template_name: "event_book_ticket_invoice"
 }
+
+EMAIL_CONFIG.event_remainder_notification = {
+	name: "Event Remainder Notification",
+	subject : "BuyUrTicket - Event Remainder Notification",
+	template_name: "event_remainder_notification"
+}

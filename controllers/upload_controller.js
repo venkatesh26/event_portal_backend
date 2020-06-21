@@ -64,8 +64,7 @@ module.exports = {
         }
       });
     },
-    compress_image(image_path, image_dir){
-
+    compress_image(image_path, image_dir) {
         var compress_images = require('compress-images'), INPUT_path_to_your_images, OUTPUT_path;
         INPUT_path_to_your_images = image_path;
         OUTPUT_path = image_dir+"compress/";
@@ -75,7 +74,7 @@ module.exports = {
                                                     {svg: {engine: 'svgo', command: '--multipass'}},
                                                     {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}
 
-}, function(error, completed, statistic){
+        }, function(error, completed, statistic){
                     console.log('-------------');
                     console.log(error);
                     console.log(completed);
@@ -83,5 +82,4 @@ module.exports = {
                     console.log('-------------');                                   
         });
     }
-
 }

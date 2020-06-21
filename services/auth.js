@@ -24,10 +24,7 @@ async function authenticate(req, res, params){
 
 		if (!bcrypt.compareSync(params.password || '', user.password))
 			throw new CustomError('Authentication failed. Wrong password.');
-
-		if(CONFIG.disable_multiple_login==true && user.is_login==true){
-			throw new CustomError('Your previously signed account terminated incorrectly.Please try after some time.');
-		}
+		
 		const payload = {
 			id: bcrypt.hashSync(aes256.encrypt(key, user.id.toString()), CONFIG.saltRounds),
 			time: bcrypt.hashSync(aes256.encrypt(key, new Date().toString()), CONFIG.saltRounds),

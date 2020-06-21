@@ -24,6 +24,8 @@ Object.keys(db).forEach(modelName => {
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
 sequelize.sync({ force: true }).then(function () {
  var sql = fs.readFileSync('master_data/sql.sql').toString();
  const client = Client.createConnection(CONFIG.dbConnectionString);
@@ -35,3 +37,7 @@ sequelize.sync({ force: true }).then(function () {
      });
  });
 });
+
+
+
+

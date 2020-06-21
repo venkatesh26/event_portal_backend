@@ -88,6 +88,9 @@ module.exports = (sequelize, DataTypes) => {
 		img_name: {
 			type: DataTypes.STRING, allowNull: true,
 		},
+		social_media_u_id : {
+			type: DataTypes.STRING, allowNull: true,	
+		}
 	});
 	User.associate = models => {
 			User.belongsTo(models.role, { foreignKey: 'role_id' })

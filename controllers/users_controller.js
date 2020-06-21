@@ -1,4 +1,5 @@
 const userService = require('../services/user');
+const authService = require('../services/auth');
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const encrypt = require('../customFunctions').encrypt;
@@ -9,7 +10,7 @@ const aes256 = require('aes256');
 const dateTime = require('node-datetime');
 let converter = require('json-2-csv');
 module.exports = {
-	index(req, res) {
+	async index(req, res) {
 		const { User } = userService.getUsers(req.query)
 		User.then(async function(data){
 		   if(req.query.is_download == 'true' || req.query.is_download == true){
@@ -51,7 +52,7 @@ module.exports = {
         	res.send(encrypt({ "success": false, "message": error }))
       })
 	},
-	add(req, res) {
+	async add(req, res) {
 		return userService.getUserByLogin(req.body.user_name || '')
 			.then(exists => {
 				if (exists) {
@@ -86,7 +87,7 @@ module.exports = {
 				});
 			});
 	},
-	update(req, res) {
+	async update(req, res) {
 		const req_data = {
 			first_name: req.body.first_name,
 			last_name: req.body.last_name,
@@ -111,7 +112,7 @@ module.exports = {
 			.catch(
 				(err) => res.status(200).send(encrypt({ "success": false, "message": err.message })));
 	},
-	avatar_update(req, res) {
+	async avatar_update(req, res) {
 		const req_data = {
 			img_dir: req.body.img_dir,
 			img_name: req.body.img_name,
@@ -123,7 +124,7 @@ module.exports = {
 			.catch(
 				(err) => res.status(200).send(encrypt({ "success": false, "message": err.message })));
 	},
-	view(req, res) {
+	async view(req, res) {
 		userService.getUser({
 			id: decrypt(decode_id(req.params.id))
 		})
@@ -132,7 +133,7 @@ module.exports = {
 		.catch(
 			(error) => res.status(400).send(encrypt({ "success": false, "message": error })));
 	},
-	delete(req, res) {
+	async delete(req, res) {
 		userService.deleteUser({
 			id: decrypt(decode_id(req.params.id))
 		}).then(
@@ -140,14 +141,14 @@ module.exports = {
 		.catch(
 		(error) => res.status(400).send(encrypt({ "success": false, "message": error })));
 	},
-	getUsersLog(req, res) {
+	async getUsersLog(req, res) {
 		const { Login_log } = userService.getUsersLog(req.query)
 		Login_log.then(
 			data => res.send(encrypt({ "success": true, "data": data.rows, "count": data.count })))
 			.catch(
 				(error) => res.status(400).send(encrypt({ "success": false, "message": error })));
 	},
-	async register(req, res){
+	async register(req, res) {
 
 	  // Required Fields
       var required_fields=[
@@ -261,7 +262,7 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid Email ID" }))
 		});
 	},
-	async account_verification(req, res){
+	async account_verification(req, res) {
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))
 		}
@@ -302,7 +303,7 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid1Token" }))
 		});
 	},
-	async forgot_password_token_validate(req, res){
+	async forgot_password_token_validate(req, res) {
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))
 		}
@@ -335,7 +336,7 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid1Token" }))
 		});
 	},
-	async reset_password(req, res){
+	async reset_password(req, res) {
 		if (typeof req.body.token=='undefined'){
 			return res.send(encrypt({ "success": false, "message": "token field is required"}))
 		}
@@ -431,7 +432,7 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message": "Invalid Token" }))
 		});
 	},
-	async FileTobase64(req, res){
+	async FileTobase64(req, res) {
 		try{
 			var filename = req.query.file_name
 			var file_dir = req.query.file_dir
@@ -442,7 +443,7 @@ module.exports = {
 			res.send(encrypt({ "success": false, "message":error}));
 		}
 	},
-	async auto_complete(req, res){
+	async auto_complete(req, res) {
 		const Sequelize = require('sequelize');
 		const Op = Sequelize.Op;
 		var q=req.query.q;
@@ -463,5 +464,106 @@ module.exports = {
 			$sort: { id: 1 }
 		});
 		return res.send(encrypt({ "success": true, "data": User.rows, "count":User.count }));
+	},
+	async social_media_register_or_login(req, res) {
+		if(typeof req.body.register_type=='undefined'){
+			return res.send(encrypt({
+					success: false,
+					message: "register_type is required"
+			}));
+		}
+		if(typeof req.body.email=='undefined'){
+			return res.send(encrypt({
+					success: false,	
+					message: "email is required"
+			}));
+		}
+		if(typeof req.body.first_name=='undefined'){
+			return res.send(encrypt({
+					success: false,
+					message: "first_name is required"
+			}));
+		}
+		if(typeof req.body.social_media_u_id=='undefined'){
+			return res.send(encrypt({
+					success: false,
+					message: "social_media_u_id is required"
+			}));
+		}
+		userService.getUserByEmail(req.body.email || '')
+		.then(async function(exists) {
+			if(exists) {
+				if(exists.register_type!=req.body.register_type) {
+					return res.send(encrypt({
+						success: false,
+						message: "Email Already Register Using Other Services"
+					}));
+				} 
+				req.body.social_media_login=true;
+				req.body.password='Passw0rd!@#$%^';
+				return await authService.customer_authenticate(req, res, req.body)
+				    .then(async token => { 
+							res.send(encrypt({
+								success: true,
+								data: token
+							}));
+					})
+				    .catch(err => { 
+							if (err.type === 'custom') {
+								return res.send(encrypt({
+									success: false,
+									message: err.message
+								}));
+							}
+							console.log(err)	
+							return res.send(encrypt({
+								success: false,
+								message: err.message
+							}));
+					});
+			}
+			else {
+
+				req.body.password = 'Passw0rd!@#$%^';
+				var user = {
+					register_type:req.body.register_type,
+					social_media_u_id:req.body.social_media_u_id,
+					first_name: req.body.first_name,
+					password: bcrypt.hashSync(req.body.password, CONFIG.saltRounds),
+					email: req.body.email,
+					is_active: 1,
+					is_email_verified: 1,
+					role_id:2
+				}
+				userService.customerRegister(user).then(async function(user) {
+					req.body.social_media_login=true;
+					return await authService.customer_authenticate(req, res, req.body)
+						.then(async token => { 
+							res.send(encrypt({
+								success: true,
+								data: token
+							}));
+						})
+						.catch(err => { 
+							if (err.type === 'custom') {
+								return res.send(encrypt({
+									success: false,
+									message: err.message
+								}));
+							}
+							console.log(err)	
+							return res.send(encrypt({
+								success: false,
+								message: err.message
+							}));
+						});
+				}).catch(function(error) {
+					return res.send(encrypt({
+						success: false,
+						message: error.message
+					}));
+				});
+			}
+		});
 	}
 }

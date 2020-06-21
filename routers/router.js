@@ -43,6 +43,7 @@ module.exports.set = (app) => {
 		'/api/user_auto_complete',
 		'/api/city_auto_complete',
 		'/api/event_auto_complete',
+		'/api/social_media'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -109,11 +110,8 @@ module.exports.set = (app) => {
 	app.post('/api/users', userController.add);  
 	app.put('/api/users', userController.update);  
 	app.delete('api/users/:id', userController.delete);
-
 	app.get('/api/user_auto_complete', userController.auto_complete);
-
-
-	
+	app.post('/api/social_media', userController.social_media_register_or_login);
 
     // Log in Logs
 	app.get('/api/login_log', userController.getUsersLog);
