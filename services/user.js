@@ -25,7 +25,7 @@ const getUsers = function (data) {
 	let order_query = []
 	if(data.order_key && data.order_param){
 		order_query.push(data.order_key) 
-		if(data.order_key == 'role' || data.order_key == 'department'){
+		if(data.order_key == 'role'){
 			order_query.push(data.order_key)
 		} 
 		order_query.push(data.order_param)

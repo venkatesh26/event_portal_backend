@@ -1,0 +1,11 @@
+event post - waiting for approval
+           - published(admin)
+           - canceled
+           - declined
+           		- why we declined
+           		- waiting for approval
+           - expired (Auto cron) not editable
+           
+
+
+

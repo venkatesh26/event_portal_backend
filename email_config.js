@@ -57,7 +57,7 @@ EMAIL_CONFIG.event_admin_approval = {
 
 EMAIL_CONFIG.event_admin_declined = {
 	name: "Event Declined",
-	subject : "BuyUrTicket - Event Declined",
+	subject : "BuyUrTicket - Your Event Got Declined",
 	template_name: "event_decline"
 }
 

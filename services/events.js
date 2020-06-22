@@ -111,6 +111,12 @@ const getSearchEventList = function (data) {
   if (data.end_date) {
      where.end_date = { [Op.lte]: data.end_date }
   }
+  if (data.is_online) {
+     where.type = 'online';
+  }
+  if (data.is_popular) {
+     where.is_popular = 1;
+  }
   if (data.keyword) {
       var q=data.keyword;
       where[Op.or] = [

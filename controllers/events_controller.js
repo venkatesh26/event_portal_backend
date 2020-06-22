@@ -3,6 +3,7 @@ const countryService = require('../services/countries');
 const stateService = require('../services/states');
 const cityService = require('../services/cities');
 const tagService = require('../services/tag');
+const userService = require('../services/user');
 const models = require('../models');
 var crypto = require('crypto');
 const encrypt = require('../customFunctions').encrypt;
@@ -120,7 +121,7 @@ module.exports = {
           city:req.body.city,
           city_id:city_id,
           state:req.body.state,
-          state_id:city_id,
+          state_id:state_id,
           country:req.body.country,
           country_id:country_id,
           pincode:req.body.pincode,
@@ -271,7 +272,6 @@ module.exports = {
           img_dir:req.body.img_dir,
           img_name:req.body.img_name,
           tags:req.body.tags,
-          status:'published',
           venue_name:req.body.venue_name,
           address_line_1:req.body.address_line_1,
           address_line_2:req.body.address_line_2,
@@ -280,7 +280,7 @@ module.exports = {
           city:req.body.city,
           city_id:city_id,
           state:req.body.state,
-          state_id:city_id,
+          state_id:state_id,
           country:req.body.country,
           country_id:country_id,
           pincode:req.body.pincode,
@@ -407,12 +407,23 @@ module.exports = {
         }
       });
   },
-  async update_status(req, res){
-
+  async update_status(req, res) {
       if(typeof req.body.event_id =='undefined' || req.body.event_id==''){
         return res.send(encrypt({
               success: false,
               message: 'event_id Field Is required'
+        }));
+      }
+      if(typeof req.body.user_id =='undefined' || req.body.user_id==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'user_id Field Is required'
+        }));
+      }
+      if(typeof req.body.event_name =='undefined' || req.body.event_name==''){
+        return res.send(encrypt({
+              success: false,
+              message: 'event_name Field Is required'
         }));
       }
       if(typeof req.body.status =='undefined' || req.body.status==''){
@@ -421,12 +432,48 @@ module.exports = {
               message: 'status Field Is required'
         }));
       }
-      var status = ['published', 'waiting_for_approval', 'declined', 'unpublished', 'expired'];
+      if(req.body.status =='declined' && ( typeof req.body.declined_message=='undefined' || req.body.declined_message=='')){
+        return res.send(encrypt({
+              success: false,
+              message: 'declined_message Field Is required'
+        }));
+      }
+      var status = ['published', 'declined', 'unpublished', 'expired'];
       if(status.indexOf(req.body.status) > -1){
         var update_data ={
-          'status':req.body.status
+          'status':req.body.status,
+          'declined_message':req.body.declined_message
         }
         eventService.updateData(update_data, req.body.event_id);
+        if(req.body.status=='published'){
+          var where =[{'id':req.body.user_id}]
+          const user_data = userService.getUserDetails(where)
+          user_data.then(function(user){ 
+            if(user){
+              var email_config=EMAIL_CONFIG['event_admin_approval'];
+              var email_data = {
+                'customer_name':user.first_name,
+                'event_name':req.body.event_name
+              }
+              mailer.send_mail(user.email, email_config.subject, email_data, email_config.template_name);
+            }
+          });
+        }
+        else if(req.body.status=='declined'){
+          var where =[{'id':req.body.user_id}]
+          const user_data = userService.getUserDetails(where)
+          user_data.then(function(user){ 
+            if(user){
+              var email_config=EMAIL_CONFIG['event_admin_declined'];
+              var email_data = {
+                'customer_name':user.first_name,
+                'declined_message': req.body.declined_message,
+                'event_name':req.body.event_name
+              }
+              mailer.send_mail(user.email, email_config.subject, email_data, email_config.template_name);
+            }
+          });
+        }
         return res.send({
             status: true,
             message: "Status Updated Sucessfully"
@@ -630,7 +677,7 @@ module.exports = {
           city:req.body.city,
           city_id:city_id,
           state:req.body.state,
-          state_id:city_id,
+          state_id:state_id,
           country:req.body.country,
           country_id:country_id,
           pincode:req.body.pincode,
@@ -789,7 +836,7 @@ module.exports = {
           city:req.body.city,
           city_id:city_id,
           state:req.body.state,
-          state_id:city_id,
+          state_id:state_id,
           country:req.body.country,
           country_id:country_id,
           pincode:req.body.pincode,
