@@ -941,6 +941,7 @@ module.exports = {
     const Events = await models.events.findAndCountAll({
       where: where,
       order: [order_query],
+      limit:20,
       attributes:['id','name', 'city', 'state', 'slug', 'venue_name'],
       $sort: { id: 1 }
     });

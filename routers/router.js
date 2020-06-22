@@ -13,6 +13,7 @@ const orderController = require(__basedir +'/controllers/order_controller');
 const eventEnquiryController = require(__basedir +'/controllers/event_enquiry_controller');
 const pagesController = require(__basedir +'/controllers/pages_controller');
 const emailLogController = require(__basedir +'/controllers/email_log_controller');
+const reportController = require(__basedir +'/controllers/report_controller');
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -229,4 +230,10 @@ module.exports.set = (app) => {
 	app.get('/api/my_order_detail/:user_id/:id', orderController.my_order_detail);
 	app.get('/api/my_tickets/:user_id', orderController.my_tickets);
 	app.get('/api/my_ticket_detail/:user_id/:id', orderController.my_ticket_detail);
+
+
+	// Reports
+	app.get('/api/admin_dashboard_report', reportController.admin_dashboard_report);
+	app.get('/api/admin_dashboard_order_report', reportController.order_report);
+	app.get('/api/admin_dashboard_revenue_report', reportController.revenue_report);
 }
