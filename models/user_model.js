@@ -35,13 +35,7 @@ module.exports = (sequelize, DataTypes) => {
 		area_code: { type:DataTypes.STRING, allowNull: true },
 		mobile_no: {
 			type: DataTypes.STRING, 
-			allowNull: true,
-			validate: {
-				len: {
-					args: [10],
-					msg: "Mobile number must be 10 digit"
-				}
-			}
+			allowNull: true
 		},
 		address_1: { type: DataTypes.STRING, allowNull: true },
 		address_2: { type: DataTypes.STRING, allowNull: true },

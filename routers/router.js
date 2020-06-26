@@ -236,4 +236,6 @@ module.exports.set = (app) => {
 	app.get('/api/admin_dashboard_report', reportController.admin_dashboard_report);
 	app.get('/api/admin_dashboard_order_report', reportController.order_report);
 	app.get('/api/admin_dashboard_revenue_report', reportController.revenue_report);
+	app.get('/api/admin_dashboard_recent_enquiry', reportController.recent_enquiry);
+	app.get('/api/admin_dashboard_recent_contacts', reportController.recent_contacts);
 }

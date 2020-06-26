@@ -101,6 +101,10 @@ module.exports = {
 			address_1: req.body.address_1,
 			address_2: req.body.address_2,
 			is_active: req.body.is_active,
+			city:req.body.city,
+			state:req.body.state,
+			pincode:req.body.pincode,
+			country:req.body.country,
 			id: req.body.id
 		}
 		if (req.body.password) {

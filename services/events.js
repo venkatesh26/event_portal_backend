@@ -181,6 +181,9 @@ const getAdminListData = function (data) {
   if (data.status) {
     where.status = data.status;
   }  
+  if (data.type) {
+    where.type = data.type;
+  }  
   where.deletedAt = null; 
   const Events = models.events.findAndCountAll({
     distinct:true,

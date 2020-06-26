@@ -5,10 +5,44 @@ const encrypt = require('../customFunctions').encrypt;
 const decrypt = require('../customFunctions').decrypt;
 const decode_id = require('../customFunctions').decode_id;
 module.exports = {
-  index(req, res) {
+  async index(req, res) {
     const { EventEnquiry } = eventEnuquiryService.getAllData(req.query)
-      EventEnquiry.then(data => {
-        res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+      EventEnquiry.then(async function(data){
+
+        if(req.query.is_download == 'true' || req.query.is_download == true){
+            var excel_data = [];      
+            await Promise.all(
+              data.rows.map(async (my_data,i) => {  
+                var obj={}
+                obj['created']=my_data['createdAt'];
+                obj['name']=my_data['name'];
+                obj['email']=my_data['email'];
+                obj['contact_no']=my_data['contact_no'];
+                obj['message']=my_data['message'];
+                excel_data.push(obj);
+              })
+            );
+            var new_file_header=[
+              {'column_name':'created', displayName:'Enquiry Date'},
+              {'column_name':'name', displayName:'Name'},
+              {'column_name':'email', displayName:'Email'},
+              {'column_name':'message', displayName:'Message'},
+              {'column_name':'event_name', displayName:'Event Name'}                   
+            ]
+            var reports = downloadExcel.downloadExcelSheet(new_file_header, excel_data)
+            var file_name = "lead-list.xlsx"
+            var file_dir = "assets/"
+            writeFileSync(file_dir+file_name, reports);
+            var base64_data='';
+            var fs = require('fs');
+            var bitmap = fs.readFileSync(file_dir+file_name);
+            base64_data = new Buffer.from(bitmap).toString('base64');
+            fs.unlinkSync(file_dir+file_name)
+            return res.send(encrypt({ "success": true, "base64_data": base64_data, 'file_name':file_name}))
+        }
+        else {
+            res.send(encrypt({ "success": true, "data": data.rows, "count": data.count }))
+        }
       })
     .catch(function(error){
         res.send(encrypt({ "success": false, "message": error }))
@@ -60,12 +94,12 @@ module.exports = {
           }));
       }
   },
-  view(req, res) {
+  async view(req, res) {
     eventEnuquiryService.getById(decrypt(decode_id(req.params.id)))
       .then(data => res.send(encrypt({ "success": true, "data": data })))
       .catch((err) => res.status(400).send(err.message));
   },
-  delete(req, res) {
+  async delete(req, res) {
     eventEnuquiryService.deleteData(decrypt(decode_id(req.params.id))).then(() => 
       res.send(encrypt({ "success": true, "message": "Deleted successfully." })))
       .catch((error) => res.status(400).send(error));

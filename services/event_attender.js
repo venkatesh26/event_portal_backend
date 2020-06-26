@@ -24,12 +24,9 @@ const getAllData = function (data) {
   if (data.email) {
     where.email = { [Op.like]: '%' + data.email + '%' }
   }
-  if (data.contact_no ) {
-    where.contact_no   = { [Op.like]: '%' + data.contact_no   + '%' }
+  if (data.mobile_no ) {
+    where.mobile_no   = { [Op.like]: '%' + data.mobile_no   + '%' }
   }
-  if (data.is_active) {
-		where.is_active = data.is_active
-	}
   if (data.event_id) {
     where.event_id = data.event_id
   }
@@ -39,7 +36,7 @@ const getAllData = function (data) {
       }
   }
   where.deletedAt = null 
-  const EventEnquiry = models.event_enquiries.findAndCountAll({
+  const EventAttenders = models.event_attenders.findAndCountAll({
     distinct:true,
     include:[
       {
@@ -53,16 +50,7 @@ const getAllData = function (data) {
     offset: offset,
     $sort: { id: 1 }
   });
-  return { 'EventEnquiry': EventEnquiry}
+  return { 'EventAttenders': EventAttenders}
 };
 
-const getById = function (data) {
-   return models.event_enquiries.findOne({where:{id:data}});
-}
-
-const deleteData = id => models.event_enquiries.destroy(
-  {
-    where: { id: id }
-  });
-
-module.exports = { getAllData, getById, deleteData };
+module.exports = { getAllData };

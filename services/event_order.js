@@ -83,6 +83,12 @@ const getAllData = function (data) {
   if (data.status) {
 		where.status = data.status
 	}
+  if (data.event_id) {
+    where.event_id = data.event_id
+  }
+  if (data.currency_id) {
+    where.currency_id = data.currency_id
+  }
   where.deletedAt = null; 
   const EventOrders = models.event_orders.findAndCountAll({
     distinct:true,

@@ -189,6 +189,12 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false, 
 			trim:true
 		},
+		ticket_type: {
+			type: DataTypes.STRING,
+			allowNull: false, 
+			defaultValue:'paid',
+			trim:true
+		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },
 		deletedAt: { type: DataTypes.DATE, allowNull: true }

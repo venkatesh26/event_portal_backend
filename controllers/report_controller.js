@@ -95,16 +95,82 @@ module.exports = {
     var today_start_date = dt.format('Y-m-d')+" 00:00:00"; 
     var dt = dateTime.create();
     var today_end_date = dt.format('Y-m-d')+" 23:59:59"; 
-
     var currency_id="1"; // Default Currency
-
-    const order_report_data = await sequelize.query("SELECT sum(order_item.total_amount) as total_amount, DATE(event_order.createdAt) as date FROM event_order_items as order_item JOIN event_orders as event_order on event_order.id=order_item.event_order_id  where event_order.currency_id="+currency_id+" AND event_order.createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(event_order.createdAt);", { type: QueryTypes.SELECT });
+    if(req.query.currency_id){
+       currency_id=req.query.currency_id;
+    }
+    const order_report_data = await sequelize.query("SELECT sum(total_amount) as total_amount, DATE(createdAt) as date FROM event_orders where event_orders.currency_id="+currency_id+" AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(createdAt);", { type: QueryTypes.SELECT });
 
     return res.send({
         success: true,
         data: order_report_data
     });
+  },
+  async recent_enquiry(req, res) {
+    var order_query = ['createdAt', 'DESC'];
+    const EventEnquiry = await models.event_enquiries.findAndCountAll({
+      distinct:true,
+      include:[
+        {
+          model: models.events,
+          attributes:['name']
+        }
+      ],
+      limit: 5,
+      order: [order_query],
+      $sort: { id: 1 }
+    });
+    return res.send({
+        success: true,
+        data: EventEnquiry.rows,
+        count: EventEnquiry.count
+    });
+  },
+  async recent_orders(req, res) {
 
+    var order_query = ['createdAt', 'DESC'];
+    const EventOrders = models.event_orders.findAndCountAll({
+      distinct:true,
+      limit: limit,
+      include: [
+          {
+              model: models.users,
+              attributes: ['first_name', 'email']
+          },
+          {
+              model: models.currencies,
+              attributes: ['name']
+          },
+          {
+              model: models.events,
+              attributes: ['name']
+          }
+      ],
+      order: [order_query],
+      offset: offset,
+      $sort: { id: 1 }
+    });
+    return res.send({
+        success: true,
+        data: EventOrders.rows,
+        count: EventOrders.count
+    });
+  },
+  async recent_contacts(req, res) {
+    var order_query = ['createdAt', 'DESC'];
+    const Contacts = await models.contacts.findAndCountAll({  
+      limit: 5,
+      order: [order_query],
+      $sort: { id: 1 }
+    });
+    console.log(Contacts);
+
+    return res.send({
+        success: true,
+        data: Contacts.rows,
+        count: Contacts.count
+    });
   }
 }
  
+
