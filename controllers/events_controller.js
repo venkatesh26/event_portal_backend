@@ -369,6 +369,7 @@ module.exports = {
       }
   },
   async view(req, res) {
+
       var where = {};
       where.id = req.params.id;
       const Events = models.events.findOne({

@@ -1,4 +1,4 @@
-const eventAttenderService = require('../services/event_attender');
+	const eventAttenderService = require('../services/event_attender');
 const models = require('../models');
 var crypto = require('crypto');
 const encrypt = require('../customFunctions').encrypt;
@@ -6,8 +6,8 @@ const decrypt = require('../customFunctions').decrypt;
 const decode_id = require('../customFunctions').decode_id;
 module.exports = {
 	async index(req, res) {
-	    const { eventAttenders } = eventAttenderService.getAllData(req.query)
-	      	eventAttenders.then(async function(data){
+	    const { EventAttenders } = eventAttenderService.getAllData(req.query)
+	      	EventAttenders.then(async function(data){
 		   if(req.query.is_download == 'true' || req.query.is_download == true){
 		      	var excel_data = [];			
 				await Promise.all(

@@ -14,6 +14,10 @@ const eventEnquiryController = require(__basedir +'/controllers/event_enquiry_co
 const pagesController = require(__basedir +'/controllers/pages_controller');
 const emailLogController = require(__basedir +'/controllers/email_log_controller');
 const reportController = require(__basedir +'/controllers/report_controller');
+const attendersController = require(__basedir +'/controllers/event_attenders_controller');
+const blogsController = require(__basedir +'/controllers/blogs_controller');
+const blogCommentsController = require(__basedir +'/controllers/blog_comments_controller');
+
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -44,7 +48,10 @@ module.exports.set = (app) => {
 		'/api/user_auto_complete',
 		'/api/city_auto_complete',
 		'/api/event_auto_complete',
-		'/api/social_media'
+		'/api/social_media',
+		'/api/frontend_blogs',
+		'/api/frontend_blog_detail',
+		'/api/add_comments'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -196,7 +203,6 @@ module.exports.set = (app) => {
 	app.get('/api/orders', orderController.index);
 	app.get('/api/orders/:id', orderController.view);
 
-
 	// Event Enquiry
 	app.get('/api/event_enquiry', eventEnquiryController.index);
 	app.delete('/api/event_enquiry/:id', eventEnquiryController.delete);
@@ -238,4 +244,25 @@ module.exports.set = (app) => {
 	app.get('/api/admin_dashboard_revenue_report', reportController.revenue_report);
 	app.get('/api/admin_dashboard_recent_enquiry', reportController.recent_enquiry);
 	app.get('/api/admin_dashboard_recent_contacts', reportController.recent_contacts);
+
+	app.get('/api/event_attenders', attendersController.index);
+	app.get('/api/event_attenders/:id', attendersController.view);
+
+
+	// Blogs
+	app.get('/api/blogs', blogsController.index);
+	app.get('/api/blogs/:id', blogsController.view);
+	app.post('/api/blogs', blogsController.add);
+	app.delete('/api/blogs/:id', blogsController.delete);
+	app.put('/api/blogs', blogsController.update);
+
+	// Blog Comments
+	app.get('/api/blog_comments', blogCommentsController.index);
+	app.get('/api/blog_comments/:id', blogCommentsController.view);
+
+	// FronTend Blog View 
+	app.get('/api/frontend_blogs', blogsController.frontend_index);
+	app.get('/api/frontend_blog_detail', blogsController.frontend_view);
+
+	app.post('/api/add_comments', blogCommentsController.add_comments);	
 }
