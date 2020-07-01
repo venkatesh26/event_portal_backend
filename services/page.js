@@ -14,8 +14,11 @@ const getAllData = function (data) {
 		order_query = ['createdAt', 'DESC']
 	}
   var page = 1;
+  if (data.limit) {
+    limit = parseInt(data.limit);
+  }
   if(data.page_no){
-    page = data.page_no;
+    page = parseInt(data.page_no);
   }
   offset = limit * (page - 1);
   if (data.name) {

@@ -9,10 +9,9 @@ const FindOrSave = function(name, slug) {
      where: where
   });
   return data.then(function(data){
-
-  	    if(typeof data !='undefined' && data && data){
+  	  if(typeof data !='undefined' && data && data){
   	    	return data.id;
-  	    }		
+  	  }		
   		var tags_data = {};
   		tags_data.name = name;
   		tags_data.slug = slug;

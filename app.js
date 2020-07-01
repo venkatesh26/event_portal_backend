@@ -47,6 +47,7 @@ app.all('*', function (req, res, next) {
         var allowedOrigins = CONFIG.allowedOrigins
         var origin = req.headers.origin;
         var origin = req.headers.origin ? req.headers.origin : req.headers.host
+console.log(req.query);
        if(allowedOrigins.indexOf(origin) > -1){
             res.setHeader('Access-Control-Allow-Origin', origin);
         }else {

@@ -37,7 +37,7 @@ const getUsers = function (data) {
 	}
 	var page = 1;
 	if(data.page_no){
-		page = data.page_no;
+		page = parseInt(data.page_no);
 	}
 	offset = limit * (page - 1);
 	if (data.first_name) {
@@ -55,11 +55,13 @@ const getUsers = function (data) {
 	if (data.mobile_no) {
 		where.mobile_no = { [Op.like]: '%' + data.mobile_no + '%' }
 	}
-	if (data.is_active==true || data.is_active=='true') {
-		where.is_active = 1
-	}
-	if (data.is_active==false || data.is_active=='false') {
-		where.is_active = 0
+	if(data.is_active!=''){
+		if (data.is_active==true || data.is_active=='true') {
+			where.is_active = 1
+		}
+		if (data.is_active==false || data.is_active=='false') {
+			where.is_active = 0
+		}
 	}
 	if (data.register_type) {
 		where.register_type = data.register_type

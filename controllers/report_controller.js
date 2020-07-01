@@ -81,9 +81,26 @@ module.exports = {
     var dt = dateTime.create();
     var today_end_date = dt.format('Y-m-d')+" 23:59:59"; 
     const order_report_data = await sequelize.query("SELECT count(id) as total_orders, DATE(createdAt) as date FROM event_orders where createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(createdAt);", { type: QueryTypes.SELECT });
+    var order_report_final_data=[];
+    for(i=6;i>=0;i--) {
+        var dateTime = require('node-datetime');
+        var dt = dateTime.create();
+        dt.offsetInDays(-i);
+        var date = dt.format('Y-m-d');
+        var obj={};
+        obj.total_orders=0;
+        obj.date=date;
+        order_report_data.map(function(data){
+          if(data.date==date){       
+            obj.total_orders=data.total_orders;
+            obj.date=data.date;
+          }
+        });
+        order_report_final_data.push(obj);
+    }
     return res.send({
         success: true,
-        data: order_report_data
+        data: order_report_final_data
     });  
   },
   async revenue_report(req, res) {
@@ -101,9 +118,26 @@ module.exports = {
     }
     const order_report_data = await sequelize.query("SELECT sum(total_amount) as total_amount, DATE(createdAt) as date FROM event_orders where event_orders.currency_id="+currency_id+" AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(createdAt);", { type: QueryTypes.SELECT });
 
+    var order_report_final_data=[];
+    for(i=6;i>=0;i--) {
+        var dateTime = require('node-datetime');
+        var dt = dateTime.create();
+        dt.offsetInDays(-i);
+        var date = dt.format('Y-m-d');
+        var obj={};
+        obj.total_amount=0;
+        obj.date=date;
+        order_report_data.map(function(data){
+          if(data.date==date){       
+            obj.total_amount=data.total_amount;
+            obj.date=data.date;
+          }
+        });
+        order_report_final_data.push(obj);
+    }
     return res.send({
         success: true,
-        data: order_report_data
+        data: order_report_final_data
     });
   },
   async recent_enquiry(req, res) {

@@ -8,7 +8,7 @@ module.exports = {
 		is_encryption: false,
 		db_migration:false,
 		is_ssl_enabled:false,
-		is_allow_origin:false,
+		is_allow_origin:true,
   	 	file_upload_limit:'50mb',
         reset_password_link_expiry_hours:3,
         reset_password_link:"http://localhost:8012/reset_password",
