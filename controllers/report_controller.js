@@ -163,9 +163,9 @@ module.exports = {
   async recent_orders(req, res) {
 
     var order_query = ['createdAt', 'DESC'];
-    const EventOrders = models.event_orders.findAndCountAll({
+    const EventOrders = await models.event_orders.findAndCountAll({
       distinct:true,
-      limit: limit,
+      limit: 10,
       include: [
           {
               model: models.users,
@@ -181,7 +181,6 @@ module.exports = {
           }
       ],
       order: [order_query],
-      offset: offset,
       $sort: { id: 1 }
     });
     return res.send({
@@ -204,7 +203,135 @@ module.exports = {
         data: Contacts.rows,
         count: Contacts.count
     });
-  }
+  },
+  async customer_order_report(req, res) {
+
+    var user_id=req.params.user_id;
+    // Last 7 Days Report 
+    var dateTime = require('node-datetime');
+    var dt = dateTime.create();
+    dt.offsetInDays(-7);
+    var today_start_date = dt.format('Y-m-d')+" 00:00:00"; 
+    var dt = dateTime.create();
+    var today_end_date = dt.format('Y-m-d')+" 23:59:59"; 
+    const order_report_data = await sequelize.query("SELECT count(id) as total_orders, DATE(createdAt) as date FROM event_orders where event_user_id='"+user_id+"' AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(createdAt);", { type: QueryTypes.SELECT });
+    var order_report_final_data=[];
+    for(i=6;i>=0;i--) {
+        var dateTime = require('node-datetime');
+        var dt = dateTime.create();
+        dt.offsetInDays(-i);
+        var date = dt.format('Y-m-d');
+        var obj={};
+        obj.total_orders=0;
+        obj.date=date;
+        order_report_data.map(function(data){
+          if(data.date==date){       
+            obj.total_orders=data.total_orders;
+            obj.date=data.date;
+          }
+        });
+        order_report_final_data.push(obj);
+    }
+    return res.send({
+        success: true,
+        data: order_report_final_data
+    });  
+  },
+  async customer_revenue_report(req, res) {
+
+
+    var user_id=req.params.user_id;
+    // Last 7 Days Revenue
+    var dateTime = require('node-datetime');
+    var dt = dateTime.create();
+    dt.offsetInDays(-7);
+    var today_start_date = dt.format('Y-m-d')+" 00:00:00"; 
+    var dt = dateTime.create();
+    var today_end_date = dt.format('Y-m-d')+" 23:59:59"; 
+    var currency_id="1"; // Default Currency
+    if(req.query.currency_id){
+       currency_id=req.query.currency_id;
+    }
+    const order_report_data = await sequelize.query("SELECT sum(total_amount) as total_amount, DATE(createdAt) as date FROM event_orders where event_user_id="+user_id+" AND event_orders.currency_id="+currency_id+" AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' GROUP BY DATE(createdAt);", { type: QueryTypes.SELECT });
+
+    var order_report_final_data=[];
+    for(i=6;i>=0;i--) {
+        var dateTime = require('node-datetime');
+        var dt = dateTime.create();
+        dt.offsetInDays(-i);
+        var date = dt.format('Y-m-d');
+        var obj={};
+        obj.total_amount=0;
+        obj.date=date;
+        order_report_data.map(function(data){
+          if(data.date==date){       
+            obj.total_amount=data.total_amount;
+            obj.date=data.date;
+          }
+        });
+        order_report_final_data.push(obj);
+    }
+    return res.send({
+        success: true,
+        data: order_report_final_data
+    });
+  },
+  async customer_recent_enquiry(req, res) {
+    var user_id=req.params.user_id;
+    var order_query = ['createdAt', 'DESC'];
+    var where={};
+    const EventEnquiry = await models.event_enquiries.findAndCountAll({
+      where:where,
+      distinct:true,
+      include:[
+        {
+          model: models.events,
+          where:{'user_id':user_id},
+          attributes:['name']
+        }
+      ],
+      limit: 5,
+      order: [order_query],
+      $sort: { id: 1 }
+    });
+    return res.send({
+        success: true,
+        data: EventEnquiry.rows,
+        count: EventEnquiry.count
+    });
+  },
+  async customer_recent_orders(req, res) {
+
+    var user_id=req.params.user_id;
+    var where = {'event_user_id':user_id};
+    var order_query = ['createdAt', 'DESC'];
+    const EventOrders = await models.event_orders.findAndCountAll({
+      distinct:true,
+      where:where,
+      limit: 10,
+      include: [
+          {
+              model: models.users,
+              attributes: ['first_name', 'email']
+          },
+          {
+              model: models.currencies,
+              attributes: ['name']
+          },
+          {
+              model: models.events,
+              attributes: ['name']
+          }
+      ],
+      order: [order_query],
+      $sort: { id: 1 }
+    });
+    return res.send({
+        success: true,
+        data: EventOrders.rows,
+        count: EventOrders.count
+    });
+  },
 }
  
 

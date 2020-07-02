@@ -244,6 +244,15 @@ module.exports.set = (app) => {
 	app.get('/api/admin_dashboard_revenue_report', reportController.revenue_report);
 	app.get('/api/admin_dashboard_recent_enquiry', reportController.recent_enquiry);
 	app.get('/api/admin_dashboard_recent_contacts', reportController.recent_contacts);
+	app.get('/api/admin_dashboard_recent_orders', reportController.recent_orders);
+
+
+	// Customer Reports
+	app.get('/api/dashboard_order_report/:user_id', reportController.customer_order_report);
+	app.get('/api/dashboard_revenue_report/:user_id', reportController.customer_revenue_report);
+	app.get('/api/dashboard_recent_enquiry/:user_id', reportController.customer_recent_enquiry);
+	app.get('/api/dashboard_recent_orders/:user_id', reportController.customer_recent_orders);
+
 
 	app.get('/api/event_attenders', attendersController.index);
 	app.get('/api/event_attenders/:id', attendersController.view);
