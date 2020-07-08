@@ -39,6 +39,13 @@ module.exports = {
   },
   async add(req, res) {
 
+      if(typeof req.body.type =='undefined' || req.body.type==''){
+          return res.send(encrypt({
+                success: false,
+                message: 'type Field Is required'
+          }));
+      }
+
       // Required Fields
       var required_fields=[
         'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
@@ -46,6 +53,15 @@ module.exports = {
         'thumb_nail_img_name', 'img_dir', 'img_name', 'city', 'tags', 'venue_name', 
         'address_line_1',"currency_id", 'user_id', 'state', 'country', 'pincode'
       ]
+
+      if(req.body.type=='online'){
+        // Required Fields
+        var required_fields=[
+          'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+          'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+          'thumb_nail_img_name', 'img_dir', 'img_name', 'tags'
+        ]
+      }
 
       var error = false;
       var error_field = '';
@@ -80,18 +96,21 @@ module.exports = {
         event_tickets.push(ticket);
       });
 
-      var country_id = '';
-      var state_id = '';
-      var city_id = '';
 
-      // Save Country And GET ID
-      country_id = await countryService.findOrSaveAndGetId(req.body.country);
+      var country_id = null;
+      var state_id = null;
+      var city_id = null;
+      if(req.body.type!='online'){
 
-      // Save State And GET ID
-      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
-      
-      // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+        // Save Country And GET ID
+        country_id = await countryService.findOrSaveAndGetId(req.body.country);
+
+        // Save State And GET ID
+        state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+        
+        // Save City And GET ID
+        city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+      }
 
       var start_date='';
       var end_date='';
@@ -197,16 +216,33 @@ module.exports = {
   },
   async update(req, res) {
 
-    // Required Fields
+      if(typeof req.body.type =='undefined' || req.body.type==''){
+          return res.send(encrypt({
+                success: false,
+                message: 'type Field Is required'
+          }));
+      }
+
+      // Required Fields
       var required_fields=[
-        'id','name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
-        'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
-        'img_name', 'city', 'tags', 'venue_name', 'address_line_1',"currency_id", 
-        'user_id'
+        'id', 'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+        'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+        'thumb_nail_img_name', 'img_dir', 'img_name', 'city', 'tags', 'venue_name', 
+        'address_line_1',"currency_id", 'user_id', 'state', 'country', 'pincode'
       ]
+
+      if(req.body.type=='online'){
+        // Required Fields
+        var required_fields=[
+          'id', 'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+          'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+          'thumb_nail_img_name', 'img_dir', 'img_name', 'tags'
+        ]
+      }
 
       var error = false;
       var error_field = '';
+
       // Required Validation
       required_fields.forEach(field => {
           if(typeof req.body[field] =='undefined' || req.body[field]==''){
@@ -230,9 +266,9 @@ module.exports = {
       }
 
 
-      var country_id = '';
-      var state_id = '';
-      var city_id = '';
+      var country_id = null;
+      var state_id = null;
+      var city_id = null;
 
       var start_date='';
       var end_date='';
@@ -247,15 +283,16 @@ module.exports = {
       var dt = dateTime.create(req.body.end_date);
       var end_date = dt.format('Y-m-d');
       
+      if(req.body.type!='online'){
+        // Save Country And GET ID
+        country_id = await countryService.findOrSaveAndGetId(req.body.country);
 
-      // Save Country And GET ID
-      country_id = await countryService.findOrSaveAndGetId(req.body.country);
-
-      // Save State And GET ID
-      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
-      
-      // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+        // Save State And GET ID
+        state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+        
+        // Save City And GET ID
+        city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+      }
 
       var post_data = {
           name: req.body.name,
@@ -596,6 +633,13 @@ module.exports = {
   },
   async add_my_event(req, res) {
 
+      if(typeof req.body.type =='undefined' || req.body.type==''){
+          return res.send(encrypt({
+                success: false,
+                message: 'type Field Is required'
+          }));
+      }
+
       // Required Fields
       var required_fields=[
         'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
@@ -603,6 +647,15 @@ module.exports = {
         'thumb_nail_img_name', 'img_dir', 'img_name', 'city', 'tags', 'venue_name', 
         'address_line_1',"currency_id", 'user_id', 'state', 'country', 'pincode'
       ]
+
+      if(req.body.type=='online'){
+        // Required Fields
+        var required_fields=[
+          'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+          'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+          'thumb_nail_img_name', 'img_dir', 'img_name', 'tags'
+        ]
+      }
 
       var error = false;
       var error_field = '';
@@ -620,7 +673,7 @@ module.exports = {
                 success: false,
                 message: error_field + ' Field Is required'
         }));
-      }
+      }  
 
       var slug = sluggable_behavior((req.body.name).toString().toLowerCase());
       // check slug already exists
@@ -637,18 +690,21 @@ module.exports = {
         event_tickets.push(ticket);
       });
 
-      var country_id = '';
-      var state_id = '';
-      var city_id = '';
+      var country_id = null;
+      var state_id = null;
+      var city_id = null;
 
-      // Save Country And GET ID
-      country_id = await countryService.findOrSaveAndGetId(req.body.country);
+      if(req.body.type!='online'){
 
-      // Save State And GET ID
-      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
-      
-      // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+        // Save Country And GET ID
+        country_id = await countryService.findOrSaveAndGetId(req.body.country);
+
+        // Save State And GET ID
+        state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+        
+        // Save City And GET ID
+        city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+      }
 
       var start_date='';
       var end_date='';
@@ -754,16 +810,33 @@ module.exports = {
   },
   async update_my_event(req, res) {
 
-    // Required Fields
+      if(typeof req.body.type =='undefined' || req.body.type==''){
+          return res.send(encrypt({
+                success: false,
+                message: 'type Field Is required'
+          }));
+      }
+
+      // Required Fields
       var required_fields=[
-        'id','name', 'description', 'start_date', 'end_date', 'category_id', 'category_name',
-        'type', 'event_visibility', 'thumb_nail_img_dir', 'thumb_nail_img_name', 'img_dir', 
-        'img_name', 'city', 'tags', 'venue_name', 'address_line_1',"currency_id", 
-        'user_id'
+        'id', 'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+        'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+        'thumb_nail_img_name', 'img_dir', 'img_name', 'city', 'tags', 'venue_name', 
+        'address_line_1',"currency_id", 'user_id', 'state', 'country', 'pincode'
       ]
+
+      if(req.body.type=='online'){
+        // Required Fields
+        var required_fields=[
+          'id', 'name', 'description', 'start_date', 'end_date', 'start_time', 'end_time', 'time_zone' , 
+          'category_id', 'category_name','type', 'event_visibility', 'thumb_nail_img_dir', 
+          'thumb_nail_img_name', 'img_dir', 'img_name', 'tags'
+        ]
+      }
 
       var error = false;
       var error_field = '';
+
       // Required Validation
       required_fields.forEach(field => {
           if(typeof req.body[field] =='undefined' || req.body[field]==''){
@@ -787,9 +860,9 @@ module.exports = {
       }
 
 
-      var country_id = '';
-      var state_id = '';
-      var city_id = '';
+      var country_id = null;
+      var state_id = null;
+      var city_id = null;
 
       var start_date='';
       var end_date='';
@@ -804,16 +877,17 @@ module.exports = {
       var dt = dateTime.create(req.body.end_date);
       var end_date = dt.format('Y-m-d');
       
+      if(req.body.type!='online'){
+        // Save Country And GET ID
+        country_id = await countryService.findOrSaveAndGetId(req.body.country);
 
-      // Save Country And GET ID
-      country_id = await countryService.findOrSaveAndGetId(req.body.country);
-
-      // Save State And GET ID
-      state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+        // Save State And GET ID
+        state_id = await stateService.findOrSaveAndGetId(req.body.state, country_id);
+        
+        // Save City And GET ID
+        city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
+      }
       
-      // Save City And GET ID
-      city_id = await cityService.findOrSaveAndGetId(req.body.city, state_id, country_id);
-
       var post_data = {
           name: req.body.name,
           slug: slug,

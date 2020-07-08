@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.TEXT, allowNull: true, trim:true
 		},
 		no_of_tickets_sold: { type: DataTypes.INTEGER, defaultValue:0},
+		ticket_type: {
+			type: DataTypes.STRING, allowNull: true, trim:true, defaultValue: "paid"
+		},
+		is_sold_out: { type: DataTypes.BOOLEAN, defaultValue: false},
 		is_active: { type: DataTypes.BOOLEAN, defaultValue: true},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 		updatedAt: { type: DataTypes.DATE, allowNull: true },

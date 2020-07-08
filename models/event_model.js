@@ -76,60 +76,30 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		venue_name: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "Venue name Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		address_line_1: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "Address line1 Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		address_line_2: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "Address line2 Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		city: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "City  Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		city_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true
 		},
 		state: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "State  Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		state_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true
 		},
 		country: {
-			type: DataTypes.STRING, allowNull: true, trim:true, validate: {
-				notEmpty: {
-					args: true,
-					msg: "Country  Required"
-				},
-			}
+			type: DataTypes.STRING, allowNull: true, trim:true
 		},
 		country_id: {
 			type: DataTypes.INTEGER,
@@ -186,13 +156,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		declined_message: {
 			type: DataTypes.TEXT,
-			allowNull: false, 
-			trim:true
-		},
-		ticket_type: {
-			type: DataTypes.STRING,
-			allowNull: false, 
-			defaultValue:'paid',
+			allowNull: true, 
 			trim:true
 		},
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

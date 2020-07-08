@@ -17,7 +17,7 @@ const reportController = require(__basedir +'/controllers/report_controller');
 const attendersController = require(__basedir +'/controllers/event_attenders_controller');
 const blogsController = require(__basedir +'/controllers/blogs_controller');
 const blogCommentsController = require(__basedir +'/controllers/blog_comments_controller');
-
+const cronController = require(__basedir +'/controllers/cron_controller');
 
 const jwt = require('jsonwebtoken');
 const decrypt = require('../customFunctions').decrypt;
@@ -51,10 +51,12 @@ module.exports.set = (app) => {
 		'/api/social_media',
 		'/api/frontend_blogs',
 		'/api/frontend_blog_detail',
-		'/api/add_comments'
+		'/api/add_comments',
+		'/cron/event_exipry'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
+		console.log("fdddddddddddddddddddddddddddd")
 		console.log(req.baseUrl);
 		if (unAuthrorizedUrl.includes(req.baseUrl)) {
 			next();
@@ -274,4 +276,8 @@ module.exports.set = (app) => {
 	app.get('/api/frontend_blog_detail', blogsController.frontend_view);
 
 	app.post('/api/add_comments', blogCommentsController.add_comments);	
+
+
+	// Cron List
+	app.get('/cron/event_exipry', cronController.event_exipry);
 }

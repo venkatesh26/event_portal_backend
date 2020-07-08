@@ -363,7 +363,7 @@ module.exports = {
 					var ticket_log = {
 						"event_id":req.body.event_id,
 						"ref_number":ref_number,
-						"no_of_tickets":no_of_tickets,
+						"no_of_tickets":total_tickets,
 						"status":"processing",
 						"event_ticket_log_details":event_ticket_log_details
 					}
