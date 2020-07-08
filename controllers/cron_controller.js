@@ -12,10 +12,15 @@ module.exports = {
 		var dt = dateTime.create();
 
 		var end_date = dt.format('Y-m-d');
-		
+
 		// Total Users
-		await sequelize.query("UPDATE events SET status='expired' WHERE end_date <='"+end_date+"' AND  status!='expired';", { type: QueryTypes.UPDATE });
+		await sequelize.query("UPDATE events SET status='expired2' WHERE end_date <='"+end_date+"' AND  status!='expired';", { type: QueryTypes.UPDATE });
 	
+	return res.send({
+        success: true,
+        data:1,
+        count: 1
+    });
 		return true;
 	}
 }

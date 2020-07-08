@@ -63,6 +63,8 @@ module.exports = {
         ]
       }
 
+      console.log(req.body);
+
       var error = false;
       var error_field = '';
 

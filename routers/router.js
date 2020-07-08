@@ -56,8 +56,7 @@ module.exports.set = (app) => {
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
-		console.log("fdddddddddddddddddddddddddddd")
-		console.log(req.baseUrl);
+		
 		if (unAuthrorizedUrl.includes(req.baseUrl)) {
 			next();
 		}
