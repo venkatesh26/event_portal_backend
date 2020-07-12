@@ -38,6 +38,7 @@ module.exports.set = (app) => {
 		'/api/search_events',
 		'/api/home_categories',
 		'/api/event_details',
+		'/api/ticket_detail',
 		'/api/place_order',
 		'/api/add_enquiry',
 		'/api/payment_intents',
@@ -217,9 +218,14 @@ module.exports.set = (app) => {
 	app.get('/api/home_events', eventsController.home_event_list);
 	app.get('/api/search_events', eventsController.search_event_list);
 	app.get('/api/event_details', eventsController.event_detail);
+	app.get('/api/ticket_details', eventsController.ticket_detail);
 	app.get('/api/home_categories', categoriesController.home_categories);
 	app.post('/api/place_order', orderController.place_order);
 	app.post('/api/payment_intents', orderController.payment_intents);
+
+	app.get('/api/payment_intents', orderController.payment_intents);
+
+
 	app.post('/api/add_enquiry', eventEnquiryController.add_enquiry);
     app.post('/api/email_verification', userController.account_verification);
     app.post('/api/download_invoice', orderController.download_invoice);

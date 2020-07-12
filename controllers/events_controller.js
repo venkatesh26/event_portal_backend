@@ -515,7 +515,7 @@ module.exports = {
           });
         }
         return res.send({
-            status: true,
+            success: true,
             message: "Status Updated Sucessfully"
         });
       }
@@ -544,11 +544,14 @@ module.exports = {
     var where = {};
     where.id = req.query.event_id;
     where.status = 'published';
+    event_tickets_where={};
+    event_tickets_where.is_active=1;
     const Events = models.events.findOne({
       where: where,
       include: [
         {
-            model: models.event_tickets
+            model: models.event_tickets,
+            where: event_tickets_where
         },
         {
             model: models.currencies
@@ -559,6 +562,36 @@ module.exports = {
       ]
     });
     Events.then(function(data){
+        if(data) {
+            return res.send({
+                success: true,
+                data: data,
+            });
+        }
+        else {
+          return res.send({
+              success: false, 
+              data: data,
+          });
+      }
+    });
+  },
+  async ticket_detail(req, res){
+    var where = {};
+    where.event_id = req.query.event_id;
+    var event_where={};
+    event_where.status="published";
+    const EventTickets = models.event_tickets.findOne({
+      where: where,
+      include: [
+        {
+            model: models.events,
+            where:event_where,
+            attributes:['id', 'name']
+        }
+      ]
+    });
+    EventTickets.then(function(data){
         if(data) {
             return res.send({
                 success: true,

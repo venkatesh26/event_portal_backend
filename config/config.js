@@ -1,6 +1,6 @@
 module.exports = {
 		port: 8012,
-		dbConnectionString: 'mysql://root:Passw0rd@localhost/event_portal',
+		dbConnectionString: 'mysql://root:Passw0rd@localhost/event_portal_demo',
 		saltRounds: 2,
 		jwtSecret: 'yo-its-a-secret',
 		tokenExpireTimeInHours: '6',
@@ -8,7 +8,7 @@ module.exports = {
 		is_encryption: false,
 		db_migration:false,
 		is_ssl_enabled:false,
-		is_allow_origin:true,
+		is_allow_origin:false,
   	 	file_upload_limit:'50mb',
         reset_password_link_expiry_hours:3,
         reset_password_link:"http://localhost:8015/reset_password",

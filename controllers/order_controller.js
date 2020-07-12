@@ -318,23 +318,31 @@ module.exports = {
 		    	var total_tickets = 0;
 				Events.event_tickets.map(function(ticket){
 				    if(ticket.is_active==1){
-					   ticket_data[ticket.id]=ticket.price;
+					   ticket_data[ticket.id]=ticket;
 					}
 				});	
 
 				var ticket_error = false;
-				req.body.ticket_details.map(field => {	
+				var ticket_error_data=[];
+				await req.body.ticket_details.map(field => {	
+
+
 					try
 					{
-						var ticket_price =  ticket_data[field.ticket_id];
+						var ticket_price =  ticket_data[field.ticket_id]['price'];
 						if(typeof ticket_price!='undefined'){
 							var  ticket_amount  = parseFloat(field.quantity * ticket_price);
 							total_amount = parseFloat(total_amount) + ticket_amount;
 							total_tickets = parseInt(total_tickets)+parseInt(field.quantity);
-							if(field.no_of_tickets_sold > field.quantity){
-								ticket_error=true;
+							var available_ticket = ticket_data[field.ticket_id]['quantity'] -  ticket_data[field.ticket_id]['no_of_tickets_sold']; 
+							var ticket_name = ticket_data[field.ticket_id]['name'];
+							if(field.quantity > available_ticket || field.is_sold==1){
+							
+								ticket_error = true;
+								ticket_error_data.push(ticket_name);
 							}
 							event_ticket_log_details.push({
+								'ticket_name':ticket_name,
 								'event_ticket_id': field.ticket_id,
 								'no_of_tickets':field.quantity,
 								'amount':ticket_price,
@@ -343,10 +351,95 @@ module.exports = {
 						}
 					}
 					catch(error){
-
+						console.log(error);
 					}
 				});
 
+				// Handle Ticket Availablity Error
+				if(ticket_error){
+					return res.send(encrypt({
+						success: false,
+						message: ticket_error_data[0]+" ticket is not available"
+					}));
+				}
+
+				var dateTime = require('node-datetime');
+				var dt = dateTime.create();
+				var today_start_date = dt.format('YmdHISN');
+				var ref_number = "BUY_"+req.body.event_id+"_"+today_start_date;
+
+				// Save Ticket Log
+				var ticket_log = {
+					"event_id":req.body.event_id,
+					"ref_number":ref_number,
+					"no_of_tickets":total_tickets,
+					"status":"processing"
+				}
+				// Handle Quantity in DB
+				var log_details = await models.event_ticket_logs.create(ticket_log);
+
+				var log_id=log_details.id;
+				const Sequelize = require('sequelize');
+				const QueryTypes   = Sequelize.QueryTypes;
+				var sequelize = require('../db');
+
+				// DB Tocket Avaialble Check
+			  	var ticket_error = false;
+			  	var ticket_error_data=[];
+			  	var success_data=[];
+			  	await event_ticket_log_details.map(async function(field) {	
+
+
+			  		if(!ticket_error){
+					 	var output = await sequelize.query('CALL ticket_avaibiltiy(:param1, :param2, @status);', 
+					 	{
+							replacements: {param1: field.event_ticket_id, param2: field.no_of_tickets},
+							type: sequelize.QueryTypes.RAW
+					 	});
+					 	if(output[0].status==0) {
+							ticket_error = true;
+							ticket_error_data.push(field.ticket_name);
+					 	}
+					 	else {
+					 	success_data.push(field);
+
+						// Save Ticket Log
+						var event_ticket_log_details = {
+							"ticket_log_id":log_id,
+							"event_ticket_id":field.event_ticket_id,
+							"quantity":field.no_of_tickets
+						}
+						var log_details = await models.event_ticket_log_details.create(event_ticket_log_details);
+					   }
+				 	}
+			 	});
+
+			 	// Handle Ticket Availablity Error
+				if(ticket_error) {
+
+					var ticket_log = {
+						"status":"failed"
+					}
+					// Handle Quantity in DB
+					var log_details = models.event_ticket_logs.update(ticket_log,{
+						where: { id: log_id }
+					});
+
+				  	success_data.map(async function(field) {
+
+				  		sequelize.query('CALL ticket_reset(:param1, :param2, @status);', 
+					 	{
+							replacements: {param1: field.event_ticket_id, param2: field.no_of_tickets},
+							type: sequelize.QueryTypes.RAW
+					 	});
+
+				  	});
+
+					return res.send(encrypt({
+						success: false,
+						message: ticket_error_data[0]+" ticket is not available"
+					}));
+				}
 
 				let amount = total_amount * 100;
 		    	var currencies_code = Events.currency.code;
@@ -359,15 +452,6 @@ module.exports = {
 				},
 				function(err, paymentIntent) {
 
-					// Save Ticket Log
-					var ticket_log = {
-						"event_id":req.body.event_id,
-						"ref_number":ref_number,
-						"no_of_tickets":total_tickets,
-						"status":"processing",
-						"event_ticket_log_details":event_ticket_log_details
-					}
-
 					return res.send(encrypt({
 						success: true,
 						data:paymentIntent.client_secret,
@@ -376,6 +460,8 @@ module.exports = {
 						message: 'success'
 					}));
 				});
+	
+
 			}
 			else {
 				return res.send(encrypt({
@@ -385,6 +471,7 @@ module.exports = {
 			}
 		}
 		catch(error) {
+			console.log(error);
 			return res.send(encrypt({
 				success: false,
 				message: error
@@ -435,6 +522,15 @@ module.exports = {
 			return res.send(encrypt({
 				success: false,
 				message: 'customer_name Field Is required'
+			}));
+		}
+
+
+		if(typeof req.body.ref_number =='undefined' || req.body.ref_number==''){
+
+			return res.send(encrypt({
+				success: false,
+				message: 'ref_number Field Is required'
 			}));
 		}
 
@@ -617,6 +713,13 @@ module.exports = {
 							 email_config.template_name, 'assets/order_invoice/'+file_name);
 						});
 
+						// Event Log Update 
+						var log_data={
+							'status':'success'
+						}
+                        models.event_tickets.update(log_data,{
+                              where: { id: req.body.ref_number },
+                        });
 						return res.send(encrypt({
 							success: true,
 							message: 'Order Placed Successfully'
