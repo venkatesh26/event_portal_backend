@@ -51,13 +51,7 @@ module.exports = (sequelize, DataTypes) => {
 		city: { type: DataTypes.STRING, allowNull: true },
 		state: { type: DataTypes.STRING, allowNull: true },
 		pincode: {
-			type: DataTypes.INTEGER, allowNull: true,
-			validate: {
-				len: {
-					args: [6],
-					msg: "Pincode must be 6 digit"
-				}
-			}
+			type: DataTypes.STRING, allowNull: true
 		},
 		country: { type: DataTypes.STRING, allowNull: true },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

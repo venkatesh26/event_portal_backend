@@ -26,6 +26,8 @@ module.exports = {
     // Check  Already Exists
     var isExist = await categoryService.isExistOrNot(req.body.name);
     if(isExist) {
+
+      console.log('dffffffffffffffffffffffffffff');
       return res.send(encrypt({
             success: false,
             message: 'Category Already Exists'

@@ -52,6 +52,9 @@ const getUsers = function (data) {
 	if (data.email) {
 		where.email = { [Op.like]: '%' + data.email + '%' }
 	}
+	if (data.id) {
+		where.id = data.id;
+	}
 	if (data.mobile_no) {
 		where.mobile_no = { [Op.like]: '%' + data.mobile_no + '%' }
 	}

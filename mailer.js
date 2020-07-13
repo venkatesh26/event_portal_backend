@@ -34,9 +34,10 @@ async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) 
         var base64Img = require('base64-img');
         if( typeof attachments === 'string' ) {
           var img = base64Img.base64Sync(attachments); 
-           var attachments = [
+          var file_name = path.basename(attachments);
+          var attachments = [
                   {
-                      filename: attachments,
+                      filename: file_name,
                       path: ABSPATH+attachments,
                       contents: new Buffer.from(img.replace(/^data:image\/(png|gif|jpeg|jpg|xlsx|html|pdf);base64,/,''), 'base64')
                   }
@@ -46,8 +47,9 @@ async function send_mail(toEmail, Subject, Data, template_name, attachments=[]) 
           var new_attachments = []
           for(var k = 0; k < attachments.length; k++) {
                 var img =base64Img.base64Sync(attachments[k]); 
+                var file_name = path.basename(attachments[k]);
                 var att = {}
-                att.filename = attachments[k]
+                att.filename = file_name
                 att.path=ABSPATH+attachments[k]
                 att.contents = new Buffer.from(img.replace(/^data:image\/(png|gif|jpeg|jpg|xlsx|html|pdf);base64,/,''), 'base64')
                 new_attachments.push(att)

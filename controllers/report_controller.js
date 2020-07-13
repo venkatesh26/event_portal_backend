@@ -40,11 +40,11 @@ module.exports = {
 
 
     // Total Pending Events
-    const total_pending_events_data = await sequelize.query("SELECT count(*) as total_events FROM `events` where status='waiting_for_approval'", { type: QueryTypes.SELECT });
+    const total_pending_events_data = await sequelize.query("SELECT count(*) as total_events FROM `events` where status='waiting for approval'", { type: QueryTypes.SELECT });
     total_pending_events = (total_pending_events_data[0]['total_events']);
 
     // Today Pending Events
-    const today_pending_events_data = await sequelize.query("SELECT count(*) as total_events FROM `events` where status='waiting_for_approval' AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' ", { type: QueryTypes.SELECT });
+    const today_pending_events_data = await sequelize.query("SELECT count(*) as total_events FROM `events` where status='waiting for approval' AND createdAt BETWEEN  '"+today_start_date+"' AND '"+today_end_date+"' ", { type: QueryTypes.SELECT });
     today_pending_events = (today_pending_events_data[0]['total_events']);
 
     // Orders
@@ -113,6 +113,7 @@ module.exports = {
     var dt = dateTime.create();
     var today_end_date = dt.format('Y-m-d')+" 23:59:59"; 
     var currency_id="1"; // Default Currency
+    
     if(req.query.currency_id){
        currency_id=req.query.currency_id;
     }
