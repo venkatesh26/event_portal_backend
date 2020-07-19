@@ -53,7 +53,9 @@ module.exports.set = (app) => {
 		'/api/frontend_blogs',
 		'/api/frontend_blog_detail',
 		'/api/add_comments',
-		'/cron/event_exipry'
+		'/cron/event_exipry',
+		'/cron/ticket_reset',
+		'/api/add_contacts'
 	]
 	var fs = require('fs');
 	app.use('*', function (req, res, next) {
@@ -137,8 +139,9 @@ module.exports.set = (app) => {
 
 	// Contacts
 	app.get('/api/contacts', contactsController.index);
-	app.get('/api//contacts/:id', contactsController.view);
+	app.get('/api/contacts/:id', contactsController.view);
 	app.delete('/api/contacts/:id', contactsController.delete);
+	app.post('/api/add_contacts', contactsController.add);
 
 	// Countries
 	app.get('/api/countries', countriesController.index);
@@ -285,4 +288,5 @@ module.exports.set = (app) => {
 
 	// Cron List
 	app.get('/cron/event_exipry', cronController.event_exipry);
+	app.get('/cron/ticket_reset', cronController.ticket_reset);
 }

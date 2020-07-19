@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	event_ticket_logs.associate = models => {
 		event_ticket_logs.belongsTo(models.events, { foreignKey: 'event_id' })
+		event_ticket_logs.hasMany(models.event_ticket_log_details, { foreignKey: 'ticket_log_id' })
 	}
 	return event_ticket_logs;
 }

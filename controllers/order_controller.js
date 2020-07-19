@@ -524,8 +524,6 @@ module.exports = {
 				message: 'customer_name Field Is required'
 			}));
 		}
-
-
 		if(typeof req.body.ref_number =='undefined' || req.body.ref_number==''){
 
 			return res.send(encrypt({
@@ -717,8 +715,8 @@ module.exports = {
 						var log_data={
 							'status':'success'
 						}
-                        models.event_tickets.update(log_data,{
-                              where: { id: req.body.ref_number },
+                        models.event_ticket_logs.update(log_data,{
+                              where: { ref_number: req.body.ref_number },
                         });
 						return res.send(encrypt({
 							success: true,

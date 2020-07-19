@@ -44,10 +44,10 @@ module.exports = {
             contact_no: req.body.contact_no,
             message: req.body.message,
         }
-        var event_enquiries = models.contacts.create(post_data);
+        var contacts = await models.contacts.create(post_data);
         return res.send(encrypt({
                   success: true,
-                  message: 'Thanks For Enquires'
+                  message: 'Thanks For Contact Us'
         }));
       }
       catch(error){
@@ -58,7 +58,7 @@ module.exports = {
       }
   },
   view(req, res) {
-    contactsService.getContactsById(decrypt(decode_id(req.params.id)))
+    contactsService.getContactById(decrypt(decode_id(req.params.id)))
       .then(data => res.send(encrypt({ "success": true, "data": data })))
       .catch((err) => res.status(400).send(err.message));
   },

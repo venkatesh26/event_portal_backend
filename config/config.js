@@ -11,9 +11,9 @@ module.exports = {
 		is_allow_origin:true,
   	 	file_upload_limit:'50mb',
         reset_password_link_expiry_hours:3,
-        reset_password_link:"http://localhost:8015/reset_password",
-        forgot_password_link:"http://localhost:8015/forgot_password",
-        account_verification_link:"http://localhost:8015/email_verification",
+        reset_password_link:"http://localhost:8015/resetpassword",
+        forgot_password_link:"http://localhost:8015/forgotpassword",
+        account_verification_link:"http://localhost:8015/emailverification",
 		allowedOrigins:[
 			'localhost:8012', 
 			'https://up-events.now.sh', 

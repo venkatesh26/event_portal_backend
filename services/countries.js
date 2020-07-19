@@ -72,7 +72,7 @@ const isExistOrNot = function(name, id=null) {
      where: where
   });
   return data.then(function(count){
-      if(count > 1){
+      if(count >= 1){
         return true;
       }
       return false;

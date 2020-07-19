@@ -35,10 +35,13 @@ const getAllData = function (data) {
   return { 'Contacts': Contacts}
 };
 
-const getContactById = id => models.contacts.findById(id);
 
-const deleteCategory = id => models.contacts.destroy(
+const getContactById = function (data) {
+   return models.contacts.findOne({where:{id:data}});
+}
+
+const deleteContact = id => models.contacts.destroy(
   {
     where: { id: id }
   });
-module.exports = { getAllData, getContactById, deleteCategory };
+module.exports = { getAllData, getContactById, deleteContact };

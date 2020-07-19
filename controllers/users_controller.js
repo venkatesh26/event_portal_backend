@@ -284,23 +284,16 @@ module.exports = {
 				res.send(encrypt({ "success": false, "message": "Invalid Token" }))
 			}
 			else {
-               if(data.forgot_pass_exp_timestamp=='' || data.forgot_pass_exp_timestamp==null){
-					res.send(encrypt({ "success": true, "message": "Token Expired" }))
-               }
-               else {
-
 				   var dt = dateTime.create();
 				   var current_date = dt.format('Y-m-d H:M:S');
 	               var update_data ={
-						'is_email_verified	':1,
+						'is_email_verified':1,
 						'email_verified_date':current_date
 				   }
-				   userService.updateUserData(update_data, user.id);
+				   userService.updateUserData(update_data, data.id);
 				   var email_config=EMAIL_CONFIG['email_verification'];
 	               mailer.send_mail(user_data.email,email_config.subject, data, email_config.template_name)
-               	   res.send(encrypt({ "success": true, "message": "Account Verified Successfully" }))
-               }
-			
+               	   res.send(encrypt({ "success": true, "message": "Account Verified Successfully" }));
 			}
 		}).catch(function(error){
 			console.log(error)
