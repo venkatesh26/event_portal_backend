@@ -17,7 +17,7 @@
     "compress-images": "^1.7.8",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.7-alpha.3",
+    "express-fileupload": "^1.1.9",
     "express-mailer": "^0.3.1",
     "gifsicle": "^5.0.0",
     "helmet": "^3.21.3",
