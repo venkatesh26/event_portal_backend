@@ -1,6 +1,6 @@
 module.exports = {
 		port: 8012,
-		dbConnectionString: 'mysql://root:Passw0rd@localhost/event_portal',
+		dbConnectionString: 'mysql://root:Passw0rd@localhost/event_portal_v1',
 		saltRounds: 2,
 		jwtSecret: 'yo-its-a-secret',
 		tokenExpireTimeInHours: '6',

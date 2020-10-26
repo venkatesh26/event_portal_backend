@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 
 const getPopularEventList = function (data, user_id) {
   let where = {}
-  let limit = 3;
+  let limit = 9;
   let order_query = ['createdAt', 'DESC']
   where.deletedAt = null; 
   where.status = 'published';
