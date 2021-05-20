@@ -21,7 +21,7 @@
     "express-mailer": "^0.3.1",
     "gifsicle": "^5.0.0",
     "helmet": "^3.21.3",
-    "html-pdf": "^2.2.0",
+    "html-pdf": "^3.0.1",
     "json-2-csv": "^3.6.1",
     "jsonwebtoken": "^8.5.1",
     "mandrill-api": "^1.0.45",
